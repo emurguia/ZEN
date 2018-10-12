@@ -9,6 +9,8 @@ rule token = parse
 | ')'      { RPAREN }
 | '{'      { LBRACE }
 | '}'      { RBRACE }
+| '['	   { LSQUARE }
+| ']'	   { RSQUARE }
 | ';'      { SEMI }
 | ','      { COMMA }
 | '+'      { PLUS }
@@ -33,13 +35,15 @@ rule token = parse
 | "int"    { INT }
 | "float"  { FLOAT }
 | "bool"   { BOOL }
-| "void"   { VOID }
 | "true"   { TRUE }
 | "false"  { FALSE }
 | "list"   { LIST }
 | "tuple"  { TUPLE }
-| "canvas" { CANVAS }
 | ['0'-'9']+ as lxm { LITERAL(int_of_string lxm) }
+| ['0'-'9']+'.'['0'-'9']+ as lxm { FLOAT_LIT(float_of_string lxm)}
+
+| '"'([^'"']* as lxm)'"' { STRING_LITERAL(lxm) }
+
 | ['a'-'z' 'A'-'Z']['a'-'z' 'A'-'Z' '0'-'9' '_']* as lxm { ID(lxm) }
 | eof { EOF }
 | _ as char { raise (Failure("illegal character " ^ Char.escaped char)) }

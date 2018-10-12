@@ -1,15 +1,19 @@
-/* Ocamlyacc parser for MicroC */
+/* Ocamlyacc parser for ZEN */
 
 %{
 open Ast
 %}
 
-%token SEMI LPAREN RPAREN LBRACE RBRACE COMMA
+%token SEMI LPAREN RPAREN LBRACE RBRACE LSQUARE RSQUARE COMMA
 %token PLUS MINUS TIMES DIVIDE ASSIGN NOT
 %token EQ NEQ LT LEQ GT GEQ TRUE FALSE AND OR
-%token RETURN IF ELSE FOR WHILE INT BOOL VOID
-%token <int> LITERAL
+%token RETURN IF ELSE FOR WHILE INT BOOL FLOAT STRING
+%token LIST TUPLE
+%token <int> INT_LITERAL
+%token <float> FLOAT_LITERAL
+%token <string> STRING_LITERAL
 %token <string> ID
+%token <tuple> TUPLE_LITERAL
 %token EOF
 
 %nonassoc NOELSE
@@ -37,12 +41,11 @@ decls:
  | decls fdecl { fst $1, ($2 :: snd $1) }
 
 fdecl:
-   typ ID LPAREN formals_opt RPAREN LBRACE vdecl_list stmt_list RBRACE
-     { { typ = $1;
-	 fname = $2;
-	 formals = $4;
-	 locals = List.rev $7;
-	 body = List.rev $8 } }
+   ID LPAREN formals_opt RPAREN LBRACE vdecl_list stmt_list RBRACE
+     { { fname = $1;
+	 formals = $3;
+	 locals = List.rev $6;
+	 body = List.rev $7 } }
 
 formals_opt:
     /* nothing */ { [] }
@@ -55,7 +58,11 @@ formal_list:
 typ:
     INT { Int }
   | BOOL { Bool }
-  | VOID { Void }
+  | FLOAT { Float }
+  | STRING { String }
+
+index:
+| LSQUARE expr RSQUARE { $2 }
 
 vdecl_list:
     /* nothing */    { [] }
@@ -63,6 +70,17 @@ vdecl_list:
 
 vdecl:
    typ ID SEMI { ($1, $2) }
+
+tuple:
+    TUPLE LPAREN ID COMMA ID RPAREN SEMI { ($3, $5) }
+
+val_list:
+    expr                { [ $1 ] }
+  | expr COMMA val_list { [ $1 ] @ $3 }
+
+list_literal:
+    LSQUARE val_list RSQUARE { $2 }
+
 
 stmt_list:
     /* nothing */  { [] }
@@ -84,10 +102,15 @@ expr_opt:
   | expr          { $1 }
 
 expr:
-    LITERAL          { Literal($1) }
+    INT_LITERAL      { IntLit($1) }
+  | FLOAT_LITERAL    { FloatLit($1) }
+  | STRING_LITERAL   { StringLit($1) }
   | TRUE             { BoolLit(true) }
   | FALSE            { BoolLit(false) }
   | ID               { Id($1) }
+  | TUPLE_LITERAL    { Tuple($1) }
+  | list_literal     { ListLit($1) }
+  | expr index       { Index($1, [$2]) }
   | expr PLUS   expr { Binop($1, Add,   $3) }
   | expr MINUS  expr { Binop($1, Sub,   $3) }
   | expr TIMES  expr { Binop($1, Mult,  $3) }
@@ -104,6 +127,7 @@ expr:
   | NOT expr         { Unop(Not, $2) }
   | ID ASSIGN expr   { Assign($1, $3) }
   | ID LPAREN actuals_opt RPAREN { Call($1, $3) }
+  | ID LSQUARE expr RSQUARE ASSIGN expr { ListAssign($1, [$3], $6) }
   | LPAREN expr RPAREN { $2 }
 
 actuals_opt:
