@@ -70,9 +70,7 @@ vdecl_list:
 
 vdecl:
    typ ID SEMI { ($1, $2) }
-
-tuple:
-    TUPLE LPAREN ID COMMA ID RPAREN SEMI { ($3, $5) }
+  | TUPLE LPAREN ID COMMA ID RPAREN SEMI { ($3, $5) }
 
 val_list:
     expr                { [ $1 ] }
