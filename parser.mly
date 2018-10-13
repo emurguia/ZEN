@@ -61,9 +61,6 @@ typ:
   | FLOAT { Float }
   | STRING { String }
 
-index:
-| LSQUARE expr RSQUARE { $2 }
-
 vdecl_list:
     /* nothing */    { [] }
   | vdecl_list vdecl { $2 :: $1 }
@@ -108,7 +105,6 @@ expr:
   | ID               { Id($1) }
   | TUPLE_LITERAL    { Tuple($1) }
   | list_literal     { ListLit($1) }
-  | expr index       { Index($1, [$2]) }
   | expr PLUS   expr { Binop($1, Add,   $3) }
   | expr MINUS  expr { Binop($1, Sub,   $3) }
   | expr TIMES  expr { Binop($1, Mult,  $3) }
@@ -126,6 +122,7 @@ expr:
   | ID ASSIGN expr   { Assign($1, $3) }
   | ID LPAREN actuals_opt RPAREN { Call($1, $3) }
   | ID LSQUARE expr RSQUARE ASSIGN expr { ListAssign($1, [$3], $6) }
+  | ID LSQUARE expr RSQUARE { ListAccess($1, [$3])}
   | LPAREN expr RPAREN { $2 }
 
 actuals_opt:
