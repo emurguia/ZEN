@@ -4,7 +4,7 @@
 open Ast
 %}
 
-%token SEMI LPAREN RPAREN LBRACE RBRACE LSQUARE RSQUARE COMMA DOT
+%token SEMI LPAREN RPAREN LBRACE RBRACE LSQUARE RSQUARE COMMA
 %token PLUS MINUS TIMES DIVIDE ASSIGN NOT
 %token EQ NEQ LT LEQ GT GEQ TRUE FALSE AND OR
 %token RETURN IF ELSE FOR WHILE INT BOOL FLOAT STRING
@@ -35,10 +35,11 @@ open Ast
 program:
   decls EOF { $1 }
 
+
 decls:
    /* nothing */ { [], [] }
- | decls vdecl { ($2 :: fst $1), snd $1 }
- | decls fdecl { fst $1, ($2 :: snd $1) }
+  | decls vdecl { ($2 :: fst $1), snd $1 } 
+  | decls fdecl { fst $1, ($2 :: snd $1) }
 
 fdecl:
    ID LPAREN formals_opt RPAREN LBRACE vdecl_list stmt_list RBRACE
@@ -103,7 +104,7 @@ expr:
   | TRUE             { BoolLit(true) }
   | FALSE            { BoolLit(false) }
   | ID               { Id($1) }
-  | TUPLE_LITERAL    { Tuple($1) }
+  | TUPLE_LITERAL    { TupleLit($1) }
   | list_literal     { ListLit($1) }
   | expr PLUS   expr { Binop($1, Add,   $3) }
   | expr MINUS  expr { Binop($1, Sub,   $3) }
