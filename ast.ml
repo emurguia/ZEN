@@ -21,7 +21,7 @@ type expr =
   | Unop of uop * expr
   | Assign of string * expr
   | Call of string * expr list
-  | ListAccess of string * int
+  | ListAccess of string * expr
   | ListAssign of string * expr list * expr 
   | Noexpr
 
