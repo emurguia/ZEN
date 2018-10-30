@@ -7,11 +7,16 @@ and sx =
     SLiteral of int
   | SFliteral of string
   | SBoolLit of bool
+  | SStringLit of string
+  | STupleLit of tuple 
+  | SListLit of list
   | SId of string
   | SBinop of sexpr * op * sexpr
   | SUnop of uop * sexpr
   | SAssign of string * sexpr
   | SCall of string * sexpr list
+  | SListAccess of string * expr
+  | SListAssign of string * expr list * expr 
   | SNoexpr
 
 type sstmt =
