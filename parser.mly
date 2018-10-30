@@ -42,7 +42,7 @@ decls:
   | decls fdecl { fst $1, ($2 :: snd $1) }
 
 fdecl:
-   ID LPAREN formals_opt RPAREN LBRACE vdecl_list stmt_list RBRACE
+   typ ID LPAREN formals_opt RPAREN LBRACE vdecl_list stmt_list RBRACE
      { { fname = $1;
 	 formals = $3;
 	 locals = List.rev $6;
@@ -61,6 +61,8 @@ typ:
   | BOOL { Bool }
   | FLOAT { Float }
   | STRING { String }
+  | TUPLE { Tuple }
+  | LIST { List }
 
 vdecl_list:
     /* nothing */    { [] }
@@ -68,7 +70,6 @@ vdecl_list:
 
 vdecl:
    typ ID SEMI { ($1, $2) }
-  | TUPLE LPAREN ID COMMA ID RPAREN SEMI { ($3, $5) }
 
 val_list:
     expr                { [ $1 ] }
@@ -124,6 +125,7 @@ expr:
   | ID LPAREN actuals_opt RPAREN { Call($1, $3) }
   | ID LSQUARE expr RSQUARE ASSIGN expr { ListAssign($1, [$3], $6) }
   | ID LSQUARE expr RSQUARE { ListAccess($1, [$3])}
+  | LPAREN expr COMMA expr RPAREN { TupleLit($3, $4) }
   | LPAREN expr RPAREN { $2 }
 
 actuals_opt:
