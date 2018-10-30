@@ -38,10 +38,19 @@ let check (globals, functions) =
       fname = name; 
       formals = [(ty, "x")];
       locals = []; body = [] } map
-    in List.fold_left add_bind StringMap.empty [ ("print", Int);
-			                         ("printb", Bool);
-			                         ("printf", Float);
-			                         ("printbig", Int) ]
+    in List.fold_left add_bind StringMap.empty [ ("print", String);
+			                         ("make_circle", Tuple, Float, Int);
+                               ("make_triangle", Tuple, Float, Float);
+                               ("make_triangle", Tuple, Float, Float);
+                               ("make_rectangle", Tuple, Float, Float);
+                               ("make_point", Tuple);
+                               ("make_line", Tuple, Tuple);
+                               ("length", List);
+                               ("get", Expr, Int);
+                               ("remove", List, Int);
+                               ("add", List, Expr);
+
+                                ]
   in
 
   (* Add function name to symbol table *)
@@ -95,6 +104,12 @@ let check (globals, functions) =
         Literal  l -> (Int, SLiteral l)
       | Fliteral l -> (Float, SFliteral l)
       | BoolLit l  -> (Bool, SBoolLit l)
+      | StringLit l -> (String, SStringLit l)
+      | TupleLit (x, y) -> 
+        let t1 = expr x and t2 = expr y in 
+        if t1 = Float && t2 = Float then Tuple
+      else raise (Failure ("expected floats for type tuple"))
+      | ListLit l -> (List, SListLit l)
       | Noexpr     -> (Void, SNoexpr)
       | Id s       -> (type_of_identifier s, SId s)
       | Assign(var, e) as ex -> 
