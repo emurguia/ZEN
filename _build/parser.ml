@@ -38,7 +38,7 @@ type token =
   | FLOAT_LITERAL of (float)
   | STRING_LITERAL of (string)
   | ID of (string)
-  | TUPLE_LITERAL of (tuple)
+  | TUPLE_LITERAL of (float * float)
   | EOF
 
 open Parsing;;
@@ -688,7 +688,7 @@ let yyact = [|
 # 689 "parser.ml"
                : 'expr))
 ; (fun __caml_parser_env ->
-    let _1 = (Parsing.peek_val __caml_parser_env 0 : tuple) in
+    let _1 = (Parsing.peek_val __caml_parser_env 0 : float * float) in
     Obj.repr(
 # 109 "parser.mly"
                      ( TupleLit(_1) )

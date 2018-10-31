@@ -38,7 +38,7 @@ type token =
   | FLOAT_LITERAL of (float)
   | STRING_LITERAL of (string)
   | ID of (string)
-  | TUPLE_LITERAL of (tuple)
+  | TUPLE_LITERAL of (float * float)
   | EOF
 
 val program :
