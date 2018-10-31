@@ -44,9 +44,9 @@ decls:
 fdecl:
    typ ID LPAREN formals_opt RPAREN LBRACE vdecl_list stmt_list RBRACE
      { { fname = $1;
-	 formals = $3;
-	 locals = List.rev $6;
-	 body = List.rev $7 } }
+	 formals = $4;
+	 locals = List.rev $7;
+	 body = List.rev $8 } }
 
 formals_opt:
     /* nothing */ { [] }
@@ -125,7 +125,7 @@ expr:
   | ID LPAREN actuals_opt RPAREN { Call($1, $3) }
   | ID LSQUARE expr RSQUARE ASSIGN expr { ListAssign($1, [$3], $6) }
   | ID LSQUARE expr RSQUARE { ListAccess($1, [$3])}
-  | LPAREN expr COMMA expr RPAREN { TupleLit($3, $4) }
+  | LPAREN expr COMMA expr RPAREN { TupleLit($2, $4) }
   | LPAREN expr RPAREN { $2 }
 
 actuals_opt:
