@@ -16,7 +16,7 @@ and sx =
   | SAssign of string * sexpr
   | SCall of string * sexpr list
   | SListAccess of string * expr
-  | SListAssign of string * expr list * expr 
+  | SListAssign of string * expr * expr 
   | SNoexpr
 
 type sstmt =
