@@ -39,16 +39,16 @@ let check (globals, functions) =
       formals = [(ty, "x")];
       locals = []; body = [] } map
     in List.fold_left add_bind StringMap.empty [ ("print", String);
-			                         ("make_circle", Tuple, Float, Int);
-                               ("make_triangle", Tuple, Float, Float);
-                               ("make_triangle", Tuple, Float, Float);
-                               ("make_rectangle", Tuple, Float, Float);
-                               ("make_point", Tuple);
-                               ("make_line", Tuple, Tuple);
-                               ("length", List);
-                               ("get", Expr, Int);
-                               ("remove", List, Int);
-                               ("add", List, Expr);
+			                         ("make_circle", Void);
+                               ("make_triangle", Void);
+                               ("make_triangle", Void);
+                               ("make_rectangle", Void);
+                               ("make_point", Void);
+                               ("make_line", Void);
+                               ("length", Int);
+                               ("get", Int); (*Need multiple gets for each typ*)
+                               ("remove", Void);
+                               ("add", Void);
 
                                 ]
   in
@@ -105,16 +105,16 @@ let check (globals, functions) =
       | Fliteral l -> (Float, SFliteral l)
       | BoolLit l  -> (Bool, SBoolLit l)
       | StringLit l -> (String, SStringLit l)
-      | TupleLit (x, y) -> 
-        let t1 = expr x and t2 = expr y in 
+      | TupleLit (x, y) -> (Tuple, STupleLit (x, y))
+       (*  let t1 = expr x and t2 = expr y in 
         if t1 = Float && t2 = Float then (Tuple, STupleLit (x, y))
-      else raise (Failure ("expected floats for type tuple"))
+      else raise (Failure ("expected floats for type tuple")) *)
 	| ListLit  el -> let t = List.fold_left
 		(fun e1 e2 ->
 		  if (e1 == expr e2) then
 		    e1
 		  else raise
-		    (Failure("Multiple types inside a list of type " ^ string_of_typ e1))
+		    (Failure("Multiple types inside a list "))
 		)
         (expr (List.hd el)) (List.tl el)
     in (List, SListLit el)

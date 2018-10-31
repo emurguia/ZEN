@@ -32,9 +32,10 @@ type token =
   | BOOL
   | FLOAT
   | STRING
+  | VOID
   | LIST
   | TUPLE
-  | INT_LITERAL of (int)
+  | LITERAL of (int)
   | FLOAT_LITERAL of (float)
   | STRING_LITERAL of (string)
   | ID of (string)

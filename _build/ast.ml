@@ -5,7 +5,7 @@ type op = Add | Sub | Mult | Div | Equal | Neq | Less | Leq | Greater | Geq |
 
 type uop = Neg | Not
 
-type typ = Int | Bool | Float | Tuple | List | String (*list is composite type - how to do? (i.e. list of ints, strings, etc)*)
+type typ = Int | Bool | Float | Tuple | List | String | Void(*list is composite type - how to do? (i.e. list of ints, strings, etc)*)
 
 type bind = typ * string
 
@@ -102,8 +102,8 @@ let string_of_typ = function
   | List -> "list"
   | Tuple -> "tuple"
   | String -> "string"
-(*   | Void -> "void"
- *)
+  | Void -> "void"
+
 let string_of_vdecl (t, id) = string_of_typ t ^ " " ^ id ^ ";\n"
 
 let string_of_fdecl fdecl =

@@ -12,26 +12,24 @@ ocamldep.opt -modules parser.mli > parser.mli.depends # cached
 # Target: parser.cmi, tags: { byte, compile, extension:mli, file:parser.mli, interf, ocaml, quiet }
 ocamlc.opt -c -o parser.cmi parser.mli # cached
 # Target: sast.ml.depends, tags: { extension:ml, file:sast.ml, ocaml, ocamldep, quiet }
-ocamldep.opt -modules sast.ml > sast.ml.depends
+ocamldep.opt -modules sast.ml > sast.ml.depends # cached
+# Target: sast.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:sast.cmo, file:sast.ml, implem, ocaml, quiet }
+ocamlc.opt -c -o sast.cmo sast.ml # cached
 # Target: scanner.mll, tags: { extension:mll, file:scanner.mll, lexer, ocaml, ocamllex, quiet }
 ocamllex.opt -q scanner.mll # cached
 # Target: scanner.ml.depends, tags: { extension:ml, file:scanner.ml, ocaml, ocamldep, quiet }
 ocamldep.opt -modules scanner.ml > scanner.ml.depends # cached
-# Target: semant.ml.depends, tags: { extension:ml, file:semant.ml, ocaml, ocamldep, quiet }
-ocamldep.opt -modules semant.ml > semant.ml.depends # cached
-# Target: sast.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:sast.cmo, file:sast.ml, implem, ocaml, quiet }
-ocamlc.opt -c -o sast.cmo sast.ml
-+ ocamlc.opt -c -o sast.cmo sast.ml
-File "sast.ml", line 43, characters 34-503:
-Warning 8: this pattern-matching is not exhaustive.
-Here is an example of a case that is not matched:
-(SStringLit _|STupleLit (_, _)|SListLit _|SListAccess (_, _)|
-SListAssign (_, _, _))
 # Target: scanner.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:scanner.cmo, file:scanner.ml, implem, ocaml, quiet }
-ocamlc.opt -c -o scanner.cmo scanner.ml
-+ ocamlc.opt -c -o scanner.cmo scanner.ml
-File "scanner.mll", line 42, characters 22-29:
-Error: This variant expression is expected to have type Parser.token
-       The constructor LITERAL does not belong to type Parser.token
+ocamlc.opt -c -o scanner.cmo scanner.ml # cached
+# Target: semant.ml.depends, tags: { extension:ml, file:semant.ml, ocaml, ocamldep, quiet }
+ocamldep.opt -modules semant.ml > semant.ml.depends
+# Target: semant.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:semant.cmo, file:semant.ml, implem, ocaml, quiet }
+ocamlc.opt -c -o semant.cmo semant.ml
++ ocamlc.opt -c -o semant.cmo semant.ml
+File "semant.ml", line 120, characters 23-25:
+Error: This expression has type Ast.expr list
+       but an expression was expected of type Sast.sexpr list
+       Type Ast.expr is not compatible with type
+         Sast.sexpr = Ast.typ * Sast.sx 
 Command exited with code 2.
 # Compilation unsuccessful.

@@ -7,9 +7,9 @@ open Ast
 %token SEMI LPAREN RPAREN LBRACE RBRACE LSQUARE RSQUARE COMMA
 %token PLUS MINUS TIMES DIVIDE ASSIGN NOT
 %token EQ NEQ LT LEQ GT GEQ TRUE FALSE AND OR
-%token RETURN IF ELSE FOR WHILE INT BOOL FLOAT STRING
+%token RETURN IF ELSE FOR WHILE INT BOOL FLOAT STRING VOID
 %token LIST TUPLE
-%token <int> INT_LITERAL
+%token <int> LITERAL
 %token <float> FLOAT_LITERAL
 %token <string> STRING_LITERAL
 %token <string> ID
@@ -63,6 +63,7 @@ typ:
   | STRING { String }
   | TUPLE { Tuple }
   | LIST { List }
+  | VOID { Void }
 
 vdecl_list:
     /* nothing */    { [] }
@@ -100,7 +101,7 @@ expr_opt:
   | expr          { $1 }
 
 expr:
-    INT_LITERAL      { IntLit($1) }
+    LITERAL      { IntLit($1) }
   | FLOAT_LITERAL    { FloatLit($1) }
   | STRING_LITERAL   { StringLit($1) }
   | TRUE             { BoolLit(true) }

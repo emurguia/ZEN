@@ -15,8 +15,8 @@ and sx =
   | SUnop of uop * sexpr
   | SAssign of string * sexpr
   | SCall of string * sexpr list
-  | SListAccess of string * expr
-  | SListAssign of string * expr * expr 
+  | SListAccess of string * sexpr
+  | SListAssign of string * sexpr * sexpr 
   | SNoexpr
 
 type sstmt =
@@ -44,12 +44,17 @@ let rec string_of_sexpr (t, e) =
     SLiteral(l) -> string_of_int l
   | SBoolLit(true) -> "true"
   | SBoolLit(false) -> "false"
+  | SStringLit(s) -> s
   | SFliteral(l) -> l
+  | SListLit(li) -> "[" ^ List.fold_left(fun b a -> b ^ " " ^ string_of_sexpr a ^ ", ") "" li ^ "]"
+  | STupleLit(e1, e2) -> "(" ^ string_of_float e1 ^ ", " ^ string_of_float e2 ^ ")"
   | SId(s) -> s
   | SBinop(e1, o, e2) ->
       string_of_sexpr e1 ^ " " ^ string_of_op o ^ " " ^ string_of_sexpr e2
   | SUnop(o, e) -> string_of_uop o ^ string_of_sexpr e
   | SAssign(v, e) -> v ^ " = " ^ string_of_sexpr e
+  | SListAccess(s, e) -> s ^ "[" ^ string_of_sexpr e ^ "]"
+  | SListAssign(s, e1, e2) -> s ^ "[" ^ string_of_sexpr e1 ^ "] = " ^ string_of_sexpr e2
   | SCall(f, el) ->
       f ^ "(" ^ String.concat ", " (List.map string_of_sexpr el) ^ ")"
   | SNoexpr -> ""
