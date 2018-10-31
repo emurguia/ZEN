@@ -8,7 +8,7 @@ and sx =
   | SFliteral of string
   | SBoolLit of bool
   | SStringLit of string
-  | STupleLit of tuple 
+  | STupleLit of float * float 
   | SListLit of list
   | SId of string
   | SBinop of sexpr * op * sexpr

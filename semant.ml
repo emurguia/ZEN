@@ -107,9 +107,17 @@ let check (globals, functions) =
       | StringLit l -> (String, SStringLit l)
       | TupleLit (x, y) -> 
         let t1 = expr x and t2 = expr y in 
-        if t1 = Float && t2 = Float then Tuple
+        if t1 = Float && t2 = Float then (Tuple, STupleLit (x, y))
       else raise (Failure ("expected floats for type tuple"))
-      | ListLit l -> (List, SListLit l)
+	| ListLit  el -> let t = List.fold_left
+		(fun e1 e2 ->
+		  if (e1 == expr e2) then
+		    e1
+		  else raise
+		    (Failure("Multiple types inside a list of type " ^ string_of_typ e1))
+		)
+        (expr (List.hd el)) (List.tl el)
+    in (List, SListLit el)
       | Noexpr     -> (Void, SNoexpr)
       | Id s       -> (type_of_identifier s, SId s)
       | Assign(var, e) as ex -> 

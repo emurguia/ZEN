@@ -14,7 +14,7 @@ type expr =
   | Fliteral of string
   | BoolLit of bool
   | StringLit of string
-  | TupleLit of tuple 
+  | TupleLit of float * float 
   | ListLit of list
   | Id of string
   | Binop of expr * op * expr
