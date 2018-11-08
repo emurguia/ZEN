@@ -46,7 +46,11 @@ let check (globals, functions) =
                                ("make_point", Void);
                                ("make_line", Void);
                                ("length", Int);
-                               ("get", Int); (*Need multiple gets for each typ*)
+                               ("get_int", Int);
+                               ("get_string", String)
+                               ("get_float", Float)
+                               ("get_tuple", Tuple)
+                               ("get_bool", Boolean) 
                                ("remove", Void);
                                ("add", Void);
 
@@ -101,7 +105,7 @@ let check (globals, functions) =
 
     (* Return a semantically-checked expression, i.e., with a type *)
     let rec expr = function
-        Literal  l -> (Int, SLiteral l)
+        IntLiteral  l -> (Int, SLiteral l)
       | Fliteral l -> (Float, SFliteral l)
       | BoolLit l  -> (Bool, SBoolLit l)
       | StringLit l -> (String, SStringLit l)
@@ -109,7 +113,7 @@ let check (globals, functions) =
        (*  let t1 = expr x and t2 = expr y in 
         if t1 = Float && t2 = Float then (Tuple, STupleLit (x, y))
       else raise (Failure ("expected floats for type tuple")) *)
-	| ListLit  el -> let t = List.fold_left
+	(*| ListLit  el -> let t = List.fold_left
 		(fun e1 e2 ->
 		  if (e1 == expr e2) then
 		    e1
@@ -117,7 +121,7 @@ let check (globals, functions) =
 		    (Failure("Multiple types inside a list "))
 		)
         (expr (List.hd el)) (List.tl el)
-    in (List, SListLit el)
+    in (List, SListLit el)*)
       | Noexpr     -> (Void, SNoexpr)
       | Id s       -> (type_of_identifier s, SId s)
       | Assign(var, e) as ex -> 
