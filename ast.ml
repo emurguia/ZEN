@@ -5,7 +5,7 @@ type op = Add | Sub | Mult | Div | Equal | Neq | Less | Leq | Greater | Geq |
 
 type uop = Neg | Not
 
-type typ = Int | Bool | Float | Tuple | List | String | Void(*list is composite type - how to do? (i.e. list of ints, strings, etc)*)
+type typ = Int | Bool | Float | Tuple (* |) List *) | String | Void
 
 type bind = typ * string
 
@@ -15,14 +15,14 @@ type expr =
   | BoolLit of bool
   | StringLit of string
   | TupleLit of float * float 
-  | ListLit of expr list
+  (* | ListLit of expr list *)
   | Id of string
   | Binop of expr * op * expr
   | Unop of uop * expr
   | Assign of string * expr
   | Call of string * expr list
-  | ListAccess of string * expr
-  | ListAssign of string * expr * expr 
+  (* | ListAccess of string * expr *)
+  (* | ListAssign of string * expr * expr  *)
   | Noexpr
 
 type stmt =
@@ -69,15 +69,15 @@ let rec string_of_expr = function
   | BoolLit(true) -> "true"
   | BoolLit(false) -> "false"
   | StringLit(s) -> s
-  | ListLit(li) -> "[" ^ List.fold_left(fun b a -> b ^ " " ^ string_of_expr a ^ ", ") "" li ^ "]"
+  (* | ListLit(li) -> "[" ^ List.fold_left(fun b a -> b ^ " " ^ string_of_expr a ^ ", ") "" li ^ "]" *)
   | TupleLit(e1, e2) -> "(" ^ string_of_float e1 ^ ", " ^ string_of_float e2 ^ ")"
   | Id(s) -> s
   | Binop(e1, o, e2) ->
       string_of_expr e1 ^ " " ^ string_of_op o ^ " " ^ string_of_expr e2
   | Unop(o, e) -> string_of_uop o ^ string_of_expr e
   | Assign(v, e) -> v ^ " = " ^ string_of_expr e
-  | ListAccess(s, e) -> s ^ "[" ^ string_of_expr e ^ "]"
-  | ListAssign(s, e1, e2) -> s ^ "[" ^ string_of_expr e1 ^ "] = " ^ string_of_expr e2
+  (* | ListAccess(s, e) -> s ^ "[" ^ string_of_expr e ^ "]" *)
+  (* | ListAssign(s, e1, e2) -> s ^ "[" ^ string_of_expr e1 ^ "] = " ^ string_of_expr e2 *)
   | Call(f, el) ->
       f ^ "(" ^ String.concat ", " (List.map string_of_expr el) ^ ")"
   | Noexpr -> ""
@@ -99,7 +99,7 @@ let string_of_typ = function
     Int -> "int"
   | Bool -> "bool"
   | Float -> "float"
-  | List -> "list"
+  (* | List -> "list" *)
   | Tuple -> "tuple"
   | String -> "string"
   | Void -> "void"

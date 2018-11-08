@@ -112,11 +112,8 @@ let check (globals, functions) =
       | BoolLit l  -> (Bool, SBoolLit l)
       | StringLit l -> (String, SStringLit l)
       | TupleLit (x, y) -> (Tuple, STupleLit (x, y))
-       (*  let t1 = expr x and t2 = expr y in 
-        if t1 = Float && t2 = Float then (Tuple, STupleLit (x, y))
-      else raise (Failure ("expected floats for type tuple")) *)
       (* map all elements in list to their sexpr version (int literal -> sintliteral, etc.))*)
-	| ListLit  el -> let t = List.fold_left
+(* 	| ListLit  el -> let t = List.fold_left
 		(fun e1 e2 ->
 		  if (e1 == expr e2) then
 		    e1
@@ -124,7 +121,8 @@ let check (globals, functions) =
 		    (Failure("Multiple types inside a list "))
 		)
         (expr (List.hd el)) (List.tl el)
-    in (List, SListLit el)
+    in (List, SListLit el) *)
+      (* | ListLit l ->  List.Map (fun a -> SExpr (a)) l in (List, SListLit l) *)
       | Noexpr     -> (Void, SNoexpr)
       | Id s       -> (type_of_identifier s, SId s)
       | Assign(var, e) as ex -> 
