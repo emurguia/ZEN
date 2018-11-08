@@ -40,7 +40,7 @@ rule token = parse
 | "list"   { LIST }
 | "tuple"  { TUPLE }
 | "void"   { VOID}
-| ['0'-'9']+ as lxm { LITERAL(int_of_string lxm) }
+| ['0'-'9']+ as lxm { INT_LITERAL(int_of_string lxm) }
 | ['0'-'9']+'.'['0'-'9']+ as lxm { FLOAT_LITERAL(float_of_string lxm)}
 
 | '"'([^'"']* as lxm)'"' { STRING_LITERAL(lxm) }

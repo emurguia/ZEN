@@ -10,7 +10,7 @@ type typ = Int | Bool | Float | Tuple | List | String | Void(*list is composite 
 type bind = typ * string
 
 type expr =
-    Literal of int
+    IntLiteral of int
   | Fliteral of string
   | BoolLit of bool
   | StringLit of string
@@ -64,7 +64,7 @@ let string_of_uop = function
   | Not -> "!"
 
 let rec string_of_expr = function
-    Literal(l) -> string_of_int l
+    IntLiteral(l) -> string_of_int l
   | Fliteral(l) -> l
   | BoolLit(true) -> "true"
   | BoolLit(false) -> "false"

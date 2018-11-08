@@ -9,7 +9,7 @@ open Ast
 %token EQ NEQ LT LEQ GT GEQ TRUE FALSE AND OR
 %token RETURN IF ELSE FOR WHILE INT BOOL FLOAT STRING VOID
 %token LIST TUPLE
-%token <int> LITERAL
+%token <int> INT_LITERAL
 %token <float> FLOAT_LITERAL
 %token <string> STRING_LITERAL
 %token <string> ID
@@ -101,7 +101,7 @@ expr_opt:
   | expr          { $1 }
 
 expr:
-    LITERAL      { IntLit($1) }
+    INT_LITERAL      { IntLit($1) }
   | FLOAT_LITERAL    { FloatLit($1) }
   | STRING_LITERAL   { StringLit($1) }
   | TRUE             { BoolLit(true) }
