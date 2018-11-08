@@ -32,6 +32,8 @@ let check (globals, functions) =
   (**** Check functions ****)
 
   (* Collect function declarations for built-in functions: no bodies *)
+  (*change add bind: typ = return tupe, fname name, formals is parameters*)
+  (*functions that aren't from libraries, manually fill in in codegen with LLVM gen by OCaml*)
   let built_in_decls = 
     let add_bind map (name, ty) = StringMap.add name {
       typ = Void;
@@ -47,13 +49,13 @@ let check (globals, functions) =
                                ("make_line", Void);
                                ("length", Int);
                                ("get_int", Int);
-                               ("get_string", String)
+                               (*("get_string", String)
                                ("get_float", Float)
                                ("get_tuple", Tuple)
-                               ("get_bool", Boolean) 
+                               ("get_bool", Boolean)*) 
                                ("remove", Void);
                                ("add", Void);
-
+(* add printf/print_int from microc for printing integers etc*)
                                 ]
   in
 
@@ -105,7 +107,7 @@ let check (globals, functions) =
 
     (* Return a semantically-checked expression, i.e., with a type *)
     let rec expr = function
-        IntLiteral  l -> (Int, SLiteral l)
+        IntLiteral  l -> (Int, SIntLiteral l)
       | Fliteral l -> (Float, SFliteral l)
       | BoolLit l  -> (Bool, SBoolLit l)
       | StringLit l -> (String, SStringLit l)
@@ -113,7 +115,8 @@ let check (globals, functions) =
        (*  let t1 = expr x and t2 = expr y in 
         if t1 = Float && t2 = Float then (Tuple, STupleLit (x, y))
       else raise (Failure ("expected floats for type tuple")) *)
-	(*| ListLit  el -> let t = List.fold_left
+      (* map all elements in list to their sexpr version (int literal -> sintliteral, etc.))*)
+	| ListLit  el -> let t = List.fold_left
 		(fun e1 e2 ->
 		  if (e1 == expr e2) then
 		    e1
@@ -121,7 +124,7 @@ let check (globals, functions) =
 		    (Failure("Multiple types inside a list "))
 		)
         (expr (List.hd el)) (List.tl el)
-    in (List, SListLit el)*)
+    in (List, SListLit el)
       | Noexpr     -> (Void, SNoexpr)
       | Id s       -> (type_of_identifier s, SId s)
       | Assign(var, e) as ex -> 
