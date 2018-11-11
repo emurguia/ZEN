@@ -5,11 +5,11 @@ open Ast
 type sexpr = typ * sx
 and sx =
     SIntLiteral of int
-  | SFliteral of string
-  | SBoolLit of bool
-  | SStringLit of string
-  | STupleLit of float * float 
-(*   | SListLit of sexpr list
+  | SFloatLiteral of string
+  | SBooleanLiteral of bool
+  | SStringLiteral of string
+  (* | STupleLiteral of float * float  *)
+(*   | SListLiteral of sexpr list
  *)  | SId of string
   | SBinop of sexpr * op * sexpr
   | SUnop of uop * sexpr
@@ -42,12 +42,12 @@ type sprogram = bind list * sfunc_decl list
 let rec string_of_sexpr (t, e) =
   "(" ^ string_of_typ t ^ " : " ^ (match e with
     SIntLiteral(l) -> string_of_int l
-  | SBoolLit(true) -> "true"
-  | SBoolLit(false) -> "false"
-  | SStringLit(s) -> s
-  | SFliteral(l) -> l
-  (* | SListLit(li) -> "[" ^ List.fold_left(fun b a -> b ^ " " ^ string_of_sexpr a ^ ", ") "" li ^ "]" *)
-  | STupleLit(e1, e2) -> "(" ^ string_of_float e1 ^ ", " ^ string_of_float e2 ^ ")"
+  | SBooleanLiteral(true) -> "true"
+  | SBooleanLiteral(false) -> "false"
+  | SStringLiteral(s) -> s
+  | SFloatLiteral(l) -> l
+  (* | SListLiteral(li) -> "[" ^ List.fold_left(fun b a -> b ^ " " ^ string_of_sexpr a ^ ", ") "" li ^ "]" *)
+  (* | STupleLiteral(e1, e2) -> "(" ^ string_of_float e1 ^ ", " ^ string_of_float e2 ^ ")" *)
   | SId(s) -> s
   | SBinop(e1, o, e2) ->
       string_of_sexpr e1 ^ " " ^ string_of_op o ^ " " ^ string_of_sexpr e2

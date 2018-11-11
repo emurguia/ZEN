@@ -1,0 +1,3 @@
+string x;
+x = "Hello";
+x = "World";

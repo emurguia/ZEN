@@ -1,0 +1,4 @@
+boolean x;
+boolean y;
+x = true;
+y = !x;

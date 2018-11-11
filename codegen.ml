@@ -34,8 +34,8 @@ let translate (globals, functions) =
   and the_module = L.create_module context "Zen" in
 
   let str_t = L.pointer_type i8_t in
-  let tuple_t = L.named_struct_type context "tuple_t" in
-    L.struct_set_body tuple_t [| float_t; float_t |] false;
+(*   let tuple_t = L.named_struct_type context "tuple_t" in
+    L.struct_set_body tuple_t [| float_t; float_t |] false; *)
 
   (* Convert MicroC types to LLVM types *)
   let ltype_of_typ = function
@@ -44,7 +44,7 @@ let translate (globals, functions) =
     | A.Float -> float_t
     | A.Void  -> void_t
     | A.String -> str_t
-    | A.Tuple -> tuple_t
+    (* | A.Tuple -> tuple_t *)
   in
 
   (* Declare each global variable; remember its value in a map *)
@@ -118,10 +118,10 @@ let translate (globals, functions) =
     (* Construct code for an expression; return its value *)
     let rec expr builder ((_, e) : sexpr) = match e with
 	SIntLiteral i -> L.const_int i32_t i
-      | SBoolLit b -> L.const_int i1_t (if b then 1 else 0)
-      | SFliteral l -> L.const_float_of_string float_t l
-      | SStringLit s -> L.build_global_stringptr s "name" builder
-      | STupleLit (x, y) -> 
+      | SBooleanLiteral b -> L.const_int i1_t (if b then 1 else 0)
+      | SFloatLiteral l -> L.const_float_of_string float_t l
+      | SStringLiteral s -> L.build_global_stringptr s "name" builder
+(*       | STupleLiteral (x, y) -> 
 (*         let x' = ensureFloat (expr builder x)
         and y' = ensureFloat (expr builder y) in *)
         let tuple_ptr = L.build_alloca tuple_t "tmp" builder in
@@ -129,7 +129,7 @@ let translate (globals, functions) =
         ignore (L.build_store x x_ptr builder);
         let y_ptr = L.build_struct_gep tuple_ptr 1 "y" builder in
         ignore (L.build_store y y_ptr builder);
-        L.build_load tuple_ptr "v" builder
+        L.build_load tuple_ptr "v" builder *)
       | SNoexpr -> L.const_int i32_t 0
       | SId s -> L.build_load (lookup s) s builder
       | SAssign (s, e) -> let e' = expr builder e in

@@ -8,12 +8,12 @@ open Ast
 %token PLUS MINUS TIMES DIVIDE ASSIGN NOT
 %token EQ NEQ LT LEQ GT GEQ TRUE FALSE AND OR
 %token RETURN IF ELSE FOR WHILE INT BOOL FLOAT STRING VOID
-%token /* LIST */ TUPLE
+/*%token LIST TUPLE */
 %token <int> INT_LITERAL
 %token <float> FLOAT_LITERAL
 %token <string> STRING_LITERAL
 %token <string> ID
-%token <float * float> TUPLE_LITERAL
+/* %token <float * float> TUPLE_LITERAL */
 %token EOF
 
 %nonassoc NOELSE
@@ -43,10 +43,11 @@ decls:
 
 fdecl:
    typ ID LPAREN formals_opt RPAREN LBRACE vdecl_list stmt_list RBRACE
-     { { fname = $1;
-	 formals = $4;
-	 locals = List.rev $7;
-	 body = List.rev $8 } }
+     { { typ = $1;
+      fname = $2;
+      formals = List.rev $4;
+      locals = List.rev $7;
+      body = List.rev $8 } }
 
 formals_opt:
     /* nothing */ { [] }
@@ -57,13 +58,13 @@ formal_list:
   | formal_list COMMA typ ID { ($3,$4) :: $1 }
 
 typ:
-    INT { Int }
-  | BOOL { Bool }
-  | FLOAT { Float }
-  | STRING { String }
-  | TUPLE { Tuple }
-  /* | LIST { List } */
-  | VOID { Void }
+  INT { Int }
+| BOOL { Bool }
+| FLOAT { Float }
+| STRING { String }
+/* | TUPLE { Tuple } */
+/* | LIST { List } */
+| VOID { Void }
 
 vdecl_list:
     /* nothing */    { [] }
@@ -101,14 +102,14 @@ expr_opt:
   | expr          { $1 }
 
 expr:
-    INT_LITERAL      { IntLit($1) }
-  | FLOAT_LITERAL    { FloatLit($1) }
-  | STRING_LITERAL   { StringLit($1) }
-  | TRUE             { BoolLit(true) }
-  | FALSE            { BoolLit(false) }
+    INT_LITERAL      { IntLiteral($1) }
+  | FLOAT_LITERAL    { FloatLiteral(string_of_float $1) }
+  | STRING_LITERAL   { StringLiteral($1) }
+  | TRUE             { BooleanLiteral(true) }
+  | FALSE            { BooleanLiteral(false) }
   | ID               { Id($1) }
-  | TUPLE_LITERAL    { TupleLit($1) }
-  /* | list_literal     { ListLit($1) } */
+  /* | TUPLE_LITERAL    { TupleLiteral($1) } */
+  /* | list_literal     { ListLiteral($1) } */
   | expr PLUS   expr { Binop($1, Add,   $3) }
   | expr MINUS  expr { Binop($1, Sub,   $3) }
   | expr TIMES  expr { Binop($1, Mult,  $3) }
@@ -127,7 +128,7 @@ expr:
   | ID LPAREN actuals_opt RPAREN { Call($1, $3) }
   /* | ID LSQUARE expr RSQUARE ASSIGN expr { ListAssign($1, [$3], $6) }
   | ID LSQUARE expr RSQUARE { ListAccess($1, [$3])} */
-  | LPAREN expr COMMA expr RPAREN { TupleLit($2, $4) }
+  /* | LPAREN expr COMMA expr RPAREN { TupleLit($2, $4) } */
   | LPAREN expr RPAREN { $2 }
 
 actuals_opt:
