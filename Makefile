@@ -20,10 +20,10 @@ zen.native :
 
 # "make clean" removes all generated files
 
-# .PHONY : clean
-# clean :
-# 	ocamlbuild -clean
-# 	rm -rf testall.log *.diff
+.PHONY : clean
+clean :
+	ocamlbuild -clean
+	rm -rf testall.log *.diff
 
 # # Testing the "printbig" example
 

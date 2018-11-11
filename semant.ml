@@ -108,12 +108,12 @@ let check (globals, functions) =
     (* Return a semantically-checked expression, i.e., with a type *)
     let rec expr = function
         IntLiteral  l -> (Int, SIntLiteral l)
-      | Fliteral l -> (Float, SFliteral l)
-      | BoolLit l  -> (Bool, SBoolLit l)
-      | StringLit l -> (String, SStringLit l)
-      | TupleLit (x, y) -> (Tuple, STupleLit (x, y))
+      | FloatLiteral l -> (Float, SFloatLiteral l)
+      | BooleanLiteral l  -> (Bool, SBooleanLiteral l)
+      | StringLiteral l -> (String, SStringLiteral l)
+      (* | TupleLiteral (x, y) -> (Tuple, STupleLiteral (x, y)) *)
       (* map all elements in list to their sexpr version (int literal -> sintliteral, etc.))*)
-(* 	| ListLit  el -> let t = List.fold_left
+(* 	| ListLiteral  el -> let t = List.fold_left
 		(fun e1 e2 ->
 		  if (e1 == expr e2) then
 		    e1
@@ -121,8 +121,8 @@ let check (globals, functions) =
 		    (Failure("Multiple types inside a list "))
 		)
         (expr (List.hd el)) (List.tl el)
-    in (List, SListLit el) *)
-      (* | ListLit l ->  List.Map (fun a -> SExpr (a)) l in (List, SListLit l) *)
+    in (List, SListLiteral el) *)
+      (* | ListLiteral l ->  List.Map (fun a -> SExpr (a)) l in (List, SListLiteral l) *)
       | Noexpr     -> (Void, SNoexpr)
       | Id s       -> (type_of_identifier s, SId s)
       | Assign(var, e) as ex -> 

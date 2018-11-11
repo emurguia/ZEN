@@ -5,17 +5,17 @@ type op = Add | Sub | Mult | Div | Equal | Neq | Less | Leq | Greater | Geq |
 
 type uop = Neg | Not
 
-type typ = Int | Bool | Float | Tuple (* |) List *) | String | Void
+type typ = Int | Bool | Float (* | Tuple  | List *) | String | Void
 
 type bind = typ * string
 
 type expr =
     IntLiteral of int
-  | Fliteral of string
-  | BoolLit of bool
-  | StringLit of string
-  | TupleLit of float * float 
-  (* | ListLit of expr list *)
+  | FloatLiteral of string
+  | BooleanLiteral of bool
+  | StringLiteral of string
+  (* | TupleLiteral of float * float  *)
+  (* | ListLiteral of expr list *)
   | Id of string
   | Binop of expr * op * expr
   | Unop of uop * expr
@@ -65,12 +65,12 @@ let string_of_uop = function
 
 let rec string_of_expr = function
     IntLiteral(l) -> string_of_int l
-  | Fliteral(l) -> l
-  | BoolLit(true) -> "true"
-  | BoolLit(false) -> "false"
-  | StringLit(s) -> s
+  | FloatLiteral(l) -> l
+  | BooleanLiteral(true) -> "true"
+  | BooleanLiteral(false) -> "false"
+  | StringLiteral(s) -> s
   (* | ListLit(li) -> "[" ^ List.fold_left(fun b a -> b ^ " " ^ string_of_expr a ^ ", ") "" li ^ "]" *)
-  | TupleLit(e1, e2) -> "(" ^ string_of_float e1 ^ ", " ^ string_of_float e2 ^ ")"
+  (* | TupleLit(e1, e2) -> "(" ^ string_of_float e1 ^ ", " ^ string_of_float e2 ^ ")" *)
   | Id(s) -> s
   | Binop(e1, o, e2) ->
       string_of_expr e1 ^ " " ^ string_of_op o ^ " " ^ string_of_expr e2
@@ -100,7 +100,7 @@ let string_of_typ = function
   | Bool -> "bool"
   | Float -> "float"
   (* | List -> "list" *)
-  | Tuple -> "tuple"
+  (* | Tuple -> "tuple" *)
   | String -> "string"
   | Void -> "void"
 
