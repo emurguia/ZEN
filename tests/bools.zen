@@ -1,0 +1,8 @@
+boolean t = True;
+boolean f = False;
+
+boolean a = t and f;
+boolean o = t or f;
+
+printb(a);
+printb(o);

@@ -1,0 +1,12 @@
+float x = 2.75;
+float y = 1.1;
+
+float sum = x+y;
+float product = x*y;
+float quotient = x/y;
+float diff = x-y;
+
+printf(sum);
+printf(product);
+printf(quotient);
+printf(diff);

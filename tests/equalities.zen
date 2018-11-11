@@ -1,0 +1,16 @@
+int x = 5;
+int y = 3;
+
+boolean less = x<y;
+boolean more = x>y;
+boolean equal = x==y;
+boolean leq = x<=x;
+boolean geq = y>=x;
+boolean neq = x!=y;
+
+printb(less);
+printb(more);
+printb(equal);
+printb(leq);
+printb(geq);
+printb(neq);
