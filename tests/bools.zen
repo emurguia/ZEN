@@ -1,8 +1,11 @@
-boolean t = True;
-boolean f = False;
+void main()
+{
+	boolean t = True;
+	boolean f = False;
 
-boolean a = t and f;
-boolean o = t or f;
+	boolean a = t and f;
+	boolean o = t or f;
 
-printb(a);
-printb(o);
+	printb(a);
+	printb(o);
+}

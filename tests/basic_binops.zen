@@ -1,12 +1,15 @@
-float x = 2.75;
-float y = 1.1;
+void main()
+{
+	float x = 2.75;
+	float y = 1.1;
 
-float sum = x+y;
-float product = x*y;
-float quotient = x/y;
-float diff = x-y;
+	float sum = x+y;
+	float product = x*y;
+	float quotient = x/y;
+	float diff = x-y;
 
-printf(sum);
-printf(product);
-printf(quotient);
-printf(diff);
+	printf(sum);
+	printf(product);
+	printf(quotient);
+	printf(diff);
+}
