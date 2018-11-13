@@ -56,10 +56,8 @@ let translate (globals, functions) =
       in StringMap.add n (L.define_global n init the_module) m in
     List.fold_left global_var StringMap.empty globals in
 
-  let printf_t : L.lltype = 
-      L.var_arg_function_type i32_t [| L.pointer_type i8_t |] in
-  let printf_func : L.llvalue = 
-     L.declare_function "printf" printf_t the_module in
+  let printf_t : L.lltype = L.var_arg_function_type i32_t [| L.pointer_type i8_t |] in
+  let printf_func : L.llvalue = L.declare_function "printf" printf_t the_module in
 
   let printbig_t = L.function_type i32_t [| i32_t |] in
   let printbig_func = L.declare_function "printbig" printbig_t the_module in
@@ -83,7 +81,7 @@ let translate (globals, functions) =
     let (the_function, _) = StringMap.find fdecl.sfname function_decls in
     let builder = L.builder_at_end context (L.entry_block the_function) in
 
-    let int_format_str = L.build_global_stringptr "%d\n" "fmt" builder
+    let str_format_str = L.build_global_stringptr "%s\n" "str_fmt" builder
     and float_format_str = L.build_global_stringptr "%g\n" "fmt" builder in
 
     (* Construct the function's "locals": formal arguments and locally
@@ -173,14 +171,14 @@ let translate (globals, functions) =
 	    A.Neg when t = A.Float -> L.build_fneg 
 	  | A.Neg                  -> L.build_neg
           | A.Not                  -> L.build_not) e' "tmp" builder
-      | SCall ("print", [e]) | SCall ("printb", [e]) ->
-	  L.build_call printf_func [| int_format_str ; (expr builder e) |]
-	    "printf" builder
       | SCall ("printbig", [e]) ->
 	  L.build_call printbig_func [| (expr builder e) |] "printbig" builder
       | SCall ("printf", [e]) -> 
 	  L.build_call printf_func [| float_format_str ; (expr builder e) |]
 	    "printf" builder
+      | SCall("print", [e]) ->
+    L.build_call printf_func [| str_format_str ; (expr builder e) |]
+      "print" builder
       | SCall (f, args) ->
          let (fdef, fdecl) = StringMap.find f function_decls in
 	 let llargs = List.rev (List.map (expr builder) (List.rev args)) in
