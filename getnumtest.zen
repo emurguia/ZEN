@@ -1,0 +1,7 @@
+void main()
+{
+
+        get_num(5);
+
+}
+        

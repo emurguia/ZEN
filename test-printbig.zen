@@ -1,0 +1,15 @@
+int main()
+{
+  printbig(72); 
+  printbig(69); 
+  printbig(76); 
+  printbig(76); 
+  printbig(79);
+  printbig(32);   
+  printbig(87); 
+  printbig(79); 
+  printbig(82); 
+  printbig(76); 
+  printbig(68); 
+  return 0;
+}
