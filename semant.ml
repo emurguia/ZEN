@@ -57,73 +57,84 @@ let check (globals, functions) =
                                ("make_triangle", Float, Float, Float, Float);
                                ("make_rectangle", Float, Float, Float, Float);
                                 ]
-                                (*
-  in
-  	let add_bind3 map (name, ty) = StringMap.add name {
+                                
+    in
+  	let add_bind3 map (name, ty1, ty2, ty3, ty4) = StringMap.add name {
       typ = Void;
       fname = name; 
-      formals = [(ty, "x"),(ty, "y"),(ty, "radius"),(ty, "vertices")];
+      formals = [(ty1, "x");(ty2, "y");(ty3, "radius");(ty4, "vertices")];
       locals = []; body = [] } map
-    in List.fold_left add_bind3 StringMap.empty [
+     in
+     let _ = List.fold_left add_bind3 StringMap.empty [
                                ("make_circle", Float, Float, Float, Int);
                                 ]                            
+  
   in
-  	let add_bind4 map (name, ty) = StringMap.add name {
+  	let add_bind4 map (name, ty1, ty2) = StringMap.add name {
       typ = Void;
       fname = name; 
-      formals = [(ty, "x"),(ty, "y")];
+      formals = [(ty1, "x");(ty2, "y")];
       locals = []; body = [] } map
-    in List.fold_left add_bind4 StringMap.empty [
+    in
+    let _ = List.fold_left add_bind4 StringMap.empty [
                                ("make_point", Float, Float);
-                                ]                             
+                                ]  
+                                                           
   in
-  	let add_bind map (name, ty) = StringMap.add name {
+  	let add_bind5 map (name, ty1, ty2, ty3, ty4) = StringMap.add name {
       typ = Void;
       fname = name; 
-      formals = [(ty, "x1"),(ty, "y1"),(ty, "x2"),(ty, "y2")];
+      formals = [(ty1, "x1");(ty2, "y1");(ty3, "x2");(ty4, "y2")];
       locals = []; body = [] } map
-    in List.fold_left add_bind StringMap.empty [
+    in 
+    let _ = List.fold_left add_bind5 StringMap.empty [
                                ("make_line", Float, Float, Float, Float);
                                 ]                             
+  (* commenting out list and tuple  built in functions*)
+  (*
   in                             
-  	let add_bind map (name, ty) = StringMap.add name {
+  	let add_bind6 map (name, ty) = StringMap.add name {
       typ = Float;
       fname = name; 
       formals = [(ty, "tuple")];
       locals = []; body = [] } map
-    in List.fold_left add_bind StringMap.empty [
+    in 
+    let _ = List.fold_left add_bind6 StringMap.empty [
                                ("getX", Tuple);
                                ("getY", Tuple)
                                ]    
-  *)
-  (* commenting out list built in functions*)
-  (*
+
+  
+  
   in
-  let add_bind map (name, ty) = StringMap.add name {
+  let add_bind7 map (name, ty1, ty2) = StringMap.add name {
       typ = Int|String|Tuple|Float|Bool;
       fname = name; 
-      formals = [(ty, "list"),(ty, "index")];
+      formals = [(t1, "list");(ty2, "index")];
       locals = []; body = [] } map
-    in List.fold_left add_bind StringMap.empty [
+    in
+    let _ = List.fold_left add_bind7 StringMap.empty [
                                ("get", List, Int);
                                 ]                             
   in
-  let add_bind map (name, ty) = StringMap.add name {
+  let add_bind8 map (name, ty1, ty2) = StringMap.add name {
       typ = Void;
       fname = name; 
-      formals = [(ty, "list"),(ty, "index")];
+      formals = [(ty1, "list");(ty2, "index")];
       locals = []; body = [] } map
-    in List.fold_left add_bind StringMap.empty [
+    in 
+    let _ = List.fold_left add_bind8 StringMap.empty [
                                ("remove", List, Index);
                                ("add", List, Index)
                                 ]                             
   in
-let add_bind map (name, ty) = StringMap.add name {
+let add_bind9 map (name, ty) = StringMap.add name {
       typ = Int;
       fname = name; 
       formals = [(ty, "list")];
       locals = []; body = [] } map
-    in List.fold_left add_bind StringMap.empty [
+    in 
+    let ) = List.fold_left add_bind9 StringMap.empty [
                                ("length", List);
                                 ]                             
   *)
