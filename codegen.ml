@@ -61,6 +61,9 @@ let translate (globals, functions) =
 
   let printbig_t = L.function_type i32_t [| i32_t |] in
   let printbig_func = L.declare_function "printbig" printbig_t the_module in
+
+  let getnum_t = L.function_type i32_t [| i32_t |] in
+  let getnum_func = L.declare_function "get_num" getnum_t the_module in
 (* 
   let ensureFloat c = 
     if L.type_of c = float_t then c else (L.const_sitofp c float_t) in *)
@@ -173,6 +176,8 @@ let translate (globals, functions) =
           | A.Not                  -> L.build_not) e' "tmp" builder
       | SCall ("printbig", [e]) ->
 	  L.build_call printbig_func [| (expr builder e) |] "printbig" builder
+      | SCall("get_num", [e]) ->
+    L.build_call getnum_func [| (expr builder e) |] "get_num" builder
       | SCall ("printf", [e]) -> 
 	  L.build_call printf_func [| float_format_str ; (expr builder e) |]
 	    "printf" builder
