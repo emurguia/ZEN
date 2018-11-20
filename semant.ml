@@ -40,20 +40,24 @@ let check (globals, functions) =
       fname = name; 
       formals = [(ty, "x")];
       locals = []; body = [] } map
-    in List.fold_left add_bind StringMap.empty [ ("print", String);
+    in 
+    let _ = List.fold_left add_bind StringMap.empty [ ("print", String);
     								 ("printf", Float);
     								 ("printi", Int);
+                     ("get_num", Int);
+                     ("printbig", Int);
                                 ]
-  (*in
-  	let add_bind2 map (name, ty) = StringMap.add name {
+    in
+  	let add_bind2 map (name, ty1, ty2, ty3, ty4) = StringMap.add name {
       typ = Void;
       fname = name; 
-      formals = [(ty, "x"),(ty, "y"),(ty, "height"),(ty, "width")];
+      formals = [(ty1, "x");(ty2, "y");(ty3, "height");(ty4, "width")];
       locals = []; body = [] } map
     in List.fold_left add_bind2 StringMap.empty [
                                ("make_triangle", Float, Float, Float, Float);
                                ("make_rectangle", Float, Float, Float, Float);
                                 ]
+                                (*
   in
   	let add_bind3 map (name, ty) = StringMap.add name {
       typ = Void;
