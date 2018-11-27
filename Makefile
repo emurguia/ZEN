@@ -33,9 +33,14 @@ printbig : printbig.c
 # # Building the tarball
 
 TESTS = \
-  hello_world
+  basic_binops bool1 bool2 bools equalities float1 float2 hello \
+  int1 int2 int3 string1 string2 string3 tuples
 
-TESTFILES = $(TESTS:%=test-%.zen) $(TESTS:%=test-%.out)
+FAILS = \
+  assign1
+
+TESTFILES = $(TESTS:%=test-%.zen) $(TESTS:%=test-%.out) \
+	    $(FAILS:%=fail-%.zen) $(FAILS:%=fail-%.err)
 
 TARFILES = ast.ml sast.ml codegen.ml Makefile _tags zen.ml parser.mly \
 	README scanner.mll semant.ml testall.sh \
