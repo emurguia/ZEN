@@ -2,6 +2,6 @@ int main() {
 	int y;
 	y = -4;
 	y = 6;
-	print(y);
+	printi(y);
 	return 0;
 }
