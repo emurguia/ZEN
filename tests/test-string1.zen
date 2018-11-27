@@ -1,2 +1,6 @@
-string x;
-x = "Hello World";
+int main() {
+	string x;
+	x = "Hello World";
+	print(x);
+	return 0;
+}
