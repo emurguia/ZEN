@@ -46,7 +46,7 @@ let check (globals, functions) =
                      ("get_num", Int);
                      ("printbig", Int);
                                 ]
-    (*in
+   (* in
   	let add_bind2 map (name, ty1, ty2, ty3, ty4) = StringMap.add name {
       typ = Void;
       fname = name; 
