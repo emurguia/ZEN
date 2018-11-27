@@ -23,7 +23,7 @@ zen.native :
 .PHONY : clean
 clean :
 	ocamlbuild -clean
-	rm -rf testall.log *.diff
+	rm -rf testall.log *.diff  printbig *.o *.ll
 
 # # Testing the "printbig" example
 
