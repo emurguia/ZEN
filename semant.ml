@@ -40,14 +40,13 @@ let check (globals, functions) =
       fname = name; 
       formals = [(ty, "x")];
       locals = []; body = [] } map
-    in 
-    let _ = List.fold_left add_bind StringMap.empty [ ("print", String);
+    in List.fold_left add_bind StringMap.empty [ ("print", String);
     								 ("printf", Float);
     								 ("printi", Int);
                      ("get_num", Int);
                      ("printbig", Int);
                                 ]
-    in
+    (*in
   	let add_bind2 map (name, ty1, ty2, ty3, ty4) = StringMap.add name {
       typ = Void;
       fname = name; 
@@ -139,6 +138,7 @@ let add_bind9 map (name, ty) = StringMap.add name {
                                 ]                             
   *)
   (* Add function name to symbol table *)
+*)
 in
   let add_func map fd = 
     let built_in_err = "function " ^ fd.fname ^ " may not be defined"
