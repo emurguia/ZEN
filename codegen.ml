@@ -62,8 +62,25 @@ let translate (globals, functions) =
   let printbig_t = L.function_type i32_t [| i32_t |] in
   let printbig_func = L.declare_function "printbig" printbig_t the_module in
 
-  let getnum_t = L.function_type i32_t [| i32_t |] in
-  let getnum_func = L.declare_function "get_num" getnum_t the_module in
+  let get_num_t = L.function_type i32_t [| i32_t |] in
+  let get_num_func = L.declare_function "get_num" get_num_t the_module in
+
+  let make_triangle_t = L.function_type void_t [| float_t; float_t; float_t; float_t |] in
+  let make_triangle_func = L.declare_function "make_triangle" make_triangle_t the_module in
+
+  let make_rectangle_t = L.function_type void_t [| float_t; float_t; float_t; float_t |] in
+  let make_rectangle_func = L.declare_function "make_recatngle" make_rectangle_t the_module in
+
+  let make_circle_t = L.function_type void_t [| float_t; float_t; float_t; i32_t |] in
+  let make_circle_func = L.declare_function "make_circle" make_circle_t the_module in
+
+  let make_point_t = L.function_type void_t [| float_t; float_t; |] in
+  let make_point_func = L.declare_function "make_point" make_point_t the_module in
+
+  let make_line_t = L.function_type void_t [| float_t; float_t; float_t; float_t |] in
+  let make_line_func = L.declare_function "make_line" make_line_t the_module in
+
+
 (* 
   let ensureFloat c = 
     if L.type_of c = float_t then c else (L.const_sitofp c float_t) in *)
@@ -176,8 +193,18 @@ let translate (globals, functions) =
           | A.Not                  -> L.build_not) e' "tmp" builder
       | SCall ("printbig", [e]) ->
 	  L.build_call printbig_func [| (expr builder e) |] "printbig" builder
+      | SCall ("make_triangle", [e1; e2; e3; e4]) ->
+    L.build_call make_triangle_func [| (expr builder e1); (expr builder e2); (expr builder e3); (expr builder e4)|] "make_triangle" builder
+      | SCall ("make_rectangle", [e1; e2; e3; e4]) ->
+    L.build_call make_rectangle_func [| (expr builder e1); (expr builder e2); (expr builder e3); (expr builder e4)|] "make_rectangle" builder
+      | SCall ("make_circle", [e1; e2; e3; e4]) ->
+    L.build_call make_circle_func [| (expr builder e1); (expr builder e2); (expr builder e3); (expr builder e4)|] "make_circle" builder
+      | SCall ("make_line", [e1; e2; e3; e4]) ->
+    L.build_call make_line_func [| (expr builder e1); (expr builder e2); (expr builder e3); (expr builder e4)|] "make_line" builder
+      | SCall ("make_point", [e1; e2;]) ->
+    L.build_call make_point_func [| (expr builder e1); (expr builder e2); |] "make_point" builder
       | SCall("get_num", [e]) ->
-    L.build_call getnum_func [| (expr builder e) |] "get_num" builder
+    L.build_call get_num_func [| (expr builder e) |] "get_num" builder
       | SCall ("printf", [e]) -> 
 	  L.build_call printf_func [| float_format_str ; (expr builder e) |]
 	    "printf" builder
