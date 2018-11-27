@@ -102,7 +102,8 @@ let translate (globals, functions) =
     let builder = L.builder_at_end context (L.entry_block the_function) in
 
     let str_format_str = L.build_global_stringptr "%s\n" "str_fmt" builder
-    and float_format_str = L.build_global_stringptr "%g\n" "fmt" builder in
+    and float_format_str = L.build_global_stringptr "%g\n" "fmt" builder 
+    and int_format_str = L.build_global_stringptr "%d\n" "int_fmt" builder in
 
     (* Construct the function's "locals": formal arguments and locally
        declared variables.  Allocate each on the stack, initialize their
@@ -194,15 +195,20 @@ let translate (globals, functions) =
       | SCall ("printbig", [e]) ->
 	  L.build_call printbig_func [| (expr builder e) |] "printbig" builder
       | SCall ("make_triangle", [e1; e2; e3; e4]) ->
-    L.build_call make_triangle_func [| (expr builder e1); (expr builder e2); (expr builder e3); (expr builder e4)|] "make_triangle" builder
+    L.build_call make_triangle_func [| (expr builder e1); (expr builder e2); (expr builder e3); (expr builder e4)|] 
+    "make_triangle" builder
       | SCall ("make_rectangle", [e1; e2; e3; e4]) ->
-    L.build_call make_rectangle_func [| (expr builder e1); (expr builder e2); (expr builder e3); (expr builder e4)|] "make_rectangle" builder
+    L.build_call make_rectangle_func [| (expr builder e1); (expr builder e2); (expr builder e3); (expr builder e4)|] 
+    "make_rectangle" builder
       | SCall ("make_circle", [e1; e2; e3; e4]) ->
-    L.build_call make_circle_func [| (expr builder e1); (expr builder e2); (expr builder e3); (expr builder e4)|] "make_circle" builder
+    L.build_call make_circle_func [| (expr builder e1); (expr builder e2); (expr builder e3); (expr builder e4)|] 
+    "make_circle" builder
       | SCall ("make_line", [e1; e2; e3; e4]) ->
-    L.build_call make_line_func [| (expr builder e1); (expr builder e2); (expr builder e3); (expr builder e4)|] "make_line" builder
-      | SCall ("make_point", [e1; e2;]) ->
-    L.build_call make_point_func [| (expr builder e1); (expr builder e2); |] "make_point" builder
+    L.build_call make_line_func [| (expr builder e1); (expr builder e2); (expr builder e3); (expr builder e4)|] 
+    "make_line" builder
+      | SCall ("make_point", [e1; e2]) ->
+    L.build_call make_point_func [| (expr builder e1); (expr builder e2); |] 
+    "make_point" builder
       | SCall("get_num", [e]) ->
     L.build_call get_num_func [| (expr builder e) |] "get_num" builder
       | SCall ("printf", [e]) -> 
@@ -211,6 +217,9 @@ let translate (globals, functions) =
       | SCall("print", [e]) ->
     L.build_call printf_func [| str_format_str ; (expr builder e) |]
       "print" builder
+      | SCall("printi", [e]) ->
+    L.build_call printf_func [| int_format_str ; (expr builder e) |]
+      "printi" builder
       | SCall (f, args) ->
          let (fdef, fdecl) = StringMap.find f function_decls in
 	 let llargs = List.rev (List.map (expr builder) (List.rev args)) in
