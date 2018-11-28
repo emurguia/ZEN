@@ -1,3 +1,7 @@
-string x;
-x = "Hello";
-x = "World";
+int main() {
+	string x;
+	x = "Hello";
+	x = "World";
+	print(x);
+	return 0;
+}
