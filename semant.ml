@@ -40,19 +40,19 @@ let check (globals, functions) =
       fname = name; 
       formals = [(ty, "x")];
       locals = []; body = [] } map
-    in List.fold_left add_bind StringMap.empty [ ("print", String);
+    in let funct_map = List.fold_left add_bind StringMap.empty [ ("print", String);
     								 ("printf", Float);
     								 ("printi", Int);
                      ("get_num", Int);
                      ("printbig", Int);
                                 ]
-   (* in
+    in
   	let add_bind2 map (name, ty1, ty2, ty3, ty4) = StringMap.add name {
       typ = Void;
       fname = name; 
       formals = [(ty1, "x");(ty2, "y");(ty3, "height");(ty4, "width")];
       locals = []; body = [] } map
-    in List.fold_left add_bind2 StringMap.empty [
+    in let funct_map2 = List.fold_left add_bind2 funct_map [
                                ("make_triangle", Float, Float, Float, Float);
                                ("make_rectangle", Float, Float, Float, Float);
                                 ]
@@ -64,7 +64,7 @@ let check (globals, functions) =
       formals = [(ty1, "x");(ty2, "y");(ty3, "radius");(ty4, "vertices")];
       locals = []; body = [] } map
      in
-     let _ = List.fold_left add_bind3 StringMap.empty [
+     let funct_map3 = List.fold_left add_bind3 funct_map2 [
                                ("make_circle", Float, Float, Float, Int);
                                 ]                            
   
@@ -75,7 +75,7 @@ let check (globals, functions) =
       formals = [(ty1, "x");(ty2, "y")];
       locals = []; body = [] } map
     in
-    let _ = List.fold_left add_bind4 StringMap.empty [
+    let funct_map4 = List.fold_left add_bind4 funct_map3 [
                                ("make_point", Float, Float);
                                 ]  
                                                            
@@ -86,7 +86,7 @@ let check (globals, functions) =
       formals = [(ty1, "x1");(ty2, "y1");(ty3, "x2");(ty4, "y2")];
       locals = []; body = [] } map
     in 
-    let _ = List.fold_left add_bind5 StringMap.empty [
+     List.fold_left add_bind5 funct_map4 [
                                ("make_line", Float, Float, Float, Float);
                                 ]                             
   (* commenting out list and tuple  built in functions*)
@@ -138,7 +138,7 @@ let add_bind9 map (name, ty) = StringMap.add name {
                                 ]                             
   *)
   (* Add function name to symbol table *)
-*)
+
 in
   let add_func map fd = 
     let built_in_err = "function " ^ fd.fname ^ " may not be defined"
