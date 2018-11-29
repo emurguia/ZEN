@@ -35,6 +35,7 @@ rule token = parse
 | "int"    { INT }
 | "float"  { FLOAT }
 | "bool"   { BOOL }
+| "string" { STRING }
 | "true"   { TRUE }
 | "false"  { FALSE }
 (* | "list"   { LIST } *)
