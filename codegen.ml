@@ -217,7 +217,7 @@ let translate (globals, functions) =
       | SCall("print", [e]) ->
     L.build_call printf_func [| str_format_str ; (expr builder e) |]
       "print" builder
-      | SCall("printi", [e]) ->
+      | SCall("printi", [e]) | SCall("printb", [e]) ->
     L.build_call printf_func [| int_format_str ; (expr builder e) |]
       "printi" builder
       | SCall (f, args) ->
