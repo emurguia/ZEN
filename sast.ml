@@ -8,7 +8,7 @@ and sx =
   | SFloatLiteral of string
   | SBooleanLiteral of bool
   | SStringLiteral of string
-  (* | STupleLiteral of float * float  *)
+  | STupleLiteral of sexpr * sexpr 
 (*   | SListLiteral of sexpr list
  *)  | SId of string
   | SBinop of sexpr * op * sexpr

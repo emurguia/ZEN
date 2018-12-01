@@ -1,10 +1,6 @@
 void main()
 {
-	tuple tup = (1.5, 2.5);
-
-	float x = getX(tup);
-	float y = getY(tup);
-
-	printf(x);
-	printf(y);
+	tuple tup;
+	tup = (1.5, 2.5);
+	return; 
 }

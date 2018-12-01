@@ -191,7 +191,8 @@ in
       | FloatLiteral l -> (Float, SFloatLiteral l)
       | BooleanLiteral l  -> (Bool, SBooleanLiteral l)
       | StringLiteral l -> (String, SStringLiteral l)
-      (* | TupleLiteral (x, y) -> (Tuple, STupleLiteral (x, y)) *)
+      | TupleLiteral (x, y) -> let t1 = expr x and t2 = expr y in
+      (Tuple, STupleLiteral (t1, t2))
       (* map all elements in list to their sexpr version (int literal -> sintliteral, etc.))*)
 (* 	| ListLiteral  el -> let t = List.fold_left
 		(fun e1 e2 ->
