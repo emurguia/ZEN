@@ -1,0 +1,10 @@
+int main()
+{
+  int i;
+  float b;
+
+  i = 42;
+  b = 6.75;
+  b = i;
+  return 0;
+}

@@ -1,11 +1,19 @@
-void main()
+int main()
 {
-	boolean t = True;
-	boolean f = False;
+	bool t;
+	bool f;
 
-	boolean a = t and f;
-	boolean o = t or f;
+	bool a;
+	bool o;
+
+	t = true;
+	f = false;
+
+	a = t and f;
+	o = t or f;
 
 	printb(a);
 	printb(o);
+
+	return 0;
 }

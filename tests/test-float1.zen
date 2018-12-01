@@ -1,2 +1,7 @@
-float x;
-x = 2.5;
+int main() {
+	float x;
+	x = -3.2;
+	x = x + 0.2;
+	printf(x);
+	return 0;
+}
