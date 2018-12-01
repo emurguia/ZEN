@@ -47,7 +47,7 @@ let rec string_of_sexpr (t, e) =
   | SStringLiteral(s) -> s
   | SFloatLiteral(l) -> l
   (* | SListLiteral(li) -> "[" ^ List.fold_left(fun b a -> b ^ " " ^ string_of_sexpr a ^ ", ") "" li ^ "]" *)
-  (* | STupleLiteral(e1, e2) -> "(" ^ string_of_float e1 ^ ", " ^ string_of_float e2 ^ ")" *)
+  | STupleLiteral(e1, e2) -> "(" ^ string_of_sexpr e1 ^ ", " ^ string_of_sexpr e2 ^ ")"
   | SId(s) -> s
   | SBinop(e1, o, e2) ->
       string_of_sexpr e1 ^ " " ^ string_of_op o ^ " " ^ string_of_sexpr e2
