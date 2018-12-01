@@ -2,9 +2,9 @@ int main() {
 	string x;
 	string y;
 	string z;
-	x = "Hello";
-	y = " World";
-	z = x + y;
-	print(z);
+	x = "Hello World";
+	z = x;
+	y = z;
+	print(y);
 	return 0;
 }
