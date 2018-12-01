@@ -1,14 +1,24 @@
-void main()
+int main()
 {
-	int x = 5;
-	int y = 3;
+	int x;
+	int y;
 
-	boolean less = x<y;
-	boolean more = x>y;
-	boolean equal = x==y;
-	boolean leq = x<=x;
-	boolean geq = y>=x;
-	boolean neq = x!=y;
+	bool less;
+	bool more;
+	bool equal;
+	bool leq;
+	bool geq;
+	bool neq;
+
+	x = 5;
+	y = 3;
+
+	less = x<y;
+	more = x>y;
+	equal = x==y;
+	leq = x<=x;
+	geq = y>=x;
+	neq = x!=y;
 
 	printb(less);
 	printb(more);
@@ -16,4 +26,6 @@ void main()
 	printb(leq);
 	printb(geq);
 	printb(neq);
+
+	return 0;
 }

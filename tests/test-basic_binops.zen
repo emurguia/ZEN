@@ -20,5 +20,7 @@ int main()
 	printf(product);
 	printf(quotient);
 	printf(diff);
+
+	
 	return 0;
 }

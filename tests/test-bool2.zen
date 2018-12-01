@@ -1,4 +1,8 @@
-boolean x;
-boolean y;
-x = true;
-y = !x;
+int main() {
+	bool x;
+	bool y;
+	x = true;
+	y = !x;
+	printb(y);
+	return 0;
+}
