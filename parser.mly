@@ -38,8 +38,8 @@ program:
 
 decls:
    /* nothing */ { [], [] }
-  | decls vdecl { ($2 :: fst $1), snd $1 } 
-  | decls fdecl { fst $1, ($2 :: snd $1) }
+  | decls vdecl { (($2 :: fst $1), snd $1) } 
+  | decls fdecl { (fst $1, ($2 :: snd $1)) }
 
 fdecl:
    typ ID LPAREN formals_opt RPAREN LBRACE vdecl_list stmt_list RBRACE
@@ -51,7 +51,7 @@ fdecl:
 
 formals_opt:
     /* nothing */ { [] }
-  | formal_list   { List.rev $1 }
+  | formal_list   { $1 }
 
 formal_list:
     typ ID                   { [($1,$2)] }
