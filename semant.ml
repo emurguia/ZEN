@@ -86,11 +86,11 @@ let check (globals, functions) =
       formals = [(ty1, "x1");(ty2, "y1");(ty3, "x2");(ty4, "y2")];
       locals = []; body = [] } map
     in 
-     List.fold_left add_bind5 funct_map4 [
+     let funct_map5 = List.fold_left add_bind5 funct_map4 [
                                ("make_line", Float, Float, Float, Float);
                                 ]                             
-  (* commenting out list and tuple  built in functions*)
-  (*
+ 
+  
   in                             
   	let add_bind6 map (name, ty) = StringMap.add name {
       typ = Float;
@@ -98,13 +98,13 @@ let check (globals, functions) =
       formals = [(ty, "tuple")];
       locals = []; body = [] } map
     in 
-    let _ = List.fold_left add_bind6 StringMap.empty [
+     List.fold_left add_bind6 funct_map5 [
                                ("getX", Tuple);
                                ("getY", Tuple)
                                ]    
 
-  
-  
+  (*commenting out list built in functions*)
+  (*
   in
   let add_bind7 map (name, ty1, ty2) = StringMap.add name {
       typ = Int|String|Tuple|Float|Bool;
@@ -137,6 +137,7 @@ let add_bind9 map (name, ty) = StringMap.add name {
                                ("length", List);
                                 ]                             
   *)
+  
   (* Add function name to symbol table *)
 
 in
