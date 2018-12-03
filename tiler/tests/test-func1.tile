@@ -1,0 +1,17 @@
+// testing that function calls have static scope
+
+int a;
+int b;
+
+init {
+   a = 5;
+   b = 6;
+   iprint(add(1, 2));
+   close();
+}
+
+int add(int a, int b) {
+   int x;
+   x = 100;
+   return a+b+x;
+}

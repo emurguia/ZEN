@@ -1,0 +1,6 @@
+// Tests that the most basic helloworld program can be executed
+
+init {
+   tile(3, 3);
+   close();
+}

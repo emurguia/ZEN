@@ -1,0 +1,17 @@
+// This tests that print is able to handle expressions
+
+init {
+	int x;
+	int y;
+	float a;
+	float b;
+
+	tile(3,3);
+	x = 1;
+	y = 1;
+	a = 3.0;
+	b = 4.0;
+	iprint(x*y/y-y);
+	fprint(b/a);
+	close();
+}

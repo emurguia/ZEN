@@ -1,0 +1,7 @@
+// single line comment
+
+
+init {
+	tile(3, 3);
+	background("./sprites/hello.bmp");
+}

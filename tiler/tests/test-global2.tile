@@ -1,0 +1,29 @@
+// This tests that global variables that have values assigned in one block can still be accessed in another block
+
+int x;
+int count;
+
+init {
+   tile(3,3);
+   x = 77;
+   count = 0;
+   iprint(x);
+}
+
+turn {
+	iprint(x);
+	count = count + 1;
+	
+}
+
+end {
+
+	if (count >= 1) {
+		close();
+		return 1;
+	}
+}
+
+
+
+

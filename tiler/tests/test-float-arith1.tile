@@ -1,0 +1,9 @@
+// testing that float arithmetic between floats works
+
+init {
+	float x;
+	tile(3,3);
+	x = 3.0 + 7.5 * 2.6;
+	fprint(x);
+	close();
+}

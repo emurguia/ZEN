@@ -1,0 +1,12 @@
+// This tests that global variables can be assigned locally and updated
+
+int x;
+
+init {
+   tile(3,3);
+   x = 43;
+   iprint(x);
+   x = 21;
+   iprint(x);
+   close();
+}

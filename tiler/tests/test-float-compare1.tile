@@ -1,0 +1,9 @@
+// testing that float comparison between floats works
+
+init {
+	bool x;
+	tile(3,3);
+	x = 3.0 < 7.0;
+	iprint(x);
+	close();
+}

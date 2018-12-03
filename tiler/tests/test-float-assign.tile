@@ -1,0 +1,9 @@
+// testing that float comparison between floats and ints works
+
+init {
+	float x;
+	tile(3,3);
+	x = 3.0;
+	fprint(x);
+	close();
+}

@@ -1,0 +1,2 @@
+Fatal error: exception Failure("illegal binary operator int + bool in x + b")
+make: *** [tests/fail-arith-invalid-types.test] Error 2

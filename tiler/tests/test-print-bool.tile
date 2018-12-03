@@ -1,0 +1,9 @@
+// tests that booleans can be printed (as ints)
+
+init {
+	bool x;
+	tile(3,3);
+	x = true;
+	iprint(x);
+	close();
+}

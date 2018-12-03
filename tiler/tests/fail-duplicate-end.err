@@ -1,0 +1,2 @@
+Fatal error: exception Failure("duplicate blocks end")
+make: *** [tests/fail-duplicate-end.test] Error 2

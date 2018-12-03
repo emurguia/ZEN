@@ -1,0 +1,12 @@
+// testing that arithmetic not involving ints/floats dies at semantic checker
+
+bool b;
+int x;
+int y;
+init {
+	tile(3,3);
+	b = true;
+	x = 3;
+	y = x + b;
+	close();
+}

@@ -1,0 +1,21 @@
+// This tests that the while loop is working as expected
+
+init {
+	int x;
+	int y;
+
+	tile(3,3);
+
+	x = 7;
+	while (x > 0){
+		iprint(x);
+		x = x -1;
+	}
+
+	y = 100;
+	while(y < 1){
+		sprint("While loop should not have been entered?!?!");
+	}
+
+	close();
+}

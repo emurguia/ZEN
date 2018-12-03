@@ -1,0 +1,6 @@
+// Tests that program fails if init is missing
+
+// "init" is missing at this locations 
+{
+   grid(3, 3); 
+}

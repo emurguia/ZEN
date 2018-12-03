@@ -1,0 +1,11 @@
+// checks that duplicate end blocks are not allowed
+
+init{
+	tile(3,3);
+}
+end{
+	
+}
+end{
+	
+}

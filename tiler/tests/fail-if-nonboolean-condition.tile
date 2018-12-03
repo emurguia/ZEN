@@ -1,0 +1,8 @@
+// Tests error message when incorrect if predicate type
+
+init{
+	tile(3,3);
+	if (3){
+		iprint("happy birthday monica !");
+	}
+}

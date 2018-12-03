@@ -1,0 +1,185 @@
+#size 600 600
+#color 181 234 170
+#title "Calculator GUI"
+
+int x; int y;
+int result;
+int current;
+int current_power;
+string current_op;
+bool start_of_num;
+bool start_of_expr;
+coord mouse;
+string p; string s;
+string m; string d;
+string e; string q;
+
+class Num {
+   attr: int value;
+}
+
+class Op {
+   attr: string op;
+}
+
+init {
+   <Num> n0; 
+   <Num> n1; <Num> n2; <Num> n3; 
+   <Num> n4; <Num> n5; <Num> n6; 
+   <Num> n7; <Num> n8; <Num> n9; 
+   <Op> plus; <Op> minus; 
+   <Op> divide; <Op> times; 
+   <Op> equals; <Op> quit;
+   int count;
+
+   start_of_expr = true;
+   start_of_num = true;
+   result = 0;
+   p = "+";
+   s = "-";
+   m = "*";
+   d = "/";
+   e = "=";
+   q = "q";
+
+   tile(4, 4);
+   background("./sprites/4x4.bmp");
+
+   n0 = new Num(0);
+   setSprite(n0, "./sprites/0.bmp");
+   grid[0, 3] = n0;
+
+   n1 = new Num(1);
+   setSprite(n1, "./sprites/1.bmp");
+   grid[0, 2] = n1;
+
+   n2 = new Num(2);
+   setSprite(n2, "./sprites/2.bmp");
+   grid[1, 2] = n2;
+
+   n3 = new Num(3);
+   setSprite(n3, "./sprites/3.bmp");
+   grid[2, 2] = n3;
+
+   n4 = new Num(4);
+   setSprite(n4, "./sprites/4.bmp");
+   grid[0, 1] = n4;
+
+   n5 = new Num(5);
+   setSprite(n5, "./sprites/5.bmp");
+   grid[1, 1] = n5;
+
+   n6 = new Num(6);
+   setSprite(n6, "./sprites/6.bmp");
+   grid[2, 1] = n6;
+
+   n7 = new Num(7);
+   setSprite(n7, "./sprites/7.bmp");
+   grid[0, 0] = n7;
+
+   n8 = new Num(8);
+   setSprite(n8, "./sprites/8.bmp");
+   grid[1, 0] = n8;
+
+   n9 = new Num(9);
+   setSprite(n9, "./sprites/9.bmp");
+   grid[2, 0] = n9;
+
+   plus = new Op(p);
+   setSprite(plus, "./sprites/plus.bmp");
+   grid[3, 3] = plus;
+
+   minus = new Op(s);
+   setSprite(minus, "./sprites/minus.bmp");
+   grid[3, 2] = minus;
+
+   times = new Op(m);
+   setSprite(times, "./sprites/multiply.bmp");
+   grid[3, 1] = times;
+
+   divide = new Op(d);
+   setSprite(divide, "./sprites/divide.bmp");
+   grid[3, 0] = divide;
+
+   equals = new Op(e);
+   setSprite(equals, "./sprites/equal.bmp");
+   grid[2, 3] = equals;
+
+   quit = new Op(q);
+   setSprite(quit, "./sprites/burger.bmp");
+   grid[1, 3] = quit;
+
+   sprint("Welcome to tiler calculator!");
+   sprint("Click on the burger to quit.");
+}
+
+void calculate(){
+   if (current_op == p){
+      result = result + current;
+   }
+   if (current_op == s){
+      result = result - current;
+   }
+   if (current_op == m){
+      result = result * current;
+   }
+   if (current_op == d){
+      result = result / current;
+   }
+}
+
+turn {
+   <Num> temp_num;
+   <Op> temp_op;
+   int val;
+   current = 0;
+
+   mouse = capture();
+   while (mouse[x] != 3 && !(mouse[x]==2 && mouse[y]==3) && !(mouse[x]==1 && mouse[y]==3)){
+      temp_num = grid[mouse[x], mouse[y]];
+      val = temp_num.value;
+      current = 10 * current + val;
+      mouse = capture();
+   }
+   if (!(mouse[x]==1 && mouse[y]==3)){
+      iprint(current);
+   }
+
+   if (start_of_expr){
+      current_op = p;
+   }
+   calculate();
+   start_of_expr = false;
+
+   temp_op = grid[mouse[x], mouse[y]];
+   current_op = temp_op.op;
+   if (current_op == p){
+      sprint("+");
+   }
+   if (current_op == s){
+      sprint("-");
+   }
+   if (current_op == m){
+      sprint("*");
+   }
+   if (current_op == d){
+      sprint("/");
+   }
+   if (current_op == e){
+      sprint("=");
+      calculate();
+      iprint(result);
+      result = 0;
+      start_of_expr = true;
+      sprint("Next calculation?");
+      sprint("Click on the burger to quit.");
+   }
+}
+
+end {
+   if (current_op == q){
+      sprint("Done!");
+      return 1;
+   }
+
+}

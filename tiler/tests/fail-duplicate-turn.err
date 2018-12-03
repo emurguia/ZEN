@@ -1,0 +1,2 @@
+Fatal error: exception Failure("duplicate blocks turn")
+make: *** [tests/fail-duplicate-turn.test] Error 2

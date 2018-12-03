@@ -1,0 +1,11 @@
+// tests that duplicate turn blocks are not allowed
+
+init{
+	tile(3,3);
+}
+turn{
+	
+}
+turn{
+	
+}

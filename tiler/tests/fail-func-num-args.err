@@ -1,0 +1,4 @@
+Incorrect number of arguments passed to called function!
+  %add_result = call i32 @add(i32 2)
+LLVM ERROR: Broken module found, compilation aborted!
+make: *** [tests/fail-func-num-args.test] Error 1

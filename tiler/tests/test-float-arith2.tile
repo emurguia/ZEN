@@ -1,0 +1,11 @@
+// testing that float arithmetic between floats and ints works
+
+init {
+	float x;
+	int y;
+	tile(3,3);
+	y = 7;
+	x = 3.0 + 4 * 2.6 + 7;
+	fprint(x);
+	close();
+}
