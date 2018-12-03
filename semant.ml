@@ -98,10 +98,21 @@ let check (globals, functions) =
       formals = [(ty, "tuple")];
       locals = []; body = [] } map
     in 
-     List.fold_left add_bind6 funct_map5 [
+     let funct_map6 = List.fold_left add_bind6 funct_map5 [
                                ("getX", Tuple);
                                ("getY", Tuple)
-                               ]    
+                               ]
+  in                             
+    let add_bind7 map (name, ty) = StringMap.add name {
+      typ = Void;
+      fname = name; 
+      formals = [(ty, "tuple")];
+      locals = []; body = [] } map
+    in 
+     List.fold_left add_bind7 funct_map6 [
+                               ("setX", Tuple);
+                               ("setY", Tuple)
+                               ]     
 
   (*commenting out list built in functions*)
   (*
