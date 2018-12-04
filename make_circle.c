@@ -18,8 +18,10 @@ void make_circle(float x, float y, float radius, int vertices)
         slClose();
 }
 
+#ifdef BUILD_TEST
 int main()
 {
 	make_circle(325.0, 450.0, 25.0, 16);
 	return 1;
 }
+#endif
