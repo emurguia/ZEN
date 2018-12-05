@@ -48,7 +48,7 @@ let check (globals, functions) =
                                 ]
     in
   	let add_bind2 map (name, ty1, ty2, ty3, ty4) = StringMap.add name {
-      typ = Void;
+      typ = Int;
       fname = name; 
       formals = [(ty1, "x");(ty2, "y");(ty3, "height");(ty4, "width")];
       locals = []; body = [] } map
