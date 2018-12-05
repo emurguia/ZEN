@@ -1,4 +1,4 @@
-int main()
+void main()
 {
         float x;
 	float y;
@@ -9,6 +9,6 @@ int main()
 	z = 25.0;
 	a = 16;
 	make_circle(x, y, z, a);
-	return 0;
+	return;
         
 }
