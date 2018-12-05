@@ -1,0 +1,5 @@
+void main()
+{
+	make_triangle(100.0,450.0,50.0,50.0);
+	return;
+}
