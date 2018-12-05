@@ -65,10 +65,10 @@ let translate (globals, functions) =
   let get_num_t = L.function_type i32_t [| i32_t |] in
   let get_num_func = L.declare_function "get_num" get_num_t the_module in
 
-  let make_triangle_t = L.function_type void_t [| float_t; float_t; float_t; float_t |] in
+  let make_triangle_t = L.function_type i32_t [| float_t; float_t; float_t; float_t |] in
   let make_triangle_func = L.declare_function "make_triangle" make_triangle_t the_module in
 
-  let make_rectangle_t = L.function_type void_t [| float_t; float_t; float_t; float_t |] in
+  let make_rectangle_t = L.function_type i32_t [| float_t; float_t; float_t; float_t |] in
   let make_rectangle_func = L.declare_function "make_recatngle" make_rectangle_t the_module in
 
   let make_circle_t = L.function_type i32_t [| float_t; float_t; float_t; i32_t |] in
@@ -203,7 +203,7 @@ let translate (globals, functions) =
 	  (match op with
 	    A.Neg when t = A.Float -> L.build_fneg 
 	  | A.Neg                  -> L.build_neg
-          | A.Not                  -> L.build_not) e' "tmp" builder
+      | A.Not                  -> L.build_not) e' "tmp" builder
       | SCall ("printbig", [e]) ->
 	  L.build_call printbig_func [| (expr builder e) |] "printbig" builder
       | SCall ("make_triangle", [e1; e2; e3; e4]) ->
