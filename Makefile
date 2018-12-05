@@ -8,7 +8,7 @@ test : all test.sh
 # to test linking external code
 
 .PHONY : all
-all : zen.native printbig.o make_circle.o
+all : zen.native printbig.o make_circle.o make_triangle.o
 
 # "make zen.native" compiles the compiler
 
@@ -23,7 +23,7 @@ zen.native :
 .PHONY : clean
 clean :
 	ocamlbuild -clean
-	rm -rf testall.log *.diff  printbig make_circle *.o *.ll
+	rm -rf testall.log *.diff  printbig make_circle make_triangle *.o *.ll
 
 # # Testing the "printbig" example
 
@@ -32,6 +32,9 @@ printbig : printbig.c
 
 make_circle : make_circle.c
 	cc -o make_circle -DBUILD_TEST make_circle.c /usr/local/lib/libsigil.so
+
+make_triangle: make_triangle.c
+	cc -o make_triangle -DBUILT_TEST make_triangle.c /usr/local/lib/libsigil.so
 # # Building the tarball
 
 TESTS = \
