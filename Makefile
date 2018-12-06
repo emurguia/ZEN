@@ -8,7 +8,7 @@ test : all test.sh
 # to test linking external code
 
 .PHONY : all
-all : zen.native printbig.o make_circle.o make_triangle.o
+all : zen.native printbig.o make_circle.o make_triangle.o make_sdl_window.o
 
 # "make zen.native" compiles the compiler
 
@@ -34,7 +34,10 @@ make_circle : make_circle.c
 	cc -o make_circle -DBUILD_TEST make_circle.c /usr/local/lib/libsigil.so
 
 make_triangle: make_triangle.c
-	cc -o make_triangle -DBUILT_TEST make_triangle.c /usr/local/lib/libsigil.so
+	cc -o make_triangle -DBUILD_TEST make_triangle.c /usr/local/lib/libsigil.so
+
+make_sdl_window: make_sdl_window.c
+	cc -o make_sdl_window -DBUILD_TEST make_sdl_window.c 
 # # Building the tarball
 
 TESTS = \
