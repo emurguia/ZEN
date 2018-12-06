@@ -265,7 +265,7 @@ in
           in (ty, SBinop((t1, e1'), op, (t2, e2')))
       | Call(fname, args) as call -> 
         let print_ex arg = print_endline (string_of_expr arg) in
-        List.iter print_ex el ;
+        List.iter print_ex args ;
           let fd = find_func fname in
           let param_length = List.length fd.formals in
           if List.length args != param_length then
