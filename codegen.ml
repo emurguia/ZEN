@@ -71,7 +71,7 @@ let translate (globals, functions) =
   let make_rectangle_t = L.function_type i32_t [| float_t; float_t; float_t; float_t |] in
   let make_rectangle_func = L.declare_function "make_recatngle" make_rectangle_t the_module in
 
-  let make_circle_t = L.function_type i32_t [| float_t; float_t; float_t; i32_t |] in
+  let make_circle_t = L.function_type float_t [| float_t; float_t; float_t; i32_t |] in
   let make_circle_func = L.declare_function "make_circle" make_circle_t the_module in
 
   let make_point_t = L.function_type void_t [| float_t; float_t; |] in

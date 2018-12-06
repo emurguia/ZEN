@@ -59,7 +59,7 @@ let check (globals, functions) =
                                 
     in
   	let add_bind3 map (name, ty1, ty2, ty3, ty4) = StringMap.add name {
-      typ = Int;
+      typ = Float;
       fname = name; 
       formals = [(ty1, "x");(ty2, "y");(ty3, "radius");(ty4, "vertices")];
       locals = []; body = [] } map
