@@ -59,13 +59,13 @@ let check (globals, functions) =
                                 
     in
   	let add_bind3 map (name, ty1, ty2, ty3, ty4) = StringMap.add name {
-      typ = Float;
+      typ = Int;
       fname = name; 
       formals = [(ty1, "x");(ty2, "y");(ty3, "radius");(ty4, "vertices")];
       locals = []; body = [] } map
      in
      let funct_map3 = List.fold_left add_bind3 funct_map2 [
-                               ("make_circle", Float, Float, Float, Int);
+                               ("make_circle", Int, Int, Int, Int);
                                 ]  
 
   
@@ -265,8 +265,8 @@ in
           in (ty, SBinop((t1, e1'), op, (t2, e2')))
       | Call(fname, args) as call -> 
         
-        let print_ex arg = print_endline (string_of_expr arg) in
-        List.iter print_ex args ;
+        (*let print_ex arg = print_endline (string_of_expr arg) in
+        List.iter print_ex args ;*)
           let fd = find_func fname in
           let param_length = List.length fd.formals in
           if List.length args != param_length then
