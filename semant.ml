@@ -264,7 +264,9 @@ in
                        string_of_typ t2 ^ " in " ^ string_of_expr e))
           in (ty, SBinop((t1, e1'), op, (t2, e2')))
       | Call(fname, args) as call -> 
-        raise (Failure ("call " ^ fname));
+        let str_args = List.map string_of_expr args in
+        let all_args = String.concat " " str_args in
+        raise (Failure (all_args));
         let print_ex arg = print_endline (string_of_expr arg) in
         List.iter print_ex args ;
           let fd = find_func fname in
