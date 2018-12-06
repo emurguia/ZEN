@@ -80,7 +80,7 @@ let rec string_of_expr = function
   (* | ListAssign(s, e1, e2) -> s ^ "[" ^ string_of_expr e1 ^ "] = " ^ string_of_expr e2 *)
 
   | Call(f, el) ->
-      let print_ex arg = print_endline string_of_expr arg in
+      let print_ex arg = print_endline (string_of_expr arg) in
       List.iter print_ex el ;
       f ^ "(" ^ String.concat ", " (List.map string_of_expr el) ^ ")"
   | Noexpr -> ""
