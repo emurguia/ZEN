@@ -66,7 +66,8 @@ let check (globals, functions) =
      in
      let funct_map3 = List.fold_left add_bind3 funct_map2 [
                                ("make_circle", Float, Float, Float, Int);
-                                ]                            
+                                ]  
+
   
   in
   	let add_bind4 map (name, ty1, ty2) = StringMap.add name {
@@ -263,6 +264,8 @@ in
                        string_of_typ t2 ^ " in " ^ string_of_expr e))
           in (ty, SBinop((t1, e1'), op, (t2, e2')))
       | Call(fname, args) as call -> 
+        let print_ex arg = print_endline (string_of_expr arg) in
+        List.iter print_ex el ;
           let fd = find_func fname in
           let param_length = List.length fd.formals in
           if List.length args != param_length then
