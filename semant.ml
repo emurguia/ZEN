@@ -109,9 +109,20 @@ let check (globals, functions) =
       formals = [(ty, "tuple")];
       locals = []; body = [] } map
     in 
-     List.fold_left add_bind7 funct_map6 [
+     let funct_map7 = List.fold_left add_bind7 funct_map6 [
                                ("setX", Tuple);
                                ("setY", Tuple)
+                               ]     
+  in                             
+    let add_bind8 map (name, ty1, ty2) = StringMap.add name {
+      typ = Int;
+      fname = name; 
+      formals = [(ty1, "w");(ty2, "h")];
+      locals = []; body = [] } map
+    in 
+     List.fold_left add_bind8 funct_map7 [
+                               ("make_sdl_window", Int, Int);
+                               
                                ]     
 
   (*commenting out list built in functions*)
