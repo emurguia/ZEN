@@ -280,9 +280,9 @@ in
           in 
           let args' = List.map2 check_call fd.formals args
 
-          in let str_args = List.map string_of_sexpr args' in
+          in (*let str_args = List.map string_of_sexpr args' in
           let all_args = String.concat " " str_args in
-           raise (Failure (all_args)); 
+           raise (Failure (all_args)); *)
           (fd.typ, SCall(fname, args'))
 
     in
