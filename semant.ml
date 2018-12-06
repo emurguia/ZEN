@@ -264,9 +264,7 @@ in
                        string_of_typ t2 ^ " in " ^ string_of_expr e))
           in (ty, SBinop((t1, e1'), op, (t2, e2')))
       | Call(fname, args) as call -> 
-        let str_args = List.map string_of_expr args in
-        let all_args = String.concat " " str_args in
-        raise (Failure (all_args));
+        
         let print_ex arg = print_endline (string_of_expr arg) in
         List.iter print_ex args ;
           let fd = find_func fname in
@@ -281,7 +279,12 @@ in
             in (check_assign ft et err, e')
           in 
           let args' = List.map2 check_call fd.formals args
-          in (fd.typ, SCall(fname, args'))
+
+          in let str_args = List.map string_of_sexpr args' in
+          let all_args = String.concat " " str_args in
+           raise (Failure (all_args)); 
+          (fd.typ, SCall(fname, args'))
+
     in
 
     let check_bool_expr e = 
