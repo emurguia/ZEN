@@ -74,11 +74,22 @@ let translate (globals, functions) =
   let make_circle_t = L.function_type i32_t [| i32_t; i32_t; i32_t; i32_t |] in
   let make_circle_func = L.declare_function "make_circle" make_circle_t the_module in
 
-  let make_point_t = L.function_type void_t [| i32_t; i32_t; |] in
+  let make_point_t = L.function_type i32_t [| i32_t; i32_t; |] in
   let make_point_func = L.declare_function "make_point" make_point_t the_module in
 
-  let make_line_t = L.function_type void_t [| i32_t; i32_t; i32_t; i32_t |] in
+  let make_line_t = L.function_type i32_t [| i32_t; i32_t; i32_t; i32_t |] in
   let make_line_func = L.declare_function "make_line" make_line_t the_module in
+
+  let make_window_t = L.function_type i32_t [||] in
+  let make_window_func = L.declare_function "make_window" make_window_t the_module in
+
+  let close_window_t = L.function_type i32_t [||] in
+  let close_window_func = L.declare_function "close_window" close_window_t the_module in
+
+  let keep_open_t = L.function_type i1_t [||] in
+  let keep_open_func = L.declare_function "keep_open" keep_open_t the_module in
+
+
 
 
 
@@ -224,6 +235,12 @@ let translate (globals, functions) =
       | SCall ("make_point", [e1; e2]) ->
     L.build_call make_point_func [| (expr builder e1); (expr builder e2); |] 
     "make_point" builder
+      | SCall ("make_window", []) ->
+    L.build_call make_window_func [||] "make_window" builder
+     | SCall ("close_window", []) ->
+    L.build_call close_window_func [||] "close_window" builder
+     | SCall ("keep_open", []) ->
+    L.build_call keep_open_func [||] "keep_open" builder
       | SCall("get_num", [e]) ->
     L.build_call get_num_func [| (expr builder e) |] "get_num" builder
       | SCall ("printf", [e]) -> 

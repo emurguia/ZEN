@@ -90,28 +90,49 @@ let check (globals, functions) =
     in 
      let funct_map5 = List.fold_left add_bind5 funct_map4 [
                                ("make_line", Int, Int, Int, Int);
-                                ]                             
+                                ]    
+  in
+    let add_bind6 map (name) = StringMap.add name {
+      typ = Int;
+      fname = name; 
+      formals = [];
+      locals = []; body = [] } map
+    in 
+     let funct_map6 = List.fold_left add_bind6 funct_map5 [
+                               ("make_window");
+                               ("close_window");
+                                ]     
+  in
+    let add_bind7 map (name) = StringMap.add name {
+      typ = Bool;
+      fname = name; 
+      formals = [];
+      locals = []; body = [] } map
+    in 
+     let funct_map6 = List.fold_left add_bind7 funct_map6 [
+                               ("keep_open");
+                                ]                                    
  
   
   in                             
-  	let add_bind6 map (name, ty) = StringMap.add name {
+  	let add_bind8 map (name, ty) = StringMap.add name {
       typ = Float;
       fname = name; 
       formals = [(ty, "tuple")];
       locals = []; body = [] } map
     in 
-     let funct_map6 = List.fold_left add_bind6 funct_map5 [
+     let funct_map6 = List.fold_left add_bind8 funct_map7 [
                                ("getX", Tuple);
                                ("getY", Tuple)
                                ]
   in                             
-    let add_bind7 map (name, ty) = StringMap.add name {
+    let add_bind9 map (name, ty) = StringMap.add name {
       typ = Void;
       fname = name; 
       formals = [(ty, "tuple")];
       locals = []; body = [] } map
     in 
-      List.fold_left add_bind7 funct_map6 [
+      List.fold_left add_bind9 funct_map8 [
                                ("setX", Tuple);
                                ("setY", Tuple)
                                ]     
