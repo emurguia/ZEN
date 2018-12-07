@@ -53,8 +53,9 @@ let check (globals, functions) =
       formals = [(ty1, "x");(ty2, "y");(ty3, "height");(ty4, "width")];
       locals = []; body = [] } map
     in let funct_map2 = List.fold_left add_bind2 funct_map [
-                               ("make_triangle", Float, Float, Float, Float);
-                               ("make_rectangle", Float, Float, Float, Float);
+                               ("make_triangle", Int, Int, Int, Int);
+                               ("make_rectangle", Int, Int, Int, Int);
+
                                 ]
                                 
     in
@@ -77,7 +78,7 @@ let check (globals, functions) =
       locals = []; body = [] } map
     in
     let funct_map4 = List.fold_left add_bind4 funct_map3 [
-                               ("make_point", Float, Float);
+                               ("make_point", Int, Int);
                                 ]  
                                                            
   in
@@ -88,7 +89,7 @@ let check (globals, functions) =
       locals = []; body = [] } map
     in 
      let funct_map5 = List.fold_left add_bind5 funct_map4 [
-                               ("make_line", Float, Float, Float, Float);
+                               ("make_line", Int, Int, Int, Int);
                                 ]                             
  
   
@@ -110,12 +111,12 @@ let check (globals, functions) =
       formals = [(ty, "tuple")];
       locals = []; body = [] } map
     in 
-     let funct_map7 = List.fold_left add_bind7 funct_map6 [
+      List.fold_left add_bind7 funct_map6 [
                                ("setX", Tuple);
                                ("setY", Tuple)
                                ]     
   in                             
-    let add_bind8 map (name, ty1, ty2) = StringMap.add name {
+    (*let add_bind8 map (name, ty1, ty2) = StringMap.add name {
       typ = Int;
       fname = name; 
       formals = [(ty1, "w");(ty2, "h")];
@@ -124,7 +125,7 @@ let check (globals, functions) =
      List.fold_left add_bind8 funct_map7 [
                                ("make_sdl_window", Int, Int);
                                
-                               ]     
+                               ]     *)
 
   (*commenting out list built in functions*)
   (*

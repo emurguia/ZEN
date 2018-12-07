@@ -65,23 +65,21 @@ let translate (globals, functions) =
   let get_num_t = L.function_type i32_t [| i32_t |] in
   let get_num_func = L.declare_function "get_num" get_num_t the_module in
 
-  let make_triangle_t = L.function_type i32_t [| float_t; float_t; float_t; float_t |] in
+  let make_triangle_t = L.function_type i32_t [| i32_t; i32_t; i32_t; i32_t |] in
   let make_triangle_func = L.declare_function "make_triangle" make_triangle_t the_module in
 
-  let make_rectangle_t = L.function_type i32_t [| float_t; float_t; float_t; float_t |] in
+  let make_rectangle_t = L.function_type i32_t [| i32_t; i32_t; i32_t; i32_t |] in
   let make_rectangle_func = L.declare_function "make_recatngle" make_rectangle_t the_module in
 
-  let make_circle_t = L.function_type float_t [| i32_t; i32_t; i32_t; i32_t |] in
+  let make_circle_t = L.function_type i32_t [| i32_t; i32_t; i32_t; i32_t |] in
   let make_circle_func = L.declare_function "make_circle" make_circle_t the_module in
 
-  let make_point_t = L.function_type void_t [| float_t; float_t; |] in
+  let make_point_t = L.function_type void_t [| i32_t; i32_t; |] in
   let make_point_func = L.declare_function "make_point" make_point_t the_module in
 
-  let make_line_t = L.function_type void_t [| float_t; float_t; float_t; float_t |] in
+  let make_line_t = L.function_type void_t [| i32_t; i32_t; i32_t; i32_t |] in
   let make_line_func = L.declare_function "make_line" make_line_t the_module in
 
-  let make_sdl_window_t = L.function_type i32_t [| i32_t; i32_t|] in
-  let make_sdl_window_func = L.declare_function "make_sdl_window" make_sdl_window_t the_module in
 
 
 
