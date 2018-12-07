@@ -8,7 +8,7 @@ void main()
 	#y = 450.0;
 	#z = 25.0;
 	#a = 16;
-	make_circle(325.0, 450.0, 25.0, 16);
+	make_circle(325, 450, 25, 16);
 	return;
         
 }
