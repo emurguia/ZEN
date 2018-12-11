@@ -62,9 +62,6 @@ let translate (globals, functions) =
   let printbig_t = L.function_type i32_t [| i32_t |] in
   let printbig_func = L.declare_function "printbig" printbig_t the_module in
 
-  let get_num_t = L.function_type i32_t [| i32_t |] in
-  let get_num_func = L.declare_function "get_num" get_num_t the_module in
-
   let make_triangle_t = L.function_type i32_t [| i32_t; i32_t; i32_t; i32_t |] in
   let make_triangle_func = L.declare_function "make_triangle" make_triangle_t the_module in
 
@@ -239,8 +236,6 @@ let translate (globals, functions) =
     L.build_call close_window_func [||] "close_window" builder
      | SCall ("keep_open", []) ->
     L.build_call keep_open_func [||] "keep_open" builder
-      | SCall("get_num", [e]) ->
-    L.build_call get_num_func [| (expr builder e) |] "get_num" builder
       | SCall ("printf", [e]) -> 
 	  L.build_call printf_func [| float_format_str ; (expr builder e) |]
 	    "printf" builder
