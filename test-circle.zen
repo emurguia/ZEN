@@ -1,14 +1,13 @@
 void main()
 {
-        #float x;
-	#float y;
-	#float z;
-	#int a;
-	#x = 325.0;
-	#y = 450.0;
-	#z = 25.0;
-	#a = 16;
-	make_circle(325, 450, 25, 16);
+       
+
+        make_window();
+        while(keep_open())
+        {
+                make_circle(325, 450, 25, 16);
+        }
+        close_window();
 	return;
         
 }
