@@ -6,12 +6,12 @@ int make_circle(int x, int y, int radius, int vertices)
         //slWindow(500, 500, "circle", 0);
         //slSetBackColor(0.0, 0.0, 0.0);
 
-	printf("%d", vertices);
+/*	printf("%d", vertices);
 
 	printf("%d", x);
 	printf("%d", y);
 	printf("%d", radius);
-	printf("\n");
+	printf("\n");*/
 	x = (float)x;
 	y = (float)y;
 	radius = (float)radius;
