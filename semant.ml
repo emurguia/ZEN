@@ -237,6 +237,14 @@ in
       | FloatLiteral l -> (Float, SFloatLiteral l)
       | BooleanLiteral l  -> (Bool, SBooleanLiteral l)
       | StringLiteral l -> (String, SStringLiteral l)
+      | ArrayLiteral(l, s) as a -> let arr_type = List.fold_left (fun t1 e -> let t2 = snd (expr e) in
+            if t1 == t2 then t1
+            else raise (Failure("All array elements must be the same type ")))
+            (snd (expr (List.hd (s)))) (List.tl s) in
+            (if l == List.length s then 
+              let s_s = List.map (fun e -> expr e) s in
+              (Array(l, type_of_identifier(string_of_expr(List.hd s))), SArrayLiteral(l, s_s))
+            else raise(Failure("Assigning length not working ")))
       | TupleLiteral (x, y) -> let t1 = expr x and t2 = expr y in
       (Tuple, STupleLiteral (t1, t2))
       (* map all elements in list to their sexpr version (int literal -> sintliteral, etc.))*)
