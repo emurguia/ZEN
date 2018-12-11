@@ -218,8 +218,6 @@ let translate (globals, functions) =
       | A.Not                  -> L.build_not) e' "tmp" builder
       | SCall ("printbig", [e]) ->
 	  L.build_call printbig_func [| (expr builder e) |] "printbig" builder
-      |SCall("make_sdl_window", [e1; e2]) ->
-    L.build_call make_sdl_window_func [| (expr builder e1); (expr builder e2)|] "make_sdl_window" builder
       | SCall ("make_triangle", [e1; e2; e3; e4]) ->
     L.build_call make_triangle_func [| (expr builder e1); (expr builder e2); (expr builder e3); (expr builder e4)|] 
     "make_triangle" builder
