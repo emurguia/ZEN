@@ -3,8 +3,8 @@
 
 int make_point(int x, int y)
 {
-    x = (float)x;
-    y = (float)y;
+    //x = (float)x;
+    //y = (float)y;
 
     slSetForeColor(200.0, 100.0, 0.0, 1.0);
     slPoint(x, y);
