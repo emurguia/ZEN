@@ -4,8 +4,8 @@
 open Ast
 %}
 
-%token SEMI LPAREN RPAREN LBRACE RBRACE /* LSQUARE RSQUARE */ COMMA
-%token PLUS MINUS TIMES DIVIDE ASSIGN NOT
+%token SEMI LPAREN RPAREN LBRACE RBRACE LSQUARE RSQUARE COMMA
+%token PLUS MINUS TIMES DIVIDE ASSIGN NOT 
 %token EQ NEQ LT LEQ GT GEQ TRUE FALSE AND OR
 %token RETURN IF ELSE FOR WHILE INT BOOL FLOAT STRING VOID
 %token LIST TUPLE 
@@ -54,8 +54,8 @@ formals_opt:
   | formal_list   { $1 }
 
 formal_list:
-    typ ID                   { [($1,$2)] }
-  | formal_list COMMA typ ID { ($3,$4) :: $1 }
+    local_typ ID                   { [($1,$2)] }
+  | formal_list COMMA local_typ ID { ($3,$4) :: $1 }
 
 typ:
   INT { Int }
@@ -66,13 +66,17 @@ typ:
 /* | LIST { List } */
 | VOID { Void }
 
+local_typ:
+    typ {$1}
+  | local_typ LSQUARE INT_LITERAL RSQUARE { Array ($3, $1)}
+
 vdecl_list:
     /* nothing */    { [] }
   | vdecl_list vdecl { $2 :: $1 }
 
 
 vdecl:
-   typ ID SEMI { ($1, $2) }
+   local_typ ID SEMI { ($1, $2) }
 
 /* val_list:
     expr                { [ $1 ] }
@@ -101,6 +105,10 @@ expr_opt:
     /* nothing */ { Noexpr }
   | expr          { $1 }
 
+array_expr:
+    expr    { [$1] }
+  | array_expr COMMA expr { $3 :: $1 }
+
 expr:
     INT_LITERAL      { IntLiteral($1) }
   | FLOAT_LITERAL    { FloatLiteral(string_of_float $1) }
@@ -108,6 +116,7 @@ expr:
   | TRUE             { BooleanLiteral(true) }
   | FALSE            { BooleanLiteral(false) }
   | ID               { Id($1) }
+  | LSQUARE array_expr RSQUARE        { ArrayLiteral(List.length $2, List.rev $2) }
  /* | TUPLE_LITERAL    { TupleLiteral($1) } */
   /* | list_literal     { ListLiteral($1) } */
   | expr PLUS   expr { Binop($1, Add,   $3) }
@@ -125,6 +134,8 @@ expr:
   | MINUS expr %prec NEG { Unop(Neg, $2) }
   | NOT expr         { Unop(Not, $2) }
   | ID ASSIGN expr   { Assign($1, $3) }
+  | ID LSQUARE expr RSQUARE ASSIGN expr   { ArrayAssign($1, $3, $6) }
+  | ID LSQUARE expr RSQUARE     { ArrayAccess($1, $3) }
   | ID LPAREN actuals_opt RPAREN { Call($1, $3) }
   /* | ID LSQUARE expr RSQUARE ASSIGN expr { ListAssign($1, [$3], $6) }
   | ID LSQUARE expr RSQUARE { ListAccess($1, [$3])} */
