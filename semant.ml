@@ -109,7 +109,7 @@ let check (globals, functions) =
       formals = [];
       locals = []; body = [] } map
     in 
-     let funct_map6 = List.fold_left add_bind7 funct_map6 [
+     let funct_map7 = List.fold_left add_bind7 funct_map6 [
                                ("keep_open");
                                 ]                                    
  
@@ -121,7 +121,7 @@ let check (globals, functions) =
       formals = [(ty, "tuple")];
       locals = []; body = [] } map
     in 
-     let funct_map6 = List.fold_left add_bind8 funct_map7 [
+     let funct_map8 = List.fold_left add_bind8 funct_map7 [
                                ("getX", Tuple);
                                ("getY", Tuple)
                                ]
