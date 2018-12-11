@@ -136,7 +136,7 @@ let check (globals, functions) =
                                ("setX", Tuple);
                                ("setY", Tuple)
                                ]     
-  in                             
+                             
     (*let add_bind8 map (name, ty1, ty2) = StringMap.add name {
       typ = Int;
       fname = name; 
