@@ -23,7 +23,7 @@ zen.native :
 .PHONY : clean
 clean :
 	ocamlbuild -clean
-	rm -rf testall.log *.diff printbig make_circle make_triangle keep_open close_window keep_open *.o *.ll
+	rm -rf testall.log *.diff printbig make_circle make_triangle keep_open close_window keep_open *.o *.ll *.exe
 
 # # Testing the "printbig" example
 
