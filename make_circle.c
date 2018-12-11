@@ -12,8 +12,8 @@ int make_circle(int x, int y, int radius, int vertices)
 	printf("%d", y);
 	printf("%d", radius);
 	printf("\n");*/
-	x = (float)x;
-	y = (float)y;
+//	x = (float)x;
+//	y = (float)y;
 	radius = (float)radius;
 //	while(!slShouldClose() && !slGetKey(SL_KEY_ESCAPE))
   //      {
