@@ -23,7 +23,7 @@ zen.native :
 .PHONY : clean
 clean :
 	ocamlbuild -clean
-	rm -rf testall.log *.diff printbig make_circle make_triangle keep_open close_window keep_open *.o *.ll *.exe
+	rm -rf testall.log *.diff printbig make_circle make_triangle keep_open close_window keep_open make_rectangle make_point make_line *.o *.ll *.exe
 
 # # Testing the "printbig" example
 
@@ -44,6 +44,14 @@ close_window: close_window.c
 
 keep_open: keep_open.c
 	cc -o keep_open -DBUILD_TEST keep_open.c /usr/local/lib/libsigil.so
+
+make_line: make_line.c
+	cc -o make_line -DBUILD_TEST make_line.c /usr/local/lib/libsigil.so
+
+make_point: make_point.c
+	cc -o make_point -DBUILD_TEST make_point.c /usr/local/lib/libsigil.so
+make_rectangle: make_rectangle.c
+	cc -o make_rectangle -DBUILD_TEST make_rectangle.c /usr/local/lib/libsigil.so
 
 
 # # Building the tarball

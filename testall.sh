@@ -94,7 +94,7 @@ Check() {
     generatedfiles="$generatedfiles ${basename}.ll ${basename}.s ${basename}.exe ${basename}.out" &&
     Run "$ZEN" "$1" ">" "${basename}.ll" &&
     Run "$LLC" "-relocation-model=pic" "${basename}.ll" ">" "${basename}.s" &&
-    Run "$CC" "-o" "${basename}.exe" "${basename}.s" "printbig.o" "make_circle.o" "make_triangle.o"  "/usr/local/lib/libsigil.so" &&
+    Run "$CC" "-o" "${basename}.exe" "${basename}.s" "printbig.o" "make_circle.o" "make_triangle.o" "make_line.o" "make_point.o" "make_rectangle.o" "make_window.o" "close_window.o" "keep_open.o"  "/usr/local/lib/libsigil.so" &&
     Run "./${basename}.exe" > "${basename}.out" &&
     Compare ${basename}.out ${reffile}.out ${basename}.diff
 
