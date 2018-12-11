@@ -1,7 +1,7 @@
 #include "sl.h"
 #include <stdio.h>
 
-bool keep_open()
+int keep_open()
 {
     return !slShouldClose() && !slGetKey(SL_KEY_ESCAPE);
 }
@@ -11,3 +11,4 @@ int main()
     keep_open();
     return 0;
 }
+#endif
