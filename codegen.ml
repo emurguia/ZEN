@@ -45,6 +45,8 @@ let translate (globals, functions) =
     | A.Void  -> void_t
     | A.String -> str_t
     | A.Tuple -> tuple_t
+    (*| A.List(t) -> L.pointer_type (ltype_of_typ t)*)
+    (*| A.Array(l, t) -> L.array_type (ltype_of_typ t) l*)
   in
 
   (* Declare each global variable; remember its value in a map *)
@@ -85,10 +87,6 @@ let translate (globals, functions) =
 
   let keep_open_t = L.function_type i1_t [||] in
   let keep_open_func = L.declare_function "keep_open" keep_open_t the_module in
-
-
-
-
 
 
   let ensureFloat c = 
@@ -138,18 +136,28 @@ let translate (globals, functions) =
       List.fold_left add_local formals fdecl.slocals 
     in
 
+   
     (* Return the value for a variable or formal argument. First check
      * locals, then globals *)
     let lookup n = try StringMap.find n local_vars
                    with Not_found -> StringMap.find n global_vars
     in
 
+   (* let init_arr v s = let tp = L.element_type (L.type_of v) in
+    let sz = L.size_of tp in
+    let sz = L.build_intcast sz (i32_t) "" builder in
+    let dt = L.build_bitcast (L.build_call calloc_func [|s;sz|] "" builder) tp ""
+builder in
+ L.build_store dt v builder
+ in*)
+
     (* Construct code for an expression; return its value *)
     let rec expr builder ((_, e) : sexpr) = match e with
-	SIntLiteral i -> L.const_int i32_t i
+	      SIntLiteral i -> L.const_int i32_t i
       | SBooleanLiteral b -> L.const_int i1_t (if b then 1 else 0)
       | SFloatLiteral l -> L.const_float_of_string float_t l
       | SStringLiteral s -> L.build_global_stringptr s "name" builder
+      (*| SArrayInit (v, s) -> let var = (lookup v) and size = (expr builder s) in init_arr var size*)
       | STupleLiteral (x, y) -> 
         let x' = ensureFloat (expr builder x)
         and y' = ensureFloat (expr builder y) in
@@ -170,6 +178,35 @@ let translate (globals, functions) =
         let y_ptr = L.build_struct_gep tuple_ptr 1 "y" builder in
         ignore (L.build_store y y_ptr builder); *)
         (* L.build_load tuple_ptr "v" builder *)
+      
+      (*| SArrayLiteral(_, s), (A.Array(_, array_typ) as t) ->
+          let const_array = L.const_array (ltype_of_typ array_typ) (Array.of_list (List.map (fun e-> expr builder true e) s)) in
+          if loadval then const_array
+        else (let arr_ref = L.build_alloca (ltype_of_typ t) "arr_prt" builder in
+              ignore (L.build_store const_array arr_ref builder); arr_ref)*)
+      
+      (*| SListLiteral elist -> 
+        if List.length elist == 0
+        then raise (Failure "List cannot be empty")
+        else
+          let len = L.const_int i32_t (List.length elist) in
+          elements = expr elist in
+          let etype = L.type_of (List.hd elements) in 
+          let len = List.length elist in
+          let ptr = L.build_array_malloc
+                    etype
+                    (L.const_int i32_t num_elems)
+                     
+                     in
+
+          ignore (List.fold_left 
+                   (fun i elem ->
+                     let ind = L.const_int i32_t i in
+                     let eptr = L.build_gep ptr [|ind|]  in
+                     llstore elem eptr;
+                     i+1
+                   ) 0 elements); (ptr)*)
+          
       | SNoexpr -> L.const_int i32_t 0
       | SId s -> L.build_load (lookup s) s builder
       | SAssign (s, e) -> let e' = expr builder e in
@@ -189,6 +226,7 @@ let translate (globals, functions) =
 	  | A.Leq     -> L.build_fcmp L.Fcmp.Ole
 	  | A.Greater -> L.build_fcmp L.Fcmp.Ogt
 	  | A.Geq     -> L.build_fcmp L.Fcmp.Oge
+    | A.Mod     -> L.build_srem
 	  | A.And | A.Or ->
 	      raise (Failure "internal error: semant should have rejected and/or on float")
 	  ) e1' e2' "tmp" builder 
@@ -196,7 +234,8 @@ let translate (globals, functions) =
 	  | A.Add     -> L.build_add
 	  | A.Sub     -> L.build_sub
 	  | A.Mult    -> L.build_mul
-          | A.Div     -> L.build_sdiv
+    | A.Div     -> L.build_sdiv
+    | A.Mod     -> L.build_srem
 	  | A.And     -> L.build_and
 	  | A.Or      -> L.build_or
 	  | A.Equal   -> L.build_icmp L.Icmp.Eq
