@@ -237,14 +237,25 @@ in
       | FloatLiteral l -> (Float, SFloatLiteral l)
       | BooleanLiteral l  -> (Bool, SBooleanLiteral l)
       | StringLiteral l -> (String, SStringLiteral l)
-      | ArrayLiteral(l, s) as a -> let arr_type = List.fold_left (fun t1 e -> let t2 = snd (expr e) in
+      (*| ArrayInit(typ, size) -> (type_of_identifier typ, SArrayInit (typ, (expr size)))*)
+      (*| ListLiteral elist as e -> 
+        let tlist = List.map (expr) elist in
+        if (List.length tlist) = 0
+        then (List(Any), SListLiteral tlist)
+      else
+        let  x = List.hd tlist in
+        if List.for_all (fun t -> t = x) tlist
+        then (List (type_of_identifier(string_of_expr(e))), SListLiteral tlist)
+      else raise (Failure("types inconsistent in list"))*)
+
+      (*| ArrayLiteral(l, s) as a -> let arr_type = List.fold_left (fun t1 e -> let t2 = snd (expr e) in
             if t1 == t2 then t1
             else raise (Failure("All array elements must be the same type ")))
             (snd (expr (List.hd (s)))) (List.tl s) in
             (if l == List.length s then 
               let s_s = List.map (fun e -> expr e) s in
               (Array(l, type_of_identifier(string_of_expr(List.hd s))), SArrayLiteral(l, s_s))
-            else raise(Failure("Assigning length not working ")))
+            else raise(Failure("Assigning length not working ")))*)
       | TupleLiteral (x, y) -> let t1 = expr x and t2 = expr y in
       (Tuple, STupleLiteral (t1, t2))
       (* map all elements in list to their sexpr version (int literal -> sintliteral, etc.))*)
@@ -258,6 +269,21 @@ in
         (expr (List.hd el)) (List.tl el)
     in (List, SListLiteral el) *)
       (* | ListLiteral l ->  List.Map (fun a -> SExpr (a)) l in (List, SListLiteral l) *)
+      (*| ArrayInit(_, _, e1) -> let e_type = expr e1 in 
+        if e1 != Int
+        then (raise(Failure("Array length must be of type int")))
+        else SIntLiteral
+      | (ArrayAccess(e1, e2) as e) -> let e_type = expr e1 and e_val = expr e2 in
+          (*if(e_val != SIntLiteral)
+            then (raise(Failure("Array index must be of type int")))
+          else*)
+            (match e_type with
+              | Int
+              | String
+              | Boolean
+              | Float
+              | _ -> (raise(Failure("Arrays can't be that type"))))*)
+
       | Noexpr     -> (Void, SNoexpr)
       | Id s       -> (type_of_identifier s, SId s)
       | Assign(var, e) as ex -> 
@@ -288,6 +314,7 @@ in
           | Less | Leq | Greater | Geq
                      when same && (t1 = Int || t1 = Float) -> Bool
           | And | Or when same && t1 = Bool -> Bool
+          | Mod when same && t1 = Int -> Int
           | _ -> raise (
 	      Failure ("illegal binary operator " ^
                        string_of_typ t1 ^ " " ^ string_of_op op ^ " " ^
