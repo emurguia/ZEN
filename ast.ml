@@ -5,17 +5,9 @@ type op = Add | Sub | Mult | Div | Equal | Neq | Less | Leq | Greater | Geq |
 
 type uop = Neg | Not
 
-type typ = 
-  Int 
-  | Bool 
-  | Float  
-  | Tuple  
-  (*| Array of typ*)
-  (*| List of typ*)
-  | String 
-  | Void
 
-type bind = typ * string
+
+
 
 type expr =
     IntLiteral of int
@@ -27,7 +19,7 @@ type expr =
   | ArrayAssign of string * expr * expr
   | ArrayAccess of string * expr*)
   (*| ListLiteral of expr list *)
-  (*| ArrayLiteral of int * expr list*)
+  | ArrayLiteral of expr list
   (* | ListLiteral of expr list *)
   | Id of string
   | Binop of expr * op * expr
@@ -43,6 +35,18 @@ type expr =
   (*| ArrayInit of typ * string * expr
   | ArrayAccess of expr * expr
   | ArrayAssign of expr * expr * expr*)
+
+  type typ = 
+    Int 
+  | Bool 
+  | Float  
+  | Tuple  
+  | Array of typ * expr
+  (*| List of typ*)
+  | String 
+  | Void
+
+type bind = typ * string
 
 type stmt =
     Block of stmt list
@@ -83,6 +87,8 @@ let string_of_uop = function
     Neg -> "-"
   | Not -> "!"
 
+
+
 let rec string_of_expr = function
     IntLiteral(l) -> string_of_int l
   | FloatLiteral(l) -> l
@@ -91,7 +97,8 @@ let rec string_of_expr = function
   | StringLiteral(s) -> s
   (* | ListLit(li) -> "[" ^ List.fold_left(fun b a -> b ^ " " ^ string_of_expr a ^ ", ") "" li ^ "]" *)
   | TupleLiteral(e1, e2) -> "(" ^ string_of_expr e1 ^ ", " ^ string_of_expr e2 ^ ")"
-  (*| ArrayLiteral(len, l) -> string_of_int len ^ ": [" ^ String.concat ", " (List.map string_of_expr l) ^ "]"*)
+  | ArrayLiteral(el) -> "[" ^ String.concat ", " (List.map (fun e -> string_of_expr e) el) ^ "]"
+
   | Id(s) -> s
   | Binop(e1, o, e2) ->
       string_of_expr e1 ^ " " ^ string_of_op o ^ " " ^ string_of_expr e2
@@ -127,6 +134,8 @@ and string_of_typ = function
     Int -> "int"
   | Bool -> "bool"
   | Float -> "float"
+  | Array(t, e) -> string_of_typ t ^ "[" ^ string_of_expr e ^ "]"
+
   (*| Array(t) -> "[" ^ string_of_typ t ^ "]"*)
   (*| Array(l,t) -> string_of_typ t ^ " [" ^ string_of_int l ^ "]"*)
   (* | List -> "list" *)

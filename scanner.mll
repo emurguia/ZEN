@@ -9,8 +9,8 @@ rule token = parse
 | ')'      { RPAREN }
 | '{'      { LBRACE }
 | '}'      { RBRACE }
-(*| '['	   { LSQUARE }
-| ']'	   { RSQUARE }*)
+| "["	   { LSQUARE }
+| "]"      { RSQUARE }
 | ';'      { SEMI }
 | ','      { COMMA }
 | '+'      { PLUS }
@@ -18,7 +18,7 @@ rule token = parse
 | '*'      { TIMES }
 | '/'      { DIVIDE }
 | '='      { ASSIGN }
-| '%'	   { MOD }
+| "%"	   { MOD }
 | "=="     { EQ }
 | "!="     { NEQ }  
 | '<'      { LT }

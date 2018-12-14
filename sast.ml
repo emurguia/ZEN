@@ -13,7 +13,7 @@ and sx =
   | SArrayAssign of string * sexpr * sexpr
   | SArrayAccess of string * sexpr*)
   (*| SListLiteral of sexpr list*)
-  (*| SArrayLiteral of int * sexpr list*)
+  | SArrayLiteral of sexpr list * typ
  (* | SArrayAccess of string * sexpr
   | SArrayAssign of string * sexpr * sexpr*)
 
@@ -56,6 +56,8 @@ let rec string_of_sexpr (t, e) =
   | SFloatLiteral(l) -> l
   (* | SListLiteral(li) -> "[" ^ List.fold_left(fun b a -> b ^ " " ^ string_of_sexpr a ^ ", ") "" li ^ "]" *)
   | STupleLiteral(e1, e2) -> "(" ^ string_of_sexpr e1 ^ ", " ^ string_of_sexpr e2 ^ ")"
+  (*| SArrayLiteral(el) -> "[" ^ String.concat ", " (List.map (fun e -> string_of_sexpr e) el) ^ "]"*)
+
   (*| SArrayLiteral(len, l) -> string_of_int len ^ ": [" ^ String.concat ", " (List.map string_of_sexpr l) ^ "]"*)
   (*| SArrayAccess(id, idx) -> id ^ "[" ^ string_of_sexpr idx ^ "]"
   | SArrayAssign(id, idx, e) -> id ^ "[" ^ string_of_sexpr idx ^ "]" ^ " = " ^ string_of_sexpr e*)

@@ -237,6 +237,7 @@ in
       | FloatLiteral l -> (Float, SFloatLiteral l)
       | BooleanLiteral l  -> (Bool, SBooleanLiteral l)
       | StringLiteral l -> (String, SStringLiteral l)
+      | ArrayLiteral l -> check_array_types l
       (*| ArrayInit(typ, size) -> (type_of_identifier typ, SArrayInit (typ, (expr size)))*)
       (*| ListLiteral elist as e -> 
         let tlist = List.map (expr) elist in
@@ -341,6 +342,22 @@ in
           let all_args = String.concat " " str_args in
            raise (Failure (all_args)); *)
           (fd.typ, SCall(fname, args'))
+
+    and
+
+   get_arr_type e = match e with
+      IntLiteral(_) :: ss -> get_arr_type ss
+      | [] -> Int
+      | _ -> raise (Failure("arrays only ints"))
+
+  
+
+    and check_array_types e = 
+      let t = get_arr_type e in
+      let check_arr_el e = match e with 
+        IntLiteral(i) -> if t == Int then expr(IntLiteral(i)) else expr(FloatLiteral(string_of_int i))
+        | _ -> raise (Failure("arrays only ints"))
+      in (Array (t, IntLiteral(List.length e)), SArrayLiteral(List.map check_arr_el e, Array(t, IntLiteral(List.length e))))
 
     in
 

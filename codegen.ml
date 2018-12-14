@@ -28,6 +28,7 @@ let translate (globals, functions) =
   and i8_t       = L.i8_type     context
   and i1_t       = L.i1_type     context
   and float_t    = L.double_type context
+  and array_t    = L.array_type 
   and void_t     = L.void_type   context 
   (* Create an LLVM module -- this is a "container" into which we'll 
      generate actual code *)
@@ -37,6 +38,10 @@ let translate (globals, functions) =
   let tuple_t = L.named_struct_type context "tuple_t" in
     L.struct_set_body tuple_t [| float_t; float_t |] false;
 
+  let int_lit_to_int = function
+    A.IntLiteral(i) -> i | _ -> raise(Failure("arrays must be int")) 
+
+  in
   (* Convert MicroC types to LLVM types *)
   let ltype_of_typ = function
       A.Int   -> i32_t
@@ -45,6 +50,9 @@ let translate (globals, functions) =
     | A.Void  -> void_t
     | A.String -> str_t
     | A.Tuple -> tuple_t
+    | A.Array(typ, size) -> (match typ with
+                              A.Int -> array_t i32_t (int_lit_to_int size)
+                              | _ -> raise(Failure("arrays must be int")))
     (*| A.List(t) -> L.pointer_type (ltype_of_typ t)*)
     (*| A.Array(l, t) -> L.array_type (ltype_of_typ t) l*)
   in
@@ -157,6 +165,7 @@ builder in
       | SBooleanLiteral b -> L.const_int i1_t (if b then 1 else 0)
       | SFloatLiteral l -> L.const_float_of_string float_t l
       | SStringLiteral s -> L.build_global_stringptr s "name" builder
+      | SArrayLiteral (l, t) -> L.const_array (ltype_of_typ t) (Array.of_list (List.map (expr builder) l))
       (*| SArrayInit (v, s) -> let var = (lookup v) and size = (expr builder s) in init_arr var size*)
       | STupleLiteral (x, y) -> 
         let x' = ensureFloat (expr builder x)

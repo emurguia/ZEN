@@ -4,7 +4,7 @@
 open Ast
 %}
 
-%token SEMI LPAREN RPAREN LBRACE RBRACE /*LSQUARE RSQUARE*/ COMMA
+%token SEMI LPAREN RPAREN LBRACE RBRACE LSQUARE RSQUARE COMMA
 %token PLUS MINUS TIMES DIVIDE ASSIGN NOT 
 %token EQ NEQ LT LEQ GT GEQ TRUE FALSE AND OR MOD
 %token RETURN IF ELSE FOR WHILE INT BOOL FLOAT STRING VOID
@@ -67,6 +67,7 @@ typ:
 | FLOAT { Float }
 | STRING { String }
 | TUPLE { Tuple } 
+| array_t { $1 }
 /*| LIST LSQUARE typ RSQUARE { List($3) } */
 | VOID { Void }
 
@@ -82,6 +83,9 @@ vdecl_list:
 vdecl:
    /*local_typ ID SEMI { ($1, $2) }*/
    typ ID SEMI { ($1, $2) }
+
+array_t:
+  typ LSQUARE expr RSQUARE { Array($1, $3) }
 
 /* val_list:
     expr                { [ $1 ] }
@@ -124,16 +128,10 @@ expr_opt:
   | array_expr COMMA expr { $3 :: $1 }*/
 
 expr:
-    INT_LITERAL      { IntLiteral($1) }
-  | FLOAT_LITERAL    { FloatLiteral(string_of_float $1) }
-  | STRING_LITERAL   { StringLiteral($1) }
-
+   literals { $1 }
   /*| ID ASSIGN LSQUARE expr RSQUARE    {ArrayInit($1, $4) }
   | ID LSQUARE expr RSQUARE ASSIGN expr    {ArrayAssign($1, $3, $6) }
   | ID LSQUARE expr RSQUARE    {ArrayAccess($1, $3) }*/
-
-  | TRUE             { BooleanLiteral(true) }
-  | FALSE            { BooleanLiteral(false) }
   | ID               { Id($1) }
   /*| LSQUARE array_expr RSQUARE        { ArrayLiteral(List.length $2, List.rev $2) }*/
  /* | TUPLE_LITERAL    { TupleLiteral($1) } */
@@ -171,6 +169,20 @@ expr:
   arr_access:
 
     | LSQUARE expr RSQUARE           { $2 }*/
+primitive_literals:
+  INT_LITERAL      { IntLiteral($1) }
+  | FLOAT_LITERAL    { FloatLiteral(string_of_float $1) }
+  | STRING_LITERAL   { StringLiteral($1) }
+  | TRUE             { BooleanLiteral(true) }
+  | FALSE            { BooleanLiteral(false) }
+
+literals:
+  primitive_literals { $1 }
+  | LSQUARE array_literal RSQUARE { ArrayLiteral(List.rev $2) }
+
+array_literal:
+  primitive_literals { [$1] }
+  | array_literal COMMA primitive_literals { $3 :: $1}
 
 actuals_opt:
     /* nothing */ { [] }
