@@ -4,7 +4,7 @@
 open Ast
 %}
 
-%token SEMI LPAREN RPAREN LBRACE RBRACE LSQUARE RSQUARE COMMA
+%token SEMI LPAREN RPAREN LBRACE RBRACE /*LSQUARE RSQUARE*/ COMMA
 %token PLUS MINUS TIMES DIVIDE ASSIGN NOT 
 %token EQ NEQ LT LEQ GT GEQ TRUE FALSE AND OR MOD
 %token RETURN IF ELSE FOR WHILE INT BOOL FLOAT STRING VOID
@@ -53,9 +53,13 @@ formals_opt:
     /* nothing */ { [] }
   | formal_list   { $1 }
 
-formal_list:
+/*formal_list:
     local_typ ID                   { [($1,$2)] }
-  | formal_list COMMA local_typ ID { ($3,$4) :: $1 }
+  | formal_list COMMA local_typ ID { ($3,$4) :: $1 }*/
+
+formal_list:
+  typ ID                   { [($1,$2)] }
+  | formal_list COMMA typ ID  { ($3,$4) :: $1 }
 
 typ:
   INT { Int }
@@ -66,9 +70,9 @@ typ:
 /*| LIST LSQUARE typ RSQUARE { List($3) } */
 | VOID { Void }
 
-local_typ:
+/*local_typ:
     typ {$1}
-  /*| local_typ LSQUARE INT_LITERAL RSQUARE { Array ($3, $1)}*/
+  | local_typ LSQUARE INT_LITERAL RSQUARE { Array ($3, $1)}*/
 
 vdecl_list:
     /* nothing */    { [] }
@@ -76,20 +80,21 @@ vdecl_list:
 
 
 vdecl:
-   local_typ ID SEMI { ($1, $2) }
+   /*local_typ ID SEMI { ($1, $2) }*/
+   typ ID SEMI { ($1, $2) }
 
 /* val_list:
     expr                { [ $1 ] }
   | expr COMMA val_list { [ $1 ] @ $3 } */
 
  
-expr_list_opt:
-    /* nothing */ { [] }
-  | expr_list { List.rev $1 }
+/*expr_list_opt:
+    nothing  { [] }
+  | expr_list { List.rev $1 }*/
 
-expr_list:
+/*expr_list:
     expr { [$1] }
-  | expr_list COMMA expr { $3 :: $1 }
+  | expr_list COMMA expr { $3 :: $1 }*/
 
  /*list_literal:
     LSQUARE expr_list_opt RSQUARE { ListLiteral($2) } */
@@ -114,9 +119,9 @@ expr_opt:
     /* nothing */ { Noexpr }
   | expr          { $1 }
 
-array_expr:
+/*array_expr:
     expr    { [$1] }
-  | array_expr COMMA expr { $3 :: $1 }
+  | array_expr COMMA expr { $3 :: $1 }*/
 
 expr:
     INT_LITERAL      { IntLiteral($1) }
