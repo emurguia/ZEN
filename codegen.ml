@@ -28,6 +28,7 @@ let translate (globals, functions) =
   and i8_t       = L.i8_type     context
   and i1_t       = L.i1_type     context
   and float_t    = L.double_type context
+  and array_t    = L.array_type 
   and void_t     = L.void_type   context 
   (* Create an LLVM module -- this is a "container" into which we'll 
      generate actual code *)
@@ -37,6 +38,10 @@ let translate (globals, functions) =
   let tuple_t = L.named_struct_type context "tuple_t" in
     L.struct_set_body tuple_t [| float_t; float_t |] false;
 
+  let int_lit_to_int = function
+    A.IntLiteral(i) -> i | _ -> raise(Failure("arrays must be int")) 
+
+  in
   (* Convert MicroC types to LLVM types *)
   let ltype_of_typ = function
       A.Int   -> i32_t
@@ -45,6 +50,11 @@ let translate (globals, functions) =
     | A.Void  -> void_t
     | A.String -> str_t
     | A.Tuple -> tuple_t
+    | A.Array(typ, size) -> (match typ with
+                              A.Int -> array_t i32_t (int_lit_to_int size)
+                              | _ -> raise(Failure("arrays must be int")))
+    (*| A.List(t) -> L.pointer_type (ltype_of_typ t)*)
+    (*| A.Array(l, t) -> L.array_type (ltype_of_typ t) l*)
   in
 
   (* Declare each global variable; remember its value in a map *)
@@ -62,22 +72,19 @@ let translate (globals, functions) =
   let printbig_t = L.function_type i32_t [| i32_t |] in
   let printbig_func = L.declare_function "printbig" printbig_t the_module in
 
-  let get_num_t = L.function_type i32_t [| i32_t |] in
-  let get_num_func = L.declare_function "get_num" get_num_t the_module in
-
-  let make_triangle_t = L.function_type void_t [| float_t; float_t; float_t; float_t |] in
+  let make_triangle_t = L.function_type i32_t [| i32_t; i32_t; i32_t; i32_t |] in
   let make_triangle_func = L.declare_function "make_triangle" make_triangle_t the_module in
 
-  let make_rectangle_t = L.function_type void_t [| float_t; float_t; float_t; float_t |] in
+  let make_rectangle_t = L.function_type i32_t [| i32_t; i32_t; i32_t; i32_t |] in
   let make_rectangle_func = L.declare_function "make_recatngle" make_rectangle_t the_module in
 
-  let make_circle_t = L.function_type void_t [| float_t; float_t; float_t; i32_t |] in
+  let make_circle_t = L.function_type i32_t [| i32_t; i32_t; i32_t; i32_t |] in
   let make_circle_func = L.declare_function "make_circle" make_circle_t the_module in
 
-  let make_point_t = L.function_type void_t [| float_t; float_t; |] in
+  let make_point_t = L.function_type i32_t [| i32_t; i32_t; |] in
   let make_point_func = L.declare_function "make_point" make_point_t the_module in
 
-  let make_line_t = L.function_type void_t [| float_t; float_t; float_t; float_t |] in
+  let make_line_t = L.function_type i32_t [| i32_t; i32_t; i32_t; i32_t |] in
   let make_line_func = L.declare_function "make_line" make_line_t the_module in
 
   (* Ensures int *)
@@ -85,6 +92,16 @@ let translate (globals, functions) =
   if L.type_of c = float_t then (L.const_fptosi c i32_t) else c in *)
    
   (* Ensures float *)
+  let make_window_t = L.function_type i32_t [||] in
+  let make_window_func = L.declare_function "make_window" make_window_t the_module in
+
+  let close_window_t = L.function_type i32_t [||] in
+  let close_window_func = L.declare_function "close_window" close_window_t the_module in
+
+  let keep_open_t = L.function_type i1_t [||] in
+  let keep_open_func = L.declare_function "keep_open" keep_open_t the_module in
+
+
   let ensureFloat c = 
     if L.type_of c = float_t then c else (L.const_sitofp c float_t) in
 
@@ -132,18 +149,29 @@ let translate (globals, functions) =
       List.fold_left add_local formals fdecl.slocals 
     in
 
+   
     (* Return the value for a variable or formal argument. First check
      * locals, then globals *)
     let lookup n = try StringMap.find n local_vars
                    with Not_found -> StringMap.find n global_vars
     in
 
+   (* let init_arr v s = let tp = L.element_type (L.type_of v) in
+    let sz = L.size_of tp in
+    let sz = L.build_intcast sz (i32_t) "" builder in
+    let dt = L.build_bitcast (L.build_call calloc_func [|s;sz|] "" builder) tp ""
+builder in
+ L.build_store dt v builder
+ in*)
+
     (* Construct code for an expression; return its value *)
     let rec expr builder ((_, e) : sexpr) = match e with
-	SIntLiteral i -> L.const_int i32_t i
+	      SIntLiteral i -> L.const_int i32_t i
       | SBooleanLiteral b -> L.const_int i1_t (if b then 1 else 0)
       | SFloatLiteral l -> L.const_float_of_string float_t l
       | SStringLiteral s -> L.build_global_stringptr s "name" builder
+      | SArrayLiteral (l, t) -> L.const_array (ltype_of_typ t) (Array.of_list (List.map (expr builder) l))
+      (*| SArrayInit (v, s) -> let var = (lookup v) and size = (expr builder s) in init_arr var size*)
       | STupleLiteral (x, y) -> 
         let x' = ensureFloat (expr builder x)
         and y' = ensureFloat (expr builder y) in
@@ -153,6 +181,42 @@ let translate (globals, functions) =
         let y_ptr = L.build_struct_gep t_ptr 1 "y" builder in
         ignore(L.build_store y' y_ptr builder);
         L.build_load (t_ptr) "t" builder
+
+        (* let tuple_ptr = L.build_alloca tuple_t "tmp" builder in
+        let x_ptr = L.build_struct_gep tuple_ptr 0 "x" builder in
+        ignore (L.build_store x x_ptr builder);
+        let y_ptr = L.build_struct_gep tuple_ptr 1 "y" builder in
+        ignore (L.build_store y y_ptr builder); *)
+        (* L.build_load tuple_ptr "v" builder *)
+      
+      (*| SArrayLiteral(_, s), (A.Array(_, array_typ) as t) ->
+          let const_array = L.const_array (ltype_of_typ array_typ) (Array.of_list (List.map (fun e-> expr builder true e) s)) in
+          if loadval then const_array
+        else (let arr_ref = L.build_alloca (ltype_of_typ t) "arr_prt" builder in
+              ignore (L.build_store const_array arr_ref builder); arr_ref)*)
+      
+      (*| SListLiteral elist -> 
+        if List.length elist == 0
+        then raise (Failure "List cannot be empty")
+        else
+          let len = L.const_int i32_t (List.length elist) in
+          elements = expr elist in
+          let etype = L.type_of (List.hd elements) in 
+          let len = List.length elist in
+          let ptr = L.build_array_malloc
+                    etype
+                    (L.const_int i32_t num_elems)
+                     
+                     in
+
+          ignore (List.fold_left 
+                   (fun i elem ->
+                     let ind = L.const_int i32_t i in
+                     let eptr = L.build_gep ptr [|ind|]  in
+                     llstore elem eptr;
+                     i+1
+                   ) 0 elements); (ptr)*)
+          
       | SNoexpr -> L.const_int i32_t 0
       | SId s -> L.build_load (lookup s) s builder
       | SAssign (s, e) -> let e' = expr builder e in
@@ -172,6 +236,7 @@ let translate (globals, functions) =
 	  | A.Leq     -> L.build_fcmp L.Fcmp.Ole
 	  | A.Greater -> L.build_fcmp L.Fcmp.Ogt
 	  | A.Geq     -> L.build_fcmp L.Fcmp.Oge
+    | A.Mod     -> L.build_srem
 	  | A.And | A.Or ->
 	      raise (Failure "internal error: semant should have rejected and/or on float")
 	  ) e1' e2' "tmp" builder 
@@ -179,7 +244,8 @@ let translate (globals, functions) =
 	  | A.Add     -> L.build_add
 	  | A.Sub     -> L.build_sub
 	  | A.Mult    -> L.build_mul
-          | A.Div     -> L.build_sdiv
+    | A.Div     -> L.build_sdiv
+    | A.Mod     -> L.build_srem
 	  | A.And     -> L.build_and
 	  | A.Or      -> L.build_or
 	  | A.Equal   -> L.build_icmp L.Icmp.Eq
@@ -211,6 +277,7 @@ let translate (globals, functions) =
         let value_ptr = L.build_struct_gep t_ptr idx ( "t_ptr") builder in
         L.build_load value_ptr "t_ptr" builder
           (* | SCall("getY", [e]) ->  *) 
+      (* | A.Not                  -> L.build_not) e' "tmp" builder *)
       | SCall ("printbig", [e]) ->
 	  L.build_call printbig_func [| (expr builder e) |] "printbig" builder
       | SCall ("make_triangle", [e1; e2; e3; e4]) ->
@@ -228,13 +295,19 @@ let translate (globals, functions) =
       | SCall ("make_point", [e1; e2]) ->
     L.build_call make_point_func [| (expr builder e1); (expr builder e2); |] 
     "make_point" builder
-      | SCall("get_num", [e]) ->
-    L.build_call get_num_func [| (expr builder e) |] "get_num" builder
+      (* | SCall("get_num", [e]) ->
+    L.build_call get_num_func [| (expr builder e) |] "get_num" builder *)
       (* | SCall("getX", [e]) -> 
         (* let t_ptr = (lookup ((e)))  in *)
         let value_ptr = L.build_struct_gep e 0 ("x_ptr") builder in
         L.build_load value_ptr "x" builder *)
           (* | SCall("getY", [e]) ->  *)
+      | SCall ("make_window", []) ->
+    L.build_call make_window_func [||] "make_window" builder
+     | SCall ("close_window", []) ->
+    L.build_call close_window_func [||] "close_window" builder
+     | SCall ("keep_open", []) ->
+    L.build_call keep_open_func [||] "keep_open" builder
       | SCall ("printf", [e]) -> 
 	  L.build_call printf_func [| float_format_str ; (expr builder e) |]
 	    "printf" builder

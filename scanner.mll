@@ -9,8 +9,8 @@ rule token = parse
 | ')'      { RPAREN }
 | '{'      { LBRACE }
 | '}'      { RBRACE }
-| '['	   { LSQUARE } 
-| ']'	   { RSQUARE } 
+| "["	   { LSQUARE }
+| "]"      { RSQUARE }
 | ';'      { SEMI }
 | ','      { COMMA }
 | '+'      { PLUS }
@@ -18,6 +18,7 @@ rule token = parse
 | '*'      { TIMES }
 | '/'      { DIVIDE }
 | '='      { ASSIGN }
+| "%"	   { MOD }
 | "=="     { EQ }
 | "!="     { NEQ }  
 | '<'      { LT }
@@ -38,7 +39,7 @@ rule token = parse
 | "string" { STRING }
 | "true"   { TRUE }
 | "false"  { FALSE }
-(* | "list"   { LIST } *)
+(*| "list"   { LIST }*)
 | "tuple"  { TUPLE } 
 | "void"   { VOID}
 | ['0'-'9']+ as lxm { INT_LITERAL(int_of_string lxm) }

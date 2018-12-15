@@ -48,25 +48,27 @@ let check (globals, functions) =
                                 ]
     in
   	let add_bind2 map (name, ty1, ty2, ty3, ty4) = StringMap.add name {
-      typ = Void;
+      typ = Int;
       fname = name; 
       formals = [(ty1, "x");(ty2, "y");(ty3, "height");(ty4, "width")];
       locals = []; body = [] } map
     in let funct_map2 = List.fold_left add_bind2 funct_map [
-                               ("make_triangle", Float, Float, Float, Float);
-                               ("make_rectangle", Float, Float, Float, Float);
+                               ("make_triangle", Int, Int, Int, Int);
+                               ("make_rectangle", Int, Int, Int, Int);
+
                                 ]
                                 
     in
   	let add_bind3 map (name, ty1, ty2, ty3, ty4) = StringMap.add name {
-      typ = Void;
+      typ = Int;
       fname = name; 
       formals = [(ty1, "x");(ty2, "y");(ty3, "radius");(ty4, "vertices")];
       locals = []; body = [] } map
      in
      let funct_map3 = List.fold_left add_bind3 funct_map2 [
-                               ("make_circle", Float, Float, Float, Int);
-                                ]                            
+                               ("make_circle", Int, Int, Int, Int);
+                                ]  
+
   
   in
   	let add_bind4 map (name, ty1, ty2) = StringMap.add name {
@@ -76,7 +78,7 @@ let check (globals, functions) =
       locals = []; body = [] } map
     in
     let funct_map4 = List.fold_left add_bind4 funct_map3 [
-                               ("make_point", Float, Float);
+                               ("make_point", Int, Int);
                                 ]  
                                                            
   in
@@ -87,32 +89,64 @@ let check (globals, functions) =
       locals = []; body = [] } map
     in 
      let funct_map5 = List.fold_left add_bind5 funct_map4 [
-                               ("make_line", Float, Float, Float, Float);
-                                ]                             
+                               ("make_line", Int, Int, Int, Int);
+                                ]    
+  in
+    let add_bind6 map (name) = StringMap.add name {
+      typ = Int;
+      fname = name; 
+      formals = [];
+      locals = []; body = [] } map
+    in 
+     let funct_map6 = List.fold_left add_bind6 funct_map5 [
+                               ("make_window");
+                               ("close_window");
+                                ]     
+  in
+    let add_bind7 map (name) = StringMap.add name {
+      typ = Bool;
+      fname = name; 
+      formals = [];
+      locals = []; body = [] } map
+    in 
+     let funct_map7 = List.fold_left add_bind7 funct_map6 [
+                               ("keep_open");
+                                ]                                    
  
   
   in                             
-  	let add_bind6 map (name, ty) = StringMap.add name {
+  	let add_bind8 map (name, ty) = StringMap.add name {
       typ = Float;
       fname = name; 
       formals = [(ty, "tuple")];
       locals = []; body = [] } map
     in 
-     let funct_map6 = List.fold_left add_bind6 funct_map5 [
+     let funct_map8 = List.fold_left add_bind8 funct_map7 [
                                ("getX", Tuple);
                                ("getY", Tuple)
                                ]
   in                             
-    let add_bind7 map (name, ty) = StringMap.add name {
+    let add_bind9 map (name, ty) = StringMap.add name {
       typ = Void;
       fname = name; 
       formals = [(ty, "tuple")];
       locals = []; body = [] } map
     in 
-     List.fold_left add_bind7 funct_map6 [
+      List.fold_left add_bind9 funct_map8 [
                                ("setX", Tuple);
                                ("setY", Tuple)
                                ]     
+                             
+    (*let add_bind8 map (name, ty1, ty2) = StringMap.add name {
+      typ = Int;
+      fname = name; 
+      formals = [(ty1, "w");(ty2, "h")];
+      locals = []; body = [] } map
+    in 
+     List.fold_left add_bind8 funct_map7 [
+                               ("make_sdl_window", Int, Int);
+                               
+                               ]     *)
 
   (*commenting out list built in functions*)
   (*
@@ -203,6 +237,26 @@ in
       | FloatLiteral l -> (Float, SFloatLiteral l)
       | BooleanLiteral l  -> (Bool, SBooleanLiteral l)
       | StringLiteral l -> (String, SStringLiteral l)
+      | ArrayLiteral l -> check_array_types l
+      (*| ArrayInit(typ, size) -> (type_of_identifier typ, SArrayInit (typ, (expr size)))*)
+      (*| ListLiteral elist as e -> 
+        let tlist = List.map (expr) elist in
+        if (List.length tlist) = 0
+        then (List(Any), SListLiteral tlist)
+      else
+        let  x = List.hd tlist in
+        if List.for_all (fun t -> t = x) tlist
+        then (List (type_of_identifier(string_of_expr(e))), SListLiteral tlist)
+      else raise (Failure("types inconsistent in list"))*)
+
+      (*| ArrayLiteral(l, s) as a -> let arr_type = List.fold_left (fun t1 e -> let t2 = snd (expr e) in
+            if t1 == t2 then t1
+            else raise (Failure("All array elements must be the same type ")))
+            (snd (expr (List.hd (s)))) (List.tl s) in
+            (if l == List.length s then 
+              let s_s = List.map (fun e -> expr e) s in
+              (Array(l, type_of_identifier(string_of_expr(List.hd s))), SArrayLiteral(l, s_s))
+            else raise(Failure("Assigning length not working ")))*)
       | TupleLiteral (x, y) -> let t1 = expr x and t2 = expr y in
       (Tuple, STupleLiteral (t1, t2))
       | TupleAccess (s1, s2) ->  let t1 = expr s2 in (Float, STupleAccess(s1, t1))
@@ -218,6 +272,21 @@ in
         (expr (List.hd el)) (List.tl el)
     in (List, SListLiteral el) *)
       (* | ListLiteral l ->  List.Map (fun a -> SExpr (a)) l in (List, SListLiteral l) *)
+      (*| ArrayInit(_, _, e1) -> let e_type = expr e1 in 
+        if e1 != Int
+        then (raise(Failure("Array length must be of type int")))
+        else SIntLiteral
+      | (ArrayAccess(e1, e2) as e) -> let e_type = expr e1 and e_val = expr e2 in
+          (*if(e_val != SIntLiteral)
+            then (raise(Failure("Array index must be of type int")))
+          else*)
+            (match e_type with
+              | Int
+              | String
+              | Boolean
+              | Float
+              | _ -> (raise(Failure("Arrays can't be that type"))))*)
+
       | Noexpr     -> (Void, SNoexpr)
       | Id s       -> (type_of_identifier s, SId s)
       | Assign(var, e) as ex -> 
@@ -248,12 +317,16 @@ in
           | Less | Leq | Greater | Geq
                      when same && (t1 = Int || t1 = Float) -> Bool
           | And | Or when same && t1 = Bool -> Bool
+          | Mod when same && t1 = Int -> Int
           | _ -> raise (
 	      Failure ("illegal binary operator " ^
                        string_of_typ t1 ^ " " ^ string_of_op op ^ " " ^
                        string_of_typ t2 ^ " in " ^ string_of_expr e))
           in (ty, SBinop((t1, e1'), op, (t2, e2')))
       | Call(fname, args) as call -> 
+        
+        (*let print_ex arg = print_endline (string_of_expr arg) in
+        List.iter print_ex args ;*)
           let fd = find_func fname in
           let param_length = List.length fd.formals in
           if List.length args != param_length then
@@ -266,7 +339,28 @@ in
             in (check_assign ft et err, e')
           in 
           let args' = List.map2 check_call fd.formals args
-          in (fd.typ, SCall(fname, args'))
+
+          in (*let str_args = List.map string_of_sexpr args' in
+          let all_args = String.concat " " str_args in
+           raise (Failure (all_args)); *)
+          (fd.typ, SCall(fname, args'))
+
+    and
+
+   get_arr_type e = match e with
+      IntLiteral(_) :: ss -> get_arr_type ss
+      | [] -> Int
+      | _ -> raise (Failure("arrays only ints"))
+
+  
+
+    and check_array_types e = 
+      let t = get_arr_type e in
+      let check_arr_el e = match e with 
+        IntLiteral(i) -> if t == Int then expr(IntLiteral(i)) else expr(FloatLiteral(string_of_int i))
+        | _ -> raise (Failure("arrays only ints"))
+      in (Array (t, IntLiteral(List.length e)), SArrayLiteral(List.map check_arr_el e, Array(t, IntLiteral(List.length e))))
+
     in
 
     let check_bool_expr e = 
