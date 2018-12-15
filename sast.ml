@@ -56,6 +56,10 @@ let rec string_of_sexpr (t, e) =
   | SBooleanLiteral(false) -> "false"
   | SStringLiteral(s) -> s
   | SFloatLiteral(l) -> l
+  | SArrayLiteral(el, t) -> string_of_typ t ^ "[" ^ String.concat ", " (List.map (fun e -> string_of_sexpr e) el) ^ "]"
+  | SArrayAccess(a, e, t) -> string_of_typ t ^ " " ^ a ^ "[" ^ string_of_sexpr e ^ "]"
+
+
   (* | SListLiteral(li) -> "[" ^ List.fold_left(fun b a -> b ^ " " ^ string_of_sexpr a ^ ", ") "" li ^ "]" *)
   | STupleLiteral(e1, e2) -> "(" ^ string_of_sexpr e1 ^ ", " ^ string_of_sexpr e2 ^ ")"
   (*| SArrayLiteral(el) -> "[" ^ String.concat ", " (List.map (fun e -> string_of_sexpr e) el) ^ "]"*)
