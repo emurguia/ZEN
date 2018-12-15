@@ -269,15 +269,15 @@ builder in
           | A.Not                  -> L.build_not) e' "tmp" builder
       | STupleAccess (s1, s2) ->  
         let t_ptr = (lookup s1) and
-        v_ptr = (expr builder s2) in 
-        (* zero_ptr = (expr builder "0") and 
-        one_ptr = (expr builder "1") in  *)
+        v_ptr = (expr builder s2) and 
+        zero_ptr = L.build_global_stringptr "0" "zero_ptr" builder and 
+        one_ptr =L.build_global_stringptr "1" "one_ptr" builder in 
         (* let e' = ensureInt (expr builder e) in *)
         
          let idx = 
             (match v_ptr with
-                (* zero_ptr -> 0
-              | one_ptr -> 1 *)
+                zero_ptr -> 0
+              | one_ptr -> 1
               | _ -> raise (Failure("choose 0 or 1 to access tuple" ^ string_of_sexpr s2 ))
             )
           in
