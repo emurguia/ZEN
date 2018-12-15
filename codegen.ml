@@ -264,14 +264,16 @@ builder in
           | A.Not                  -> L.build_not) e' "tmp" builder
       | STupleAccess (s1, s2) ->  
         let t_ptr = (lookup s1) and
-        v_ptr = (expr builder s2) in
+        v_ptr = (expr builder s2) in 
+        (* zero_ptr = (expr builder "0") and 
+        one_ptr = (expr builder "1") in  *)
         (* let e' = ensureInt (expr builder e) in *)
         
          let idx = 
             (match v_ptr with
-                (* "0" -> 0
-              | "1" -> 1 *)
-              | _ -> raise (Failure("choose 0 or 1 to access coordinate" ^ string_of_sexpr s2 ))
+                (* zero_ptr -> 0
+              | one_ptr -> 1 *)
+              | _ -> raise (Failure("choose 0 or 1 to access tuple" ^ string_of_sexpr s2 ))
             )
           in
         let value_ptr = L.build_struct_gep t_ptr idx ( "t_ptr") builder in
