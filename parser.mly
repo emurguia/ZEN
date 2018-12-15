@@ -68,8 +68,9 @@ typ:
 | STRING { String }
 | TUPLE { Tuple } 
 | array_t { $1 }
-/*| LIST LSQUARE typ RSQUARE { List($3) } */
 | VOID { Void }
+/*| LIST LSQUARE typ RSQUARE { List($3) } */
+
 
 /*local_typ:
     typ {$1}
@@ -152,8 +153,8 @@ expr:
   | MINUS expr %prec NEG { Unop(Neg, $2) }
   | NOT expr         { Unop(Not, $2) }
   | ID ASSIGN expr   { Assign($1, $3) }
-  /*| ID LSQUARE expr RSQUARE ASSIGN expr   { ArrayAssign($1, $3, $6) }
-  | ID LSQUARE expr RSQUARE     { ArrayAccess($1, $3) }*/
+  /*| ID LSQUARE expr RSQUARE ASSIGN expr   { ArrayAssign($1, $3, $6) } */
+  | ID LSQUARE expr RSQUARE     { ArrayAccess($1, $3) }
   | ID LPAREN actuals_opt RPAREN { Call($1, $3) }
   | ID LSQUARE expr RSQUARE { TupleAccess($1, $3)}
   | LPAREN expr COMMA expr RPAREN { TupleLiteral($2,$4) } 
@@ -190,5 +191,5 @@ actuals_opt:
   | actuals_list  { List.rev $1 }
 
 actuals_list:
-    /*expr  vartype                  { [$1] }*/
+    expr                        { [$1] }
   | actuals_list COMMA expr { $3 :: $1 }

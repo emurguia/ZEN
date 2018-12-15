@@ -14,6 +14,7 @@ and sx =
   | SArrayAccess of string * sexpr*)
   (*| SListLiteral of sexpr list*)
   | SArrayLiteral of sexpr list * typ
+  | SArrayAccess of string * sexpr * typ
  (* | SArrayAccess of string * sexpr
   | SArrayAssign of string * sexpr * sexpr*)
 

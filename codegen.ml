@@ -156,6 +156,10 @@ let translate (globals, functions) =
                    with Not_found -> StringMap.find n global_vars
     in
 
+   
+
+    
+
    (* let init_arr v s = let tp = L.element_type (L.type_of v) in
     let sz = L.size_of tp in
     let sz = L.build_intcast sz (i32_t) "" builder in
@@ -171,6 +175,7 @@ builder in
       | SFloatLiteral l -> L.const_float_of_string float_t l
       | SStringLiteral s -> L.build_global_stringptr s "name" builder
       | SArrayLiteral (l, t) -> L.const_array (ltype_of_typ t) (Array.of_list (List.map (expr builder) l))
+      | SArrayAccess (s, e, _) -> L.build_load (get_array_acc_address s e builder) s builder
       (*| SArrayInit (v, s) -> let var = (lookup v) and size = (expr builder s) in init_arr var size*)
       | STupleLiteral (x, y) -> 
         let x' = ensureFloat (expr builder x)
@@ -326,6 +331,10 @@ builder in
                         A.Void -> ""
                       | _ -> f ^ "_result") in
          L.build_call fdef (Array.of_list llargs) result builder
+
+    and  
+     get_array_acc_address s e1 builder = L.build_gep (lookup s)
+      [| (L.const_int i32_t 0); (expr builder e1) |] s builder
     in
     
     (* Each basic block in a program ends with a "terminator" instruction i.e.
