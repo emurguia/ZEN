@@ -270,6 +270,8 @@ in
             else raise(Failure("Assigning length not working ")))*)
       | TupleLiteral (x, y) -> let t1 = expr x and t2 = expr y in
       (Tuple, STupleLiteral (t1, t2))
+      | TupleAccess (s1, s2) ->  let t1 = expr s2 in (Float, STupleAccess(s1, t1))
+      (* not sure if the int part is right *)
       (* map all elements in list to their sexpr version (int literal -> sintliteral, etc.))*)
 (* 	| ListLiteral  el -> let t = List.fold_left
 		(fun e1 e2 ->

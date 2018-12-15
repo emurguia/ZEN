@@ -87,6 +87,11 @@ let translate (globals, functions) =
   let make_line_t = L.function_type i32_t [| i32_t; i32_t; i32_t; i32_t |] in
   let make_line_func = L.declare_function "make_line" make_line_t the_module in
 
+  (* Ensures int *)
+  (* let ensureInt c = 
+  if L.type_of c = float_t then (L.const_fptosi c i32_t) else c in *)
+   
+  (* Ensures float *)
   let make_window_t = L.function_type i32_t [||] in
   let make_window_func = L.declare_function "make_window" make_window_t the_module in
 
@@ -175,10 +180,6 @@ builder in
       | STupleLiteral (x, y) -> 
         let x' = ensureFloat (expr builder x)
         and y' = ensureFloat (expr builder y) in
-        (* let x' = expr builder x 
-        and y' = expr builder y in  *)
-        (* let x' = expr builder map x in 
-        let y' = expr builder map y in *)
         let t_ptr = L.build_alloca tuple_t "tmp" builder in
         let x_ptr = L.build_struct_gep t_ptr 0 "x" builder in
         ignore (L.build_store x' x_ptr builder);
@@ -265,7 +266,23 @@ builder in
 	  (match op with
 	    A.Neg when t = A.Float -> L.build_fneg 
 	  | A.Neg                  -> L.build_neg
-      | A.Not                  -> L.build_not) e' "tmp" builder
+          | A.Not                  -> L.build_not) e' "tmp" builder
+      | STupleAccess (s1, s2) ->  
+        let t_ptr = (lookup s1) and
+        v_ptr = (expr builder s2) in
+        (* let e' = ensureInt (expr builder e) in *)
+        
+         let idx = 
+            (match v_ptr with
+                (* "0" -> 0
+              | "1" -> 1 *)
+              | _ -> raise (Failure("choose 0 or 1 to access coordinate" ^ string_of_sexpr s2 ))
+            )
+          in
+        let value_ptr = L.build_struct_gep t_ptr idx ( "t_ptr") builder in
+        L.build_load value_ptr "t_ptr" builder
+          (* | SCall("getY", [e]) ->  *) 
+      (* | A.Not                  -> L.build_not) e' "tmp" builder *)
       | SCall ("printbig", [e]) ->
 	  L.build_call printbig_func [| (expr builder e) |] "printbig" builder
       | SCall ("make_triangle", [e1; e2; e3; e4]) ->
@@ -283,6 +300,13 @@ builder in
       | SCall ("make_point", [e1; e2]) ->
     L.build_call make_point_func [| (expr builder e1); (expr builder e2); |] 
     "make_point" builder
+      (* | SCall("get_num", [e]) ->
+    L.build_call get_num_func [| (expr builder e) |] "get_num" builder *)
+      (* | SCall("getX", [e]) -> 
+        (* let t_ptr = (lookup ((e)))  in *)
+        let value_ptr = L.build_struct_gep e 0 ("x_ptr") builder in
+        L.build_load value_ptr "x" builder *)
+          (* | SCall("getY", [e]) ->  *)
       | SCall ("make_window", []) ->
     L.build_call make_window_func [||] "make_window" builder
      | SCall ("close_window", []) ->
