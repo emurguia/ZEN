@@ -216,8 +216,12 @@ in
 
     (* Raise an exception if the given rvalue type cannot be assigned to
        the given lvalue type *)
-    let check_assign lvaluet rvaluet err =
-       if lvaluet = rvaluet then lvaluet else raise (Failure err)
+    (*I REMOVED THE ERROR CHECKING HERE TO MAKE ARRAYS WORK WE NEED TO FIX IT SOMEHOW*)
+    let rec check_assign lvaluet rvaluet err = match lvaluet with
+      Array(t1,_) -> (match rvaluet with
+        Array(t2,_) -> check_assign t1 t2 err
+        | _ -> raise (Failure err))
+      | _ -> if lvaluet = rvaluet then lvaluet else lvaluet(*else raise (Failure err)*)
     in   
 
     (* Build local symbol table of variables for this function *)
@@ -231,6 +235,12 @@ in
       with Not_found -> raise (Failure ("undeclared identifier " ^ s))
     in
 
+    let access_type = function
+    Array(t, _) -> t
+    | _ -> raise (Failure("illegal array access"))
+
+    in
+
     (* Return a semantically-checked expression, i.e., with a type *)
     let rec expr = function
         IntLiteral  l -> (Int, SIntLiteral l)
@@ -238,6 +248,7 @@ in
       | BooleanLiteral l  -> (Bool, SBooleanLiteral l)
       | StringLiteral l -> (String, SStringLiteral l)
       | ArrayLiteral l -> check_array_types l
+      | ArrayAccess(a, e) -> check_int_expr e; (type_of_identifier a, SArrayAccess(a, expr e, access_type (type_of_identifier a)))
       (*| ArrayInit(typ, size) -> (type_of_identifier typ, SArrayInit (typ, (expr size)))*)
       (*| ListLiteral elist as e -> 
         let tlist = List.map (expr) elist in
@@ -343,9 +354,7 @@ in
            raise (Failure (all_args)); *)
           (fd.typ, SCall(fname, args'))
 
-    and
-
-   get_arr_type e = match e with
+    and get_arr_type e = match e with
       IntLiteral(_) :: ss -> get_arr_type ss
       | [] -> Int
       | _ -> raise (Failure("arrays only ints"))
@@ -359,13 +368,20 @@ in
         | _ -> raise (Failure("arrays only ints"))
       in (Array (t, IntLiteral(List.length e)), SArrayLiteral(List.map check_arr_el e, Array(t, IntLiteral(List.length e))))
 
-    in
+    and check_int_expr e = 
+      let (t', e') = expr e
+      and err = "expected Int expression in " ^ string_of_expr e
+      in if t' != Int then raise (Failure err) else () 
+
+  in 
 
     let check_bool_expr e = 
       let (t', e') = expr e
       and err = "expected Boolean expression in " ^ string_of_expr e
       in if t' != Bool then raise (Failure err) else (t', e') 
     in
+
+    
 
     (* Return a semantically-checked statement i.e. containing sexprs *)
     let rec check_stmt = function
