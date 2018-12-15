@@ -4,7 +4,7 @@
 open Ast
 %}
 
-%token SEMI LPAREN RPAREN LBRACE RBRACE /* LSQUARE RSQUARE */ COMMA
+%token SEMI LPAREN RPAREN LBRACE RBRACE LSQUARE RSQUARE COMMA
 %token PLUS MINUS TIMES DIVIDE ASSIGN NOT
 %token EQ NEQ LT LEQ GT GEQ TRUE FALSE AND OR
 %token RETURN IF ELSE FOR WHILE INT BOOL FLOAT STRING VOID
@@ -38,8 +38,8 @@ program:
 
 decls:
    /* nothing */ { [], [] }
-  | decls vdecl { ($2 :: fst $1), snd $1 } 
-  | decls fdecl { fst $1, ($2 :: snd $1) }
+  | decls vdecl { (($2 :: fst $1), snd $1) } 
+  | decls fdecl { (fst $1, ($2 :: snd $1)) }
 
 fdecl:
    typ ID LPAREN formals_opt RPAREN LBRACE vdecl_list stmt_list RBRACE
@@ -51,7 +51,7 @@ fdecl:
 
 formals_opt:
     /* nothing */ { [] }
-  | formal_list   { List.rev $1 }
+  | formal_list   { $1 }
 
 formal_list:
     typ ID                   { [($1,$2)] }
@@ -126,6 +126,7 @@ expr:
   | NOT expr         { Unop(Not, $2) }
   | ID ASSIGN expr   { Assign($1, $3) }
   | ID LPAREN actuals_opt RPAREN { Call($1, $3) }
+  | ID LSQUARE expr RSQUARE { TupleAccess($1, $3)}
   /* | ID LSQUARE expr RSQUARE ASSIGN expr { ListAssign($1, [$3], $6) }
   | ID LSQUARE expr RSQUARE { ListAccess($1, [$3])} */
   | LPAREN expr COMMA expr RPAREN { TupleLiteral($2,$4) } 

@@ -86,11 +86,11 @@ let check (globals, functions) =
       formals = [(ty1, "x1");(ty2, "y1");(ty3, "x2");(ty4, "y2")];
       locals = []; body = [] } map
     in 
-     List.fold_left add_bind5 funct_map4 [
+     let funct_map5 = List.fold_left add_bind5 funct_map4 [
                                ("make_line", Float, Float, Float, Float);
                                 ]                             
-  (* commenting out list and tuple  built in functions*)
-  (*
+ 
+  
   in                             
   	let add_bind6 map (name, ty) = StringMap.add name {
       typ = Float;
@@ -98,13 +98,24 @@ let check (globals, functions) =
       formals = [(ty, "tuple")];
       locals = []; body = [] } map
     in 
-    let _ = List.fold_left add_bind6 StringMap.empty [
+     let funct_map6 = List.fold_left add_bind6 funct_map5 [
                                ("getX", Tuple);
                                ("getY", Tuple)
-                               ]    
+                               ]
+  in                             
+    let add_bind7 map (name, ty) = StringMap.add name {
+      typ = Void;
+      fname = name; 
+      formals = [(ty, "tuple")];
+      locals = []; body = [] } map
+    in 
+     List.fold_left add_bind7 funct_map6 [
+                               ("setX", Tuple);
+                               ("setY", Tuple)
+                               ]     
 
-  
-  
+  (*commenting out list built in functions*)
+  (*
   in
   let add_bind7 map (name, ty1, ty2) = StringMap.add name {
       typ = Int|String|Tuple|Float|Bool;
@@ -137,6 +148,7 @@ let add_bind9 map (name, ty) = StringMap.add name {
                                ("length", List);
                                 ]                             
   *)
+  
   (* Add function name to symbol table *)
 
 in
@@ -193,6 +205,8 @@ in
       | StringLiteral l -> (String, SStringLiteral l)
       | TupleLiteral (x, y) -> let t1 = expr x and t2 = expr y in
       (Tuple, STupleLiteral (t1, t2))
+      | TupleAccess (s1, s2) ->  let t1 = expr s2 in (Float, STupleAccess(s1, t1))
+      (* not sure if the int part is right *)
       (* map all elements in list to their sexpr version (int literal -> sintliteral, etc.))*)
 (* 	| ListLiteral  el -> let t = List.fold_left
 		(fun e1 e2 ->

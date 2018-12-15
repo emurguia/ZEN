@@ -23,6 +23,7 @@ type expr =
   | Call of string * expr list
   (* | ListAccess of string * expr *)
   (* | ListAssign of string * expr * expr  *)
+  | TupleAccess of string * expr (* tilers is string * string*)
   | Noexpr
 
 type stmt =
@@ -78,6 +79,7 @@ let rec string_of_expr = function
   | Assign(v, e) -> v ^ " = " ^ string_of_expr e
   (* | ListAccess(s, e) -> s ^ "[" ^ string_of_expr e ^ "]" *)
   (* | ListAssign(s, e1, e2) -> s ^ "[" ^ string_of_expr e1 ^ "] = " ^ string_of_expr e2 *)
+  | TupleAccess(e1, e2 ) -> e1 ^ "[" ^ string_of_expr e2 ^ "]"
   | Call(f, el) ->
       f ^ "(" ^ String.concat ", " (List.map string_of_expr el) ^ ")"
   | Noexpr -> ""

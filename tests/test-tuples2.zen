@@ -1,0 +1,10 @@
+void main()
+{
+	tuple tup;
+    float x;
+	string y; 
+	y = "1"; 
+	tup = (1.5, 2.5);
+	# x = tup[y];
+	return; 
+}

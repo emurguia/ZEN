@@ -4,7 +4,7 @@
 open Ast
 %}
 
-%token SEMI LPAREN RPAREN LBRACE RBRACE /* LSQUARE RSQUARE */ COMMA
+%token SEMI LPAREN RPAREN LBRACE RBRACE LSQUARE RSQUARE COMMA
 %token PLUS MINUS TIMES DIVIDE ASSIGN NOT
 %token EQ NEQ LT LEQ GT GEQ TRUE FALSE AND OR
 %token RETURN IF ELSE FOR WHILE INT BOOL FLOAT STRING VOID
@@ -126,6 +126,7 @@ expr:
   | NOT expr         { Unop(Not, $2) }
   | ID ASSIGN expr   { Assign($1, $3) }
   | ID LPAREN actuals_opt RPAREN { Call($1, $3) }
+  | ID LSQUARE expr RSQUARE { TupleAccess($1, $3)}
   /* | ID LSQUARE expr RSQUARE ASSIGN expr { ListAssign($1, [$3], $6) }
   | ID LSQUARE expr RSQUARE { ListAccess($1, [$3])} */
   | LPAREN expr COMMA expr RPAREN { TupleLiteral($2,$4) } 

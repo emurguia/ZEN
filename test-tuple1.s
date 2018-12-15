@@ -6,16 +6,12 @@
 main:                                   # @main
 	.cfi_startproc
 # %bb.0:                                # %entry
-	pushq	%rax
-	.cfi_def_cfa_offset 16
-	movb	$1, 6(%rsp)
-	movb	$0, 7(%rsp)
-	movzbl	6(%rsp), %esi
-	leaq	.Lint_fmt(%rip), %rdi
-	xorl	%eax, %eax
-	callq	printf@PLT
-	xorl	%eax, %eax
-	popq	%rcx
+	movabsq	$4609434218613702656, %rax # imm = 0x3FF8000000000000
+	movq	%rax, -32(%rsp)
+	movabsq	$4612811918334230528, %rcx # imm = 0x4004000000000000
+	movq	%rcx, -24(%rsp)
+	movq	%rcx, -8(%rsp)
+	movq	%rax, -16(%rsp)
 	retq
 .Lfunc_end0:
 	.size	main, .Lfunc_end0-main

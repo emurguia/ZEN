@@ -10,13 +10,15 @@ and sx =
   | SStringLiteral of string
   | STupleLiteral of sexpr * sexpr 
 (*   | SListLiteral of sexpr list
- *)  | SId of string
+ *)  
+  | SId of string
   | SBinop of sexpr * op * sexpr
   | SUnop of uop * sexpr
   | SAssign of string * sexpr
   | SCall of string * sexpr list
   (* | SListAccess of string * sexpr *)
   (* | SListAssign of string * sexpr * sexpr  *)
+  | STupleAccess of string * sexpr 
   | SNoexpr
 
 type sstmt =
@@ -55,6 +57,7 @@ let rec string_of_sexpr (t, e) =
   | SAssign(v, e) -> v ^ " = " ^ string_of_sexpr e
   (* | SListAccess(s, e) -> s ^ "[" ^ string_of_sexpr e ^ "]" *)
   (* | SListAssign(s, e1, e2) -> s ^ "[" ^ string_of_sexpr e1 ^ "] = " ^ string_of_sexpr e2 *)
+  | STupleAccess(s1, s2) -> s1 ^ "[" ^ string_of_sexpr s2 ^ "]"
   | SCall(f, el) ->
       f ^ "(" ^ String.concat ", " (List.map string_of_sexpr el) ^ ")"
   | SNoexpr -> ""

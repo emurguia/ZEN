@@ -80,8 +80,11 @@ let translate (globals, functions) =
   let make_line_t = L.function_type void_t [| float_t; float_t; float_t; float_t |] in
   let make_line_func = L.declare_function "make_line" make_line_t the_module in
 
-
-
+  (* Ensures int *)
+  (* let ensureInt c = 
+  if L.type_of c = float_t then (L.const_fptosi c i32_t) else c in *)
+   
+  (* Ensures float *)
   let ensureFloat c = 
     if L.type_of c = float_t then c else (L.const_sitofp c float_t) in
 
@@ -144,23 +147,12 @@ let translate (globals, functions) =
       | STupleLiteral (x, y) -> 
         let x' = ensureFloat (expr builder x)
         and y' = ensureFloat (expr builder y) in
-        (* let x' = expr builder x 
-        and y' = expr builder y in  *)
-        (* let x' = expr builder map x in 
-        let y' = expr builder map y in *)
         let t_ptr = L.build_alloca tuple_t "tmp" builder in
         let x_ptr = L.build_struct_gep t_ptr 0 "x" builder in
         ignore (L.build_store x' x_ptr builder);
         let y_ptr = L.build_struct_gep t_ptr 1 "y" builder in
         ignore(L.build_store y' y_ptr builder);
         L.build_load (t_ptr) "t" builder
-
-        (* let tuple_ptr = L.build_alloca tuple_t "tmp" builder in
-        let x_ptr = L.build_struct_gep tuple_ptr 0 "x" builder in
-        ignore (L.build_store x x_ptr builder);
-        let y_ptr = L.build_struct_gep tuple_ptr 1 "y" builder in
-        ignore (L.build_store y y_ptr builder); *)
-        (* L.build_load tuple_ptr "v" builder *)
       | SNoexpr -> L.const_int i32_t 0
       | SId s -> L.build_load (lookup s) s builder
       | SAssign (s, e) -> let e' = expr builder e in
@@ -204,6 +196,21 @@ let translate (globals, functions) =
 	    A.Neg when t = A.Float -> L.build_fneg 
 	  | A.Neg                  -> L.build_neg
           | A.Not                  -> L.build_not) e' "tmp" builder
+      | STupleAccess (s1, s2) ->  
+        let t_ptr = (lookup s1) and
+        v_ptr = (expr builder s2) in
+        (* let e' = ensureInt (expr builder e) in *)
+        
+         let idx = 
+            (match v_ptr with
+                (* "0" -> 0
+              | "1" -> 1 *)
+              | _ -> raise (Failure("choose 0 or 1 to access coordinate" ^ string_of_sexpr s2 ))
+            )
+          in
+        let value_ptr = L.build_struct_gep t_ptr idx ( "t_ptr") builder in
+        L.build_load value_ptr "t_ptr" builder
+          (* | SCall("getY", [e]) ->  *) 
       | SCall ("printbig", [e]) ->
 	  L.build_call printbig_func [| (expr builder e) |] "printbig" builder
       | SCall ("make_triangle", [e1; e2; e3; e4]) ->
@@ -223,6 +230,11 @@ let translate (globals, functions) =
     "make_point" builder
       | SCall("get_num", [e]) ->
     L.build_call get_num_func [| (expr builder e) |] "get_num" builder
+      (* | SCall("getX", [e]) -> 
+        (* let t_ptr = (lookup ((e)))  in *)
+        let value_ptr = L.build_struct_gep e 0 ("x_ptr") builder in
+        L.build_load value_ptr "x" builder *)
+          (* | SCall("getY", [e]) ->  *)
       | SCall ("printf", [e]) -> 
 	  L.build_call printf_func [| float_format_str ; (expr builder e) |]
 	    "printf" builder

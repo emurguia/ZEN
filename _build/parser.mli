@@ -4,6 +4,8 @@ type token =
   | RPAREN
   | LBRACE
   | RBRACE
+  | LSQUARE
+  | RSQUARE
   | COMMA
   | PLUS
   | MINUS
