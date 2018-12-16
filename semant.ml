@@ -112,9 +112,18 @@ let check (globals, functions) =
      let funct_map7 = List.fold_left add_bind7 funct_map6 [
                                ("keep_open");
                                 ]                                    
- 
+ in
+    let add_bind8 map (name) = StringMap.add name {
+      typ = Bool;
+      fname = name; 
+      formals = [];
+      locals = []; body = [] } map
+    in 
+     let funct_map8 = List.fold_left add_bind7 funct_map6 [
+                               ("render");
+                                ]    
   
-  in                             
+  (* in                             
   	let add_bind8 map (name, ty) = StringMap.add name {
       typ = Float;
       fname = name; 
@@ -136,7 +145,7 @@ let check (globals, functions) =
                                ("setX", Tuple);
                                ("setY", Tuple)
                                ]     
-                             
+                              *)
     (*let add_bind8 map (name, ty1, ty2) = StringMap.add name {
       typ = Int;
       fname = name; 

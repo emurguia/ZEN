@@ -101,6 +101,9 @@ let translate (globals, functions) =
   let keep_open_t = L.function_type i1_t [||] in
   let keep_open_func = L.declare_function "keep_open" keep_open_t the_module in
 
+  let render_t = L.function_type i1_t [||] in 
+  let render_func = L.declare_function "render" render_t the_module in
+
 
   let ensureFloat c = 
     if L.type_of c = float_t then c else (L.const_sitofp c float_t) in
@@ -315,6 +318,8 @@ builder in
     L.build_call close_window_func [||] "close_window" builder
      | SCall ("keep_open", []) ->
     L.build_call keep_open_func [||] "keep_open" builder
+    | SCall ("render", []) -> 
+    L.build_call render_func [||] "render" builder 
       | SCall ("printf", [e]) -> 
 	  L.build_call printf_func [| float_format_str ; (expr builder e) |]
 	    "printf" builder
