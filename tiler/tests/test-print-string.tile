@@ -1,9 +1,0 @@
-// tests that strings can be printed
-
-init {
-	string x;
-	tile(3,3);
-	x = "3.3";
-	sprint(x);
-	close();
-}

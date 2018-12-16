@@ -1,2 +1,0 @@
-Fatal error: exception Failure("duplicate local variable a in init")
-make: *** [tests/fail-local1.test] Error 2

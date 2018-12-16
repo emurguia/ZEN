@@ -18,3 +18,5 @@ int main()
     make_point(100, 25);
     return 0;
 }
+#endif
+

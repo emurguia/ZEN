@@ -8,7 +8,7 @@ test : all test.sh
 # to test linking external code
 
 .PHONY : all
-all : zen.native printbig.o make_circle.o make_triangle.o make_window.o close_window.o keep_open.o
+all : zen.native printbig.o make_circle.o make_triangle.o make_window.o close_window.o keep_open.o make_line.o make_point.o
 
 # "make zen.native" compiles the compiler
 
@@ -50,6 +50,7 @@ make_line: make_line.c
 
 make_point: make_point.c
 	cc -o make_point -DBUILD_TEST make_point.c /usr/local/lib/libsigil.so
+
 make_rectangle: make_rectangle.c
 	cc -o make_rectangle -DBUILD_TEST make_rectangle.c /usr/local/lib/libsigil.so
 

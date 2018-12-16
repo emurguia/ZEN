@@ -1,9 +1,0 @@
-// testing that invalid arithmetic operations fail at parser
-
-init{
-	grid{3,3};
-	int y;
-	y = 3/*4;
-	iprint(y);
-	close();
-}

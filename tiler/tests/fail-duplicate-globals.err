@@ -1,2 +1,0 @@
-Fatal error: exception Failure("duplicate global variable a")
-make: *** [tests/fail-duplicate-globals.test] Error 2
