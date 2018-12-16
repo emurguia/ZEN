@@ -1,9 +1,0 @@
-// testing that float comparison between floats and ints works
-
-init {
-	bool x;
-	tile(3,3);
-	x = (3.0 < 7);
-	iprint(x);
-	close();
-}

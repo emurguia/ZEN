@@ -1,9 +1,0 @@
-// tests that floats can be printed
-
-init {
-	float x;
-	tile(3,3);
-	x = 3.3;
-	fprint(x);
-	close();
-}
