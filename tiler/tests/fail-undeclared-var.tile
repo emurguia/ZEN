@@ -1,7 +1,0 @@
-// Tests that program fails at parser if undeclared variable used
-
-init{
-	tile(3,3);
-	y = 30;
-	close();
-}

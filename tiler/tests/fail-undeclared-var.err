@@ -1,2 +1,0 @@
-Fatal error: exception Failure("undeclared identifiery")
-make: *** [tests/fail-undeclared-var.test] Error 2
