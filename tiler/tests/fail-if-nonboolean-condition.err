@@ -1,2 +1,0 @@
-Fatal error: exception Failure("expected Boolean expression in 3")
-make: *** [tests/fail-if-nonboolean-condition.test] Error 2

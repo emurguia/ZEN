@@ -1,9 +1,0 @@
-// tests that ints can be printed
-
-init {
-	int x;
-	tile(3,3);
-	x = 3;
-	iprint(x);
-	close();
-}

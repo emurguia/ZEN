@@ -32,7 +32,7 @@ type expr =
 
   (* | ListAccess of string * expr *)
   (* | ListAssign of string * expr * expr  *)
-  | TupleAccess of string * expr (* tilers is string * string*)
+  (* | TupleAccess of string * expr (* tilers is string * string*) *)
   | Noexpr
   (*| ArrayInit of typ * string * expr
   | ArrayAccess of expr * expr
@@ -112,7 +112,7 @@ let rec string_of_expr = function
 
   (* | ListAccess(s, e) -> s ^ "[" ^ string_of_expr e ^ "]" *)
   (* | ListAssign(s, e1, e2) -> s ^ "[" ^ string_of_expr e1 ^ "] = " ^ string_of_expr e2 *)
-  | TupleAccess(e1, e2 ) -> e1 ^ "[" ^ string_of_expr e2 ^ "]"
+  (* | TupleAccess(e1, e2 ) -> e1 ^ "[" ^ string_of_expr e2 ^ "]" *)
 
   (*| ArrayInit(t, n, e) -> "Array " ^ string_of_typ t ^ " " ^ n ^ " = " ^ " [" ^ string_of_expr e ^ "]"
   | ArrayAccess(arr_init, index) -> string_of_expr arr_init ^ "[" ^ string_of_expr index ^ "]"   

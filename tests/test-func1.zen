@@ -6,7 +6,7 @@ int add(int a,int b)
 int main()
 {
   int a;
-  a = add(39.0, 3.0);
+  a = add(39, 3);
   printi(a);
   return 0;
 }
