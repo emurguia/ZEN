@@ -8,7 +8,7 @@ test : all test.sh
 # to test linking external code
 
 .PHONY : all
-all : zen.native printbig.o make_circle.o make_triangle.o make_window.o close_window.o keep_open.o make_line.o make_point.o
+all : zen.native printbig.o make_circle.o render.o make_triangle.o make_window.o close_window.o keep_open.o make_line.o make_point.o
 
 # "make zen.native" compiles the compiler
 
@@ -23,7 +23,7 @@ zen.native :
 .PHONY : clean
 clean :
 	ocamlbuild -clean
-	rm -rf testall.log *.diff printbig make_circle make_triangle keep_open close_window keep_open make_rectangle make_point make_line *.o *.ll *.exe
+	rm -rf testall.log *.diff printbig make_circle make_triangle keep_open close_window keep_open make_rectangle make_point make_line render *.o *.ll *.exe
 
 # # Testing the "printbig" example
 
@@ -54,6 +54,8 @@ make_point: make_point.c
 make_rectangle: make_rectangle.c
 	cc -o make_rectangle -DBUILD_TEST make_rectangle.c /usr/local/lib/libsigil.so
 
+render: render.c 
+	cc -o render -DBUILD_TEST render.c /usr/local/lib/libsigil.so
 
 # # Building the tarball
 
