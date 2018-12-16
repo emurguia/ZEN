@@ -15,7 +15,6 @@ int make_triangle(int x, int y, int height, int width)
 
 
 
-            slRender();
     //    }
     //    slClose();
 }
