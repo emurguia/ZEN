@@ -267,7 +267,7 @@ builder in
 	    A.Neg when t = A.Float -> L.build_fneg 
 	  | A.Neg                  -> L.build_neg
           | A.Not                  -> L.build_not) e' "tmp" builder
-      | STupleAccess (s1, s2) ->  
+(*       | STupleAccess (s1, s2) ->  
         let t_ptr = (lookup s1) and
         v_ptr = (expr builder s2) and 
         zero_ptr = L.build_global_stringptr "0" "zero_ptr" builder and 
@@ -282,7 +282,7 @@ builder in
             )
           in
         let value_ptr = L.build_struct_gep t_ptr idx ( "t_ptr") builder in
-        L.build_load value_ptr "t_ptr" builder
+        L.build_load value_ptr "t_ptr" builder *)
           (* | SCall("getY", [e]) ->  *) 
       (* | A.Not                  -> L.build_not) e' "tmp" builder *)
       | SCall ("printbig", [e]) ->
