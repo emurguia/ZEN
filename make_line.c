@@ -21,5 +21,6 @@ int main()
     make_line(100.0, 400.0, 400.0, 400.0);
     return 0;
 }
+#endif
 
 
