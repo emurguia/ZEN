@@ -1,0 +1,9 @@
+int main()
+{
+       	make_window();
+	make_rectangle(100,450, 25, 16);
+	render();
+        close_window();
+        print("Success");
+	return 0;
+}
