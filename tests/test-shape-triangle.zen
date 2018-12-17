@@ -1,12 +1,8 @@
 void main()
 {
        	make_window();
-        while(keep_open())
-        {
-        
-                make_triangle(100,450,50,50);
-                render();
-        }
+        make_triangle(100,450,50,50);
+        render();
         close_window();
         print("Success");
 	return;

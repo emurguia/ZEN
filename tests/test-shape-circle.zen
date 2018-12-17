@@ -3,11 +3,8 @@ void main()
        
 
         make_window();
-        while(keep_open())
-        {
-                make_circle(325, 450, 25, 16);
-		render();
-        }
+        make_circle(325, 450, 25, 16);
+	render();
         close_window();
         print("Success");
 	return;
