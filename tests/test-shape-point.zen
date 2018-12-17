@@ -1,7 +1,7 @@
 int main()
 {
        	make_window();
-        make_triangle(100,450,50,50);
+	make_point(100,450);
         render();
         close_window();
         print("Success");

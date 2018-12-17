@@ -57,6 +57,18 @@ let translate (globals, functions) =
     (*| A.Array(l, t) -> L.array_type (ltype_of_typ t) l*)
   in
 
+  (*let rec atype_of_typ = function
+      i32_t -> A.Int
+    | i1_t -> A.Bool
+    | float_t -> A.Float
+    | void_t -> A.Void
+    | str_t -> A.String
+    | tuple_t -> A.Tuple
+    | array_t (typ, size)  -> A.Array(atype_of_typ typ, atype_of_typ size)
+
+  in *)
+
+
   (* Declare each global variable; remember its value in a map *)
   let global_vars : L.llvalue StringMap.t =
     let global_var m (t, n) = 
@@ -76,7 +88,7 @@ let translate (globals, functions) =
   let make_triangle_func = L.declare_function "make_triangle" make_triangle_t the_module in
 
   let make_rectangle_t = L.function_type i32_t [| i32_t; i32_t; i32_t; i32_t |] in
-  let make_rectangle_func = L.declare_function "make_recatngle" make_rectangle_t the_module in
+  let make_rectangle_func = L.declare_function "make_rectangle" make_rectangle_t the_module in
 
   let make_circle_t = L.function_type i32_t [| i32_t; i32_t; i32_t; i32_t |] in
   let make_circle_func = L.declare_function "make_circle" make_circle_t the_module in
@@ -91,7 +103,7 @@ let translate (globals, functions) =
   (* let ensureInt c = 
   if L.type_of c = float_t then (L.const_fptosi c i32_t) else c in *)
    
-  (* Ensures float *)
+ 
   let make_window_t = L.function_type i32_t [||] in
   let make_window_func = L.declare_function "make_window" make_window_t the_module in
 
@@ -104,7 +116,7 @@ let translate (globals, functions) =
   let render_t = L.function_type i1_t [||] in 
   let render_func = L.declare_function "render" render_t the_module in
 
-
+  (* Ensures float *)
   let ensureFloat c = 
     if L.type_of c = float_t then c else (L.const_sitofp c float_t) in
 
@@ -179,7 +191,30 @@ builder in
       | SStringLiteral s -> L.build_global_stringptr s "name" builder
       | SArrayLiteral (l, t) -> L.const_array (ltype_of_typ t) (Array.of_list (List.map (expr builder) l))
       | SArrayAccess (s, e, _) -> L.build_load (get_array_acc_address s e builder) s builder
-      (*| SArrayInit (v, s) -> let var = (lookup v) and size = (expr builder s) in init_arr var size*)
+      | SArrayAssign (var, idx, num) -> L.build_load (get_array_acc_address var num builder) var builder
+
+        (*let idx_val = (expr builder idx) and num_val = (expr builder num)
+      in let llname = var (*^ "[" ^ L.string_of_llvalue idx_val ^ "]"*) in
+      let arr_ptr = lookup var in
+      let arr_ptr_load = L.build_load arr_ptr var builder in
+      let arr_get = L.build_in_bounds_gep arr_ptr_load [|idx_val|] llname builder
+    in L.build_store num_val arr_get builder*)
+    
+     (*making this like pixelman assign*) (*| SArrayAssign (s, e1, e2) -> let lsb = (match s with 
+                      SArrayAccess(s,e,_) -> get_array_acc_address s e builder
+                      | _ -> raise (Failure ("Illegal assignment lvalue!")))
+                      in 
+                      let rsb = expr builder e1 in
+                      ignore (L.build_stoer rsb lsb builder); rsb*)
+
+
+      (*let e1' = expr builder e1 and e2' = expr builder e2 in
+        let addr = lookup s in
+          let ty = (type_of addr) in 
+          if ty == array_t then (ty = A.Array(A.Int, Array.length (addr)) in (
+            match ty with*)
+
+        
       | STupleLiteral (x, y) -> 
         let x' = ensureFloat (expr builder x)
         and y' = ensureFloat (expr builder y) in
@@ -188,43 +223,7 @@ builder in
         ignore (L.build_store x' x_ptr builder);
         let y_ptr = L.build_struct_gep t_ptr 1 "y" builder in
         ignore(L.build_store y' y_ptr builder);
-        L.build_load (t_ptr) "t" builder
-
-        (* let tuple_ptr = L.build_alloca tuple_t "tmp" builder in
-        let x_ptr = L.build_struct_gep tuple_ptr 0 "x" builder in
-        ignore (L.build_store x x_ptr builder);
-        let y_ptr = L.build_struct_gep tuple_ptr 1 "y" builder in
-        ignore (L.build_store y y_ptr builder); *)
-        (* L.build_load tuple_ptr "v" builder *)
-      
-      (*| SArrayLiteral(_, s), (A.Array(_, array_typ) as t) ->
-          let const_array = L.const_array (ltype_of_typ array_typ) (Array.of_list (List.map (fun e-> expr builder true e) s)) in
-          if loadval then const_array
-        else (let arr_ref = L.build_alloca (ltype_of_typ t) "arr_prt" builder in
-              ignore (L.build_store const_array arr_ref builder); arr_ref)*)
-      
-      (*| SListLiteral elist -> 
-        if List.length elist == 0
-        then raise (Failure "List cannot be empty")
-        else
-          let len = L.const_int i32_t (List.length elist) in
-          elements = expr elist in
-          let etype = L.type_of (List.hd elements) in 
-          let len = List.length elist in
-          let ptr = L.build_array_malloc
-                    etype
-                    (L.const_int i32_t num_elems)
-                     
-                     in
-
-          ignore (List.fold_left 
-                   (fun i elem ->
-                     let ind = L.const_int i32_t i in
-                     let eptr = L.build_gep ptr [|ind|]  in
-                     llstore elem eptr;
-                     i+1
-                   ) 0 elements); (ptr)*)
-          
+        L.build_load (t_ptr) "t" builder   
       | SNoexpr -> L.const_int i32_t 0
       | SId s -> L.build_load (lookup s) s builder
       | SAssign (s, e) -> let e' = expr builder e in
@@ -305,13 +304,6 @@ builder in
       | SCall ("make_point", [e1; e2]) ->
     L.build_call make_point_func [| (expr builder e1); (expr builder e2); |] 
     "make_point" builder
-      (* | SCall("get_num", [e]) ->
-    L.build_call get_num_func [| (expr builder e) |] "get_num" builder *)
-      (* | SCall("getX", [e]) -> 
-        (* let t_ptr = (lookup ((e)))  in *)
-        let value_ptr = L.build_struct_gep e 0 ("x_ptr") builder in
-        L.build_load value_ptr "x" builder *)
-          (* | SCall("getY", [e]) ->  *)
       | SCall ("make_window", []) ->
     L.build_call make_window_func [||] "make_window" builder
      | SCall ("close_window", []) ->

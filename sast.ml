@@ -15,6 +15,7 @@ and sx =
   (*| SListLiteral of sexpr list*)
   | SArrayLiteral of sexpr list * typ
   | SArrayAccess of string * sexpr * typ
+  | SArrayAssign of string * sexpr * sexpr
  (* | SArrayAccess of string * sexpr
   | SArrayAssign of string * sexpr * sexpr*)
 
@@ -58,23 +59,14 @@ let rec string_of_sexpr (t, e) =
   | SFloatLiteral(l) -> l
   | SArrayLiteral(el, t) -> string_of_typ t ^ "[" ^ String.concat ", " (List.map (fun e -> string_of_sexpr e) el) ^ "]"
   | SArrayAccess(a, e, t) -> string_of_typ t ^ " " ^ a ^ "[" ^ string_of_sexpr e ^ "]"
-
-
-  (* | SListLiteral(li) -> "[" ^ List.fold_left(fun b a -> b ^ " " ^ string_of_sexpr a ^ ", ") "" li ^ "]" *)
+  | SArrayAssign(a, e1, e2) -> a ^ "[" ^ string_of_sexpr e1 ^ "] = " ^ string_of_sexpr e2
   | STupleLiteral(e1, e2) -> "(" ^ string_of_sexpr e1 ^ ", " ^ string_of_sexpr e2 ^ ")"
-  (*| SArrayLiteral(el) -> "[" ^ String.concat ", " (List.map (fun e -> string_of_sexpr e) el) ^ "]"*)
-
-  (*| SArrayLiteral(len, l) -> string_of_int len ^ ": [" ^ String.concat ", " (List.map string_of_sexpr l) ^ "]"*)
-  (*| SArrayAccess(id, idx) -> id ^ "[" ^ string_of_sexpr idx ^ "]"
-  | SArrayAssign(id, idx, e) -> id ^ "[" ^ string_of_sexpr idx ^ "]" ^ " = " ^ string_of_sexpr e*)
 
   | SId(s) -> s
   | SBinop(e1, o, e2) ->
       string_of_sexpr e1 ^ " " ^ string_of_op o ^ " " ^ string_of_sexpr e2
   | SUnop(o, e) -> string_of_uop o ^ string_of_sexpr e
   | SAssign(v, e) -> v ^ " = " ^ string_of_sexpr e
-  (* | SListAccess(s, e) -> s ^ "[" ^ string_of_sexpr e ^ "]" *)
-  (* | SListAssign(s, e1, e2) -> s ^ "[" ^ string_of_sexpr e1 ^ "] = " ^ string_of_sexpr e2 *)
   (* | STupleAccess(s1, s2) -> s1 ^ "[" ^ string_of_sexpr s2 ^ "]" *)
   | SCall(f, el) ->
       f ^ "(" ^ String.concat ", " (List.map string_of_sexpr el) ^ ")"

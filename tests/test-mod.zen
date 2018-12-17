@@ -1,0 +1,6 @@
+int main() {
+	printi(10 % 3);
+	printi(9 % 3);
+	printi(3 % 10);	
+	return 0;
+}
