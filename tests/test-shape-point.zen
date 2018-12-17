@@ -1,0 +1,9 @@
+int main()
+{
+       	make_window();
+	make_point(100,450);
+        render();
+        close_window();
+        print("Success");
+	return 0;
+}
