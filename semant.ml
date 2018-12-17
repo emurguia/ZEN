@@ -111,6 +111,7 @@ let check (globals, functions) =
     in 
      let funct_map7 = List.fold_left add_bind7 funct_map6 [
                                ("keep_open");
+                               ("render");
                                 ]                                    
  
   

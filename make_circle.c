@@ -28,7 +28,7 @@ int make_circle(int x, int y, int radius, int vertices)
 
 
 
-            slRender();
+            // slRender();
 //        }
 //        slClose();
 	return 0;
