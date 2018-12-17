@@ -115,28 +115,6 @@ let check (globals, functions) =
                                 ]                                    
  
   
- (* in                             
-  	let add_bind8 map (name, ty) = StringMap.add name {
-      typ = Float;
-      fname = name; 
-      formals = [(ty, "tuple")];
-      locals = []; body = [] } map
-    in 
-     let funct_map8 = List.fold_left add_bind8 funct_map7 [
-                               ("getX", Tuple);
-                               ("getY", Tuple)
-                               ]
-  in                             
-    let add_bind9 map (name, ty) = StringMap.add name {
-      typ = Void;
-      fname = name; 
-      formals = [(ty, "tuple")];
-      locals = []; body = [] } map
-    in 
-      List.fold_left add_bind9 funct_map8 [
-                               ("setX", Tuple);
-                               ("setY", Tuple)
-                               ]     *)
   
   (* Add function name to symbol table *)
 
