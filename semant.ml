@@ -395,7 +395,7 @@ in
     and check_int_expr e = 
       let (t', e') = expr e
       and err = "expected Int expression in " ^ string_of_expr e
-      in if t' != Int then raise (Failure err) else () 
+      in if t' != Int then raise (Failure err) else ignore e' 
 
     (*and get_assign_sexpr e1 e2 = 
       let se1 = match e1 with 

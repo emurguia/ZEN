@@ -108,7 +108,7 @@ let rec string_of_expr = function
   | Unop(o, e) -> string_of_uop o ^ string_of_expr e
   | Assign(a, e) -> a ^ " = " ^ string_of_expr e
   | ArrayAccess(a, e) -> a ^ "[" ^ string_of_expr e ^ "]"
- (*) | ArrayAssign(e1, e2) -> string_of_expr e1 ^ " " ^ string_of_expr e2*)
+  | ArrayAssign(a, e1, e2) -> a ^ "[" ^ string_of_expr e1 ^ "] = " ^ string_of_expr e2
 
   (* | ListAccess(s, e) -> s ^ "[" ^ string_of_expr e ^ "]" *)
   (* | ListAssign(s, e1, e2) -> s ^ "[" ^ string_of_expr e1 ^ "] = " ^ string_of_expr e2 *)
