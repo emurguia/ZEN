@@ -217,12 +217,13 @@ in
     (* Raise an exception if the given rvalue type cannot be assigned to
        the given lvalue type *)
     (*I REMOVED THE ERROR CHECKING HERE TO MAKE ARRAYS WORK WE NEED TO FIX IT SOMEHOW*)
-    let rec check_assign lvaluet rvaluet err = match lvaluet with
-      Array(t1,_) -> (match rvaluet with
-        Array(t2,_) -> check_assign t1 t2 err
+    let rec check_assign lvaluet rvaluet err = match rvaluet with
+        Array(t1,_) -> (match t1 with
+        Int -> check_assign t1 Int err
         | _ -> raise (Failure err))
-      | _ -> if lvaluet = rvaluet then lvaluet else lvaluet(*else raise (Failure err)*)
-    in   
+      | _ -> if lvaluet = rvaluet then lvaluet else raise (Failure err)
+    in 
+
 
     (* Build local symbol table of variables for this function *)
     let symbols = List.fold_left (fun m (ty, name) -> StringMap.add name ty m)
@@ -235,11 +236,23 @@ in
       with Not_found -> raise (Failure ("undeclared identifier " ^ s))
     in
 
+    (*let check_arr_assign st e et =
+      let type_of_arr arr_typ = 
+        match arr_typ with 
+          Array(typ, _) -> typ
+          | _ -> raise (Failure("not array type"))
+      in check_assign(type_of_arr st) et
+      (Failure ("illegal assignment " ^ string_of_typ st ^ " = " ^
+          string_of_typ et ^ " in " ^ string_of_expr e))
+
+    in*)
+
     let access_type = function
     Array(t, _) -> t
     | _ -> raise (Failure("illegal array access"))
 
     in
+
 
     (* Return a semantically-checked expression, i.e., with a type *)
     let rec expr = function
@@ -249,6 +262,15 @@ in
       | StringLiteral l -> (String, SStringLiteral l)
       | ArrayLiteral l -> check_array_types l
       | ArrayAccess(a, e) -> check_int_expr e; (type_of_identifier a, SArrayAccess(a, expr e, access_type (type_of_identifier a)))
+      | ArrayAssign(var, idx, num) -> check_int_expr num; check_int_expr idx; (type_of_identifier var, SArrayAssign(var, expr idx, expr num))
+
+
+      (*ignore(type_of_identifier s);
+                                  ignore(expr e1);
+                                  let st = type_of_identifier s
+                                  and e2t = type_of_identifier (string_of_expr e2)
+
+                                in (check_arr_assign st e2 e2t, SArrayAssign(s, expr e1, expr e2))*)
       (*| ArrayInit(typ, size) -> (type_of_identifier typ, SArrayInit (typ, (expr size)))*)
       (*| ListLiteral elist as e -> 
         let tlist = List.map (expr) elist in
@@ -373,6 +395,17 @@ in
       let (t', e') = expr e
       and err = "expected Int expression in " ^ string_of_expr e
       in if t' != Int then raise (Failure err) else () 
+
+    (*and get_assign_sexpr e1 e2 = 
+      let se1 = match e1 with 
+      ArrayAccess(_,_) -> expr e1 (*let e1 = (a, e) in SArrayAccess(a, expr e, access_type (type_of_identifier a))*)
+      | _ -> raise (Failure ("can only array assign to array"))
+    in 
+    let se2 = expr e2 in
+    let lt = ArrayLiteral se1 in
+    let rt = IntLiteral se2 in
+    match lt with 
+    Array(_,_) -> if check_int_expr rt then SAssign(e1,se2) else raise (Failure ("illegal assignment"))*)
 
   in 
 

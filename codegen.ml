@@ -57,6 +57,18 @@ let translate (globals, functions) =
     (*| A.Array(l, t) -> L.array_type (ltype_of_typ t) l*)
   in
 
+  (*let rec atype_of_typ = function
+      i32_t -> A.Int
+    | i1_t -> A.Bool
+    | float_t -> A.Float
+    | void_t -> A.Void
+    | str_t -> A.String
+    | tuple_t -> A.Tuple
+    | array_t (typ, size)  -> A.Array(atype_of_typ typ, atype_of_typ size)
+
+  in *)
+
+
   (* Declare each global variable; remember its value in a map *)
   let global_vars : L.llvalue StringMap.t =
     let global_var m (t, n) = 
@@ -176,6 +188,37 @@ builder in
       | SStringLiteral s -> L.build_global_stringptr s "name" builder
       | SArrayLiteral (l, t) -> L.const_array (ltype_of_typ t) (Array.of_list (List.map (expr builder) l))
       | SArrayAccess (s, e, _) -> L.build_load (get_array_acc_address s e builder) s builder
+      | SArrayAssign (var, idx, num) -> 
+
+        let idx_val = (expr builder idx) and num_val = (expr builder num)
+      in let llname = var (*^ "[" ^ L.string_of_llvalue idx_val ^ "]"*) in
+      let arr_ptr = lookup var in
+      let arr_ptr_load = L.build_load arr_ptr var builder in
+      let arr_get = L.build_in_bounds_gep arr_ptr_load [|idx_val|] llname builder
+    in L.build_store num_val arr_get builder
+     (*making this like pixelman assign*) (*| SArrayAssign (s, e1, e2) -> let lsb = (match s with 
+                      SArrayAccess(s,e,_) -> get_array_acc_address s e builder
+                      | _ -> raise (Failure ("Illegal assignment lvalue!")))
+                      in 
+                      let rsb = expr builder e1 in
+                      ignore (L.build_stoer rsb lsb builder); rsb*)
+
+
+      (*let e1' = expr builder e1 and e2' = expr builder e2 in
+        let addr = lookup s in
+          let ty = (type_of addr) in 
+          if ty == array_t then (ty = A.Array(A.Int, Array.length (addr)) in (
+            match ty with
+
+        A.Array(t,_) -> 
+            let arr_ptr = L.pointer_type (ltype_of_typ t) in
+            let cast_ptr = L.build_bitcast addr arr_ptr "c_ptr" builder in
+            let addr = L.build_in_bounds_gep cast_ptr (Array.make 1 e1') "elmt_addr" builder in
+            ignore(L.build_store e2' addr builder); e2'
+        | _ -> raise (Failure ("Array type wrong"))))
+
+        else raise (Failure ("array assign for arrays"))*)
+
       (*| SArrayInit (v, s) -> let var = (lookup v) and size = (expr builder s) in init_arr var size*)
       | STupleLiteral (x, y) -> 
         let x' = ensureFloat (expr builder x)

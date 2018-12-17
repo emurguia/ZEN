@@ -21,6 +21,7 @@ type expr =
   (*| ListLiteral of expr list *)
   | ArrayLiteral of expr list
   | ArrayAccess of string * expr
+  | ArrayAssign of string * expr * expr
   (* | ListLiteral of expr list *)
   | Id of string
   | Binop of expr * op * expr
@@ -107,8 +108,7 @@ let rec string_of_expr = function
   | Unop(o, e) -> string_of_uop o ^ string_of_expr e
   | Assign(a, e) -> a ^ " = " ^ string_of_expr e
   | ArrayAccess(a, e) -> a ^ "[" ^ string_of_expr e ^ "]"
- (* | ArrayAccess(id, idx) -> id ^ "[" ^ string_of_expr idx ^ "]"
-  | ArrayAssign(id, idx, e) -> id ^ "[" ^ string_of_expr idx ^ "]" ^ " = " ^ string_of_expr e*)
+ (*) | ArrayAssign(e1, e2) -> string_of_expr e1 ^ " " ^ string_of_expr e2*)
 
   (* | ListAccess(s, e) -> s ^ "[" ^ string_of_expr e ^ "]" *)
   (* | ListAssign(s, e1, e2) -> s ^ "[" ^ string_of_expr e1 ^ "] = " ^ string_of_expr e2 *)
