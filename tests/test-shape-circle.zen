@@ -1,4 +1,4 @@
-void main()
+int main()
 {
        
 
@@ -7,6 +7,6 @@ void main()
 	render();
         close_window();
         print("Success");
-	return;
+	return 0;
         
 }
