@@ -9,6 +9,7 @@ void main()
 		render();
         }
         close_window();
+        print("Success");
 	return;
         
 }

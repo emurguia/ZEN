@@ -1,5 +1,0 @@
-void main()
-{
-        make_sdl_window(640, 480);
-        return;
-}
