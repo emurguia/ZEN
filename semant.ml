@@ -109,13 +109,13 @@ let check (globals, functions) =
       formals = [];
       locals = []; body = [] } map
     in 
-     let funct_map7 = List.fold_left add_bind7 funct_map6 [
+     List.fold_left add_bind7 funct_map6 [
                                ("keep_open");
                                ("render");
                                 ]                                    
  
   
-  in                             
+ (* in                             
   	let add_bind8 map (name, ty) = StringMap.add name {
       typ = Float;
       fname = name; 
@@ -136,53 +136,7 @@ let check (globals, functions) =
       List.fold_left add_bind9 funct_map8 [
                                ("setX", Tuple);
                                ("setY", Tuple)
-                               ]     
-                             
-    (*let add_bind8 map (name, ty1, ty2) = StringMap.add name {
-      typ = Int;
-      fname = name; 
-      formals = [(ty1, "w");(ty2, "h")];
-      locals = []; body = [] } map
-    in 
-     List.fold_left add_bind8 funct_map7 [
-                               ("make_sdl_window", Int, Int);
-                               
                                ]     *)
-
-  (*commenting out list built in functions*)
-  (*
-  in
-  let add_bind7 map (name, ty1, ty2) = StringMap.add name {
-      typ = Int|String|Tuple|Float|Bool;
-      fname = name; 
-      formals = [(t1, "list");(ty2, "index")];
-      locals = []; body = [] } map
-    in
-    let _ = List.fold_left add_bind7 StringMap.empty [
-                               ("get", List, Int);
-                                ]                             
-  in
-  let add_bind8 map (name, ty1, ty2) = StringMap.add name {
-      typ = Void;
-      fname = name; 
-      formals = [(ty1, "list");(ty2, "index")];
-      locals = []; body = [] } map
-    in 
-    let _ = List.fold_left add_bind8 StringMap.empty [
-                               ("remove", List, Index);
-                               ("add", List, Index)
-                                ]                             
-  in
-let add_bind9 map (name, ty) = StringMap.add name {
-      typ = Int;
-      fname = name; 
-      formals = [(ty, "list")];
-      locals = []; body = [] } map
-    in 
-    let ) = List.fold_left add_bind9 StringMap.empty [
-                               ("length", List);
-                                ]                             
-  *)
   
   (* Add function name to symbol table *)
 

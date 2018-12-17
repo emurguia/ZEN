@@ -53,9 +53,6 @@ formals_opt:
     /* nothing */ { [] }
   | formal_list   { $1 }
 
-/*formal_list:
-    local_typ ID                   { [($1,$2)] }
-  | formal_list COMMA local_typ ID { ($3,$4) :: $1 }*/
 
 formal_list:
   typ ID                   { [($1,$2)] }
@@ -69,12 +66,8 @@ typ:
 | TUPLE { Tuple } 
 | array_t { $1 }
 | VOID { Void }
-/*| LIST LSQUARE typ RSQUARE { List($3) } */
 
 
-/*local_typ:
-    typ {$1}
-  | local_typ LSQUARE INT_LITERAL RSQUARE { Array ($3, $1)}*/
 
 vdecl_list:
     /* nothing */    { [] }
@@ -88,21 +81,7 @@ vdecl:
 array_t:
   typ LSQUARE expr RSQUARE { Array($1, $3) }
 
-/* val_list:
-    expr                { [ $1 ] }
-  | expr COMMA val_list { [ $1 ] @ $3 } */
 
- 
-/*expr_list_opt:
-    nothing  { [] }
-  | expr_list { List.rev $1 }*/
-
-/*expr_list:
-    expr { [$1] }
-  | expr_list COMMA expr { $3 :: $1 }*/
-
- /*list_literal:
-    LSQUARE expr_list_opt RSQUARE { ListLiteral($2) } */
 
 
 stmt_list:
@@ -130,13 +109,7 @@ expr_opt:
 
 expr:
    literals { $1 }
-  /*| ID ASSIGN LSQUARE expr RSQUARE    {ArrayInit($1, $4) }
-  | ID LSQUARE expr RSQUARE ASSIGN expr    {ArrayAssign($1, $3, $6) }
-  | ID LSQUARE expr RSQUARE    {ArrayAccess($1, $3) }*/
   | ID               { Id($1) }
-  /*| LSQUARE array_expr RSQUARE        { ArrayLiteral(List.length $2, List.rev $2) }*/
- /* | TUPLE_LITERAL    { TupleLiteral($1) } */
-  /* | list_literal     { ListLiteral($1) } */
   | expr PLUS   expr { Binop($1, Add,   $3) }
   | expr MINUS  expr { Binop($1, Sub,   $3) }
   | expr TIMES  expr { Binop($1, Mult,  $3) }
@@ -159,18 +132,8 @@ expr:
   /* | ID LCARROT expr RCARROT { TupleAccess($1, $3)} */
   | LPAREN expr COMMA expr RPAREN { TupleLiteral($2,$4) } 
   | LPAREN expr RPAREN { $2 }
-  
-  /*| expr LSQUARE expr RSQUARE ASSIGN expr   { ArrayAssign($1, $3, $6)}
-  | ARRAY typ ID arr_init                   { ArrayInit($2, $3, $4)}
-  | expr arr_access                         { ArrayAccess($1, $2)}*/
 
-  /*arr_init:
-
-    | ASSIGN LSQUARE expr RSQUARE           { $3 }
-
-  arr_access:
-
-    | LSQUARE expr RSQUARE           { $2 }*/
+ 
 primitive_literals:
   INT_LITERAL      { IntLiteral($1) }
   | FLOAT_LITERAL    { FloatLiteral(string_of_float $1) }
