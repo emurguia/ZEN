@@ -103,7 +103,7 @@ let translate (globals, functions) =
   (* let ensureInt c = 
   if L.type_of c = float_t then (L.const_fptosi c i32_t) else c in *)
    
-  (* Ensures float *)
+ 
   let make_window_t = L.function_type i32_t [||] in
   let make_window_func = L.declare_function "make_window" make_window_t the_module in
 
@@ -116,7 +116,7 @@ let translate (globals, functions) =
   let render_t = L.function_type i1_t [||] in 
   let render_func = L.declare_function "render" render_t the_module in
 
-
+  (* Ensures float *)
   let ensureFloat c = 
     if L.type_of c = float_t then c else (L.const_sitofp c float_t) in
 
