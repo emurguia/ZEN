@@ -103,9 +103,6 @@ expr_opt:
     /* nothing */ { Noexpr }
   | expr          { $1 }
 
-/*array_expr:
-    expr    { [$1] }
-  | array_expr COMMA expr { $3 :: $1 }*/
 
 expr:
    literals { $1 }
