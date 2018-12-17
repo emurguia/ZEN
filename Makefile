@@ -8,7 +8,7 @@ test : all test.sh
 # to test linking external code
 
 .PHONY : all
-all : zen.native printbig.o make_circle.o render.o make_triangle.o make_window.o close_window.o keep_open.o make_line.o make_point.o render.o
+all : zen.native printbig.o make_circle.o render.o make_triangle.o make_window.o close_window.o keep_open.o make_line.o make_point.o make_rectangle.o render.o
 
 # "make zen.native" compiles the compiler
 
