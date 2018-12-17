@@ -1,0 +1,96 @@
+void main() {
+    int i;
+    #create window for drawing 
+    make_window(); 
+    i = 50; 
+
+    #keep window open     
+    while(keep_open()){
+	draw_serp_triangle(0, 0, 240, 8);
+	#draw_serp_triangle_top(300, 200, 240, 8);
+	draw_rec_circle(100, 400, 75);
+	draw_rec_circle(400, 100, 75); 
+	draw_Z(200, 250, 175); 
+	draw_E(300, 250, 275); 
+        draw_N(400, 250, 375);	
+	# render drawings 
+	render();
+    }
+
+    #close window 
+    close_window();
+
+    return; 
+}
+
+void draw_Z(int x, int y, int width){
+     if(x < width){
+    	return;
+     }
+     make_line(x, y, x+50, y); 
+     make_line(x, y+100, x+50, y+100); 
+     make_line(x, y, x+50, y+100); 
+     draw_Z(x-1, y-1, width);
+    return;
+}
+
+void draw_E(int x, int y, int width) {
+    if (x < width){
+    	return; 
+    }    
+    make_line(x, y+100, x+50, y+100); 
+    make_line(x, y+50, x+50, y+50); 
+    make_line(x, y, x+50, y); 
+    make_line(x, y+100, x, y); 
+    draw_E(x-1, y-1, width);
+
+    return; 
+}
+
+void draw_N(int x, int y, int width){
+
+    if(x < width){
+	return; 
+    }
+    make_line(x, y, x, y+100);
+    make_line(x+50, y, x+50, y+100); 
+    make_line(x, y+100, x+50, y);
+    draw_N(x-1, y-1, width);
+    return; 
+
+}
+
+
+void draw_rec_circle(int x, int y, int r) {
+    make_circle(x, y, r, 25); 
+      if( r > 2) {
+	draw_rec_circle(x + r/2, y, r/2); 
+	draw_rec_circle(x - r/2, y, r/2); 
+     }
+}
+
+
+void draw_serp_triangle(int a, int b, int dim, int minSize){
+     if (dim <= minSize) {
+	make_triangle(a, b, dim, dim);
+     } else { 
+	dim = dim / 2; 
+	draw_serp_triangle(a, b, dim, minSize); 
+	draw_serp_triangle(a + dim, b, dim, minSize); 
+	draw_serp_triangle(a, b + dim, dim, minSize); 
+     } 
+
+}
+
+void draw_serp_triangle_top(int a, int b, int dim, int minSize){
+
+    if (dim <= minSize){
+	make_triangle(a, b, dim, dim);
+    }else{
+	dim = dim/2;
+	draw_serp_triangle_top(a, b, dim, minSize);
+	draw_serp_triangle_top(a + dim, b, dim, minSize); 
+	draw_serp_triangle_top(a + dim, b + dim,dim, minSize);
+    }
+
+}
