@@ -149,7 +149,6 @@ in
 
     (* Raise an exception if the given rvalue type cannot be assigned to
        the given lvalue type *)
-    (*I REMOVED THE ERROR CHECKING HERE TO MAKE ARRAYS WORK WE NEED TO FIX IT SOMEHOW*)
     let rec check_assign lvaluet rvaluet err = match rvaluet with
         Array(t1,_) -> (match t1 with
         Int -> check_assign t1 Int err
@@ -169,16 +168,6 @@ in
       with Not_found -> raise (Failure ("undeclared identifier " ^ s))
     in
 
-    (*let check_arr_assign st e et =
-      let type_of_arr arr_typ = 
-        match arr_typ with 
-          Array(typ, _) -> typ
-          | _ -> raise (Failure("not array type"))
-      in check_assign(type_of_arr st) et
-      (Failure ("illegal assignment " ^ string_of_typ st ^ " = " ^
-          string_of_typ et ^ " in " ^ string_of_expr e))
-
-    in*)
 
     let access_type = function
     Array(t, _) -> t
@@ -199,32 +188,6 @@ in
       | TupleLiteral (x, y) -> let t1 = expr x and t2 = expr y in
       (Tuple, STupleLiteral (t1, t2))
       | TupleAccess (s1, s2) ->  (Float, STupleAccess(s1, s2))
-      (* map all elements in list to their sexpr version (int literal -> sintliteral, etc.))*)
-(* 	| ListLiteral  el -> let t = List.fold_left
-		(fun e1 e2 ->
-		  if (e1 == expr e2) then
-		    e1
-		  else raise
-		    (Failure("Multiple types inside a list "))
-		)
-        (expr (List.hd el)) (List.tl el)
-    in (List, SListLiteral el) *)
-      (* | ListLiteral l ->  List.Map (fun a -> SExpr (a)) l in (List, SListLiteral l) *)
-      (*| ArrayInit(_, _, e1) -> let e_type = expr e1 in 
-        if e1 != Int
-        then (raise(Failure("Array length must be of type int")))
-        else SIntLiteral
-      | (ArrayAccess(e1, e2) as e) -> let e_type = expr e1 and e_val = expr e2 in
-          (*if(e_val != SIntLiteral)
-            then (raise(Failure("Array index must be of type int")))
-          else*)
-            (match e_type with
-              | Int
-              | String
-              | Boolean
-              | Float
-              | _ -> (raise(Failure("Arrays can't be that type"))))*)
-
       | Noexpr     -> (Void, SNoexpr)
       | Id s       -> (type_of_identifier s, SId s)
       | Assign(var, e) as ex -> 
@@ -262,9 +225,6 @@ in
                        string_of_typ t2 ^ " in " ^ string_of_expr e))
           in (ty, SBinop((t1, e1'), op, (t2, e2')))
       | Call(fname, args) as call -> 
-        
-        (*let print_ex arg = print_endline (string_of_expr arg) in
-        List.iter print_ex args ;*)
           let fd = find_func fname in
           let param_length = List.length fd.formals in
           if List.length args != param_length then
@@ -278,9 +238,7 @@ in
           in 
           let args' = List.map2 check_call fd.formals args
 
-          in (*let str_args = List.map string_of_sexpr args' in
-          let all_args = String.concat " " str_args in
-           raise (Failure (all_args)); *)
+          in 
           (fd.typ, SCall(fname, args'))
 
     and get_arr_type e = match e with
@@ -302,16 +260,6 @@ in
       and err = "expected Int expression in " ^ string_of_expr e
       in if t' != Int then raise (Failure err) else ignore e' 
 
-    (*and get_assign_sexpr e1 e2 = 
-      let se1 = match e1 with 
-      ArrayAccess(_,_) -> expr e1 (*let e1 = (a, e) in SArrayAccess(a, expr e, access_type (type_of_identifier a))*)
-      | _ -> raise (Failure ("can only array assign to array"))
-    in 
-    let se2 = expr e2 in
-    let lt = ArrayLiteral se1 in
-    let rt = IntLiteral se2 in
-    match lt with 
-    Array(_,_) -> if check_int_expr rt then SAssign(e1,se2) else raise (Failure ("illegal assignment"))*)
 
   in 
 

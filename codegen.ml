@@ -53,20 +53,7 @@ let translate (globals, functions) =
     | A.Array(typ, size) -> (match typ with
                               A.Int -> array_t i32_t (int_lit_to_int size)
                               | _ -> raise(Failure("arrays must be int")))
-    (*| A.List(t) -> L.pointer_type (ltype_of_typ t)*)
-    (*| A.Array(l, t) -> L.array_type (ltype_of_typ t) l*)
   in
-
-  (*let rec atype_of_typ = function
-      i32_t -> A.Int
-    | i1_t -> A.Bool
-    | float_t -> A.Float
-    | void_t -> A.Void
-    | str_t -> A.String
-    | tuple_t -> A.Tuple
-    | array_t (typ, size)  -> A.Array(atype_of_typ typ, atype_of_typ size)
-
-  in *)
 
 
   (* Declare each global variable; remember its value in a map *)
@@ -171,18 +158,6 @@ let translate (globals, functions) =
                    with Not_found -> StringMap.find n global_vars
     in
 
-   
-
-    
-
-   (* let init_arr v s = let tp = L.element_type (L.type_of v) in
-    let sz = L.size_of tp in
-    let sz = L.build_intcast sz (i32_t) "" builder in
-    let dt = L.build_bitcast (L.build_call calloc_func [|s;sz|] "" builder) tp ""
-builder in
- L.build_store dt v builder
- in*)
-
     (* Construct code for an expression; return its value *)
     let rec expr builder ((_, e) : sexpr) = match e with
 	      SIntLiteral i -> L.const_int i32_t i
@@ -252,22 +227,8 @@ builder in
           | A.Not                  -> L.build_not) e' "tmp" builder
       | STupleAccess (s1, s2) ->  
         let t_ptr = (lookup s1) in
-        (* v_ptr = (lookup s2) in  *)
-        (* zero_ptr = L.build_global_stringptr "0" "zero_ptr" builder and 
-        one_ptr =L.build_global_stringptr "1" "one_ptr" builder in  *)
-        (* let e' = ensureInt (expr builder e) in *)
-        
-         (* let idx = 
-            (match s2 with
-                "0" -> 0
-              | "1" -> 1
-              | _ -> raise (Failure("choose 0 or 1 to access tuple" ^ s2))
-            )
-          in *)
         let value_ptr = L.build_struct_gep t_ptr s2 ( "t_ptr") builder in
         L.build_load value_ptr "t_ptr" builder
-          (* | SCall("getY", [e]) ->  *) 
-      (* | A.Not                  -> L.build_not) e' "tmp" builder *)
       | SCall ("printbig", [e]) ->
 	  L.build_call printbig_func [| (expr builder e) |] "printbig" builder
       | SCall ("make_triangle", [e1; e2; e3; e4]) ->

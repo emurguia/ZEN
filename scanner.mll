@@ -10,7 +10,7 @@ rule token = parse
 | '{'      { LBRACE }
 | '}'      { RBRACE }
 | '['	   { LSQUARE }
-| ']'     { RSQUARE }
+| ']'      { RSQUARE }
 | ';'      { SEMI }
 | ','      { COMMA }
 | '+'      { PLUS }
