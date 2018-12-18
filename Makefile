@@ -1,3 +1,13 @@
+.PHONY: install
+install: 
+	sudo apt-get install xorg-dev libglu1-mesa-dev
+	sudo apt-get install libxcursor-dev
+	sudo apt-get install cmake
+	sudo apt-get install libglew-dev
+	sudo apt-get install libopenal-dev
+	sudo apt-get install git
+
+
 # "make test" Compiles everything and runs the regression tests
 
 .PHONY : test
