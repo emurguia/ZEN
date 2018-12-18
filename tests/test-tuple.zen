@@ -1,0 +1,5 @@
+int main() {
+	tuple t;
+	t = (4, 5);
+	return 0;
+}
