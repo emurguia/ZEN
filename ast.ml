@@ -23,7 +23,7 @@ type expr =
   | Unop of uop * expr
   | Assign of string * expr
   | Call of string * expr list
-  (* | TupleAccess of string * expr (* tilers is string * string*) *)
+  | TupleAccess of string * int 
   | Noexpr
 
   type typ = 
@@ -86,7 +86,7 @@ let rec string_of_expr = function
   | StringLiteral(s) -> s
   | TupleLiteral(e1, e2) -> "(" ^ string_of_expr e1 ^ ", " ^ string_of_expr e2 ^ ")"
   | ArrayLiteral(el) -> "[" ^ String.concat ", " (List.map (fun e -> string_of_expr e) el) ^ "]"
-
+  | TupleAccess(s1, s2) -> s1  ^ "<" ^ string_of_int s2 ^ ">"
   | Id(s) -> s
   | Binop(e1, o, e2) ->
       string_of_expr e1 ^ " " ^ string_of_op o ^ " " ^ string_of_expr e2

@@ -198,7 +198,7 @@ in
       | ArrayAssign(var, idx, num) -> check_int_expr num; check_int_expr idx; (type_of_identifier var, SArrayAssign(var, expr idx, expr num))
       | TupleLiteral (x, y) -> let t1 = expr x and t2 = expr y in
       (Tuple, STupleLiteral (t1, t2))
-      (* | TupleAccess (s1, s2) ->  let t1 = expr s2 in (Float, STupleAccess(s1, t1)) *)
+      | TupleAccess (s1, s2) ->  (Float, STupleAccess(s1, s2))
       (* map all elements in list to their sexpr version (int literal -> sintliteral, etc.))*)
 (* 	| ListLiteral  el -> let t = List.fold_left
 		(fun e1 e2 ->

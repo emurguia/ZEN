@@ -4,9 +4,9 @@
 open Ast
 %}
 
-%token SEMI LPAREN RPAREN LBRACE RBRACE LSQUARE /* LCARROT RCARROT */ RSQUARE COMMA
+%token SEMI LPAREN RPAREN LBRACE RBRACE LSQUARE RSQUARE COMMA
 %token PLUS MINUS TIMES DIVIDE ASSIGN NOT 
-%token EQ NEQ LT LEQ GT GEQ TRUE FALSE AND OR MOD
+%token EQ NEQ LT LEQ GT GEQ TRUE FALSE AND OR MOD DOT 
 %token RETURN IF ELSE FOR WHILE INT BOOL FLOAT STRING VOID
 %token TUPLE 
 %token <int> INT_LITERAL
@@ -126,7 +126,7 @@ expr:
   | ID LSQUARE expr RSQUARE ASSIGN expr   { ArrayAssign($1, $3, $6) }
   | ID LSQUARE expr RSQUARE     { ArrayAccess($1, $3) }
   | ID LPAREN actuals_opt RPAREN { Call($1, $3) }
-  /* | ID LCARROT expr RCARROT { TupleAccess($1, $3)} */
+  | ID DOT INT_LITERAL  { TupleAccess($1, $3)} 
   | LPAREN expr COMMA expr RPAREN { TupleLiteral($2,$4) } 
   | LPAREN expr RPAREN { $2 }
 

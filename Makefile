@@ -1,3 +1,17 @@
+.PHONY: install
+install: 
+	sudo apt-get install xorg-dev libglu1-mesa-dev
+	sudo apt-get install libxcursor-dev
+	sudo apt-get install cmake
+	sudo apt-get install libglew-dev
+	sudo apt-get install libopenal-dev
+	sudo apt-get install git
+	git clone http://gitlab.com/geoff-nagy/sigil.git
+	cd sigil/deps; git clone https://github.com/glfw/glfw.git
+	mkdir sigil/build-linux-gcc; cd sigil/build-linux-gcc; cmake ../; make; sudo make install
+	echo "/usr/local/lib" >> ld.so.conf
+	sudo ldconfig
+
 # "make test" Compiles everything and runs the regression tests
 
 .PHONY : test

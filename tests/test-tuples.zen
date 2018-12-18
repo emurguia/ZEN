@@ -1,6 +1,12 @@
-void main()
+int main()
 {
 	tuple tup;
+	float x;
+	float y;
 	tup = (1.5, 2.5);
-	return; 
+	x = tup.0;
+	y = tup.1;
+	printf(x);
+	printf(y);
+	return 0; 
 }
