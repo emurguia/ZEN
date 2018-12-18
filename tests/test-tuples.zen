@@ -1,6 +1,6 @@
-void main()
+int main()
 {
 	tuple tup;
 	tup = (1.5, 2.5);
-	return; 
+	return 0; 
 }

@@ -1,10 +1,9 @@
-void main()
+int main()
 {
 	tuple tup;
-    float x;
-	string y; 
-	y = "1"; 
+    	float x;
 	tup = (1.5, 2.5);
-	# x = tup[y];
-	return; 
+	x = tup.1;
+	printf(x);
+	return 0; 
 }
