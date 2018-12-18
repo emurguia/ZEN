@@ -196,33 +196,6 @@ in
       | ArrayLiteral l -> check_array_types l
       | ArrayAccess(a, e) -> check_int_expr e; (type_of_identifier a, SArrayAccess(a, expr e, access_type (type_of_identifier a)))
       | ArrayAssign(var, idx, num) -> check_int_expr num; check_int_expr idx; (type_of_identifier var, SArrayAssign(var, expr idx, expr num))
-
-
-      (*ignore(type_of_identifier s);
-                                  ignore(expr e1);
-                                  let st = type_of_identifier s
-                                  and e2t = type_of_identifier (string_of_expr e2)
-
-                                in (check_arr_assign st e2 e2t, SArrayAssign(s, expr e1, expr e2))*)
-      (*| ArrayInit(typ, size) -> (type_of_identifier typ, SArrayInit (typ, (expr size)))*)
-      (*| ListLiteral elist as e -> 
-        let tlist = List.map (expr) elist in
-        if (List.length tlist) = 0
-        then (List(Any), SListLiteral tlist)
-      else
-        let  x = List.hd tlist in
-        if List.for_all (fun t -> t = x) tlist
-        then (List (type_of_identifier(string_of_expr(e))), SListLiteral tlist)
-      else raise (Failure("types inconsistent in list"))*)
-
-      (*| ArrayLiteral(l, s) as a -> let arr_type = List.fold_left (fun t1 e -> let t2 = snd (expr e) in
-            if t1 == t2 then t1
-            else raise (Failure("All array elements must be the same type ")))
-            (snd (expr (List.hd (s)))) (List.tl s) in
-            (if l == List.length s then 
-              let s_s = List.map (fun e -> expr e) s in
-              (Array(l, type_of_identifier(string_of_expr(List.hd s))), SArrayLiteral(l, s_s))
-            else raise(Failure("Assigning length not working ")))*)
       | TupleLiteral (x, y) -> let t1 = expr x and t2 = expr y in
       (Tuple, STupleLiteral (t1, t2))
       (* | TupleAccess (s1, s2) ->  let t1 = expr s2 in (Float, STupleAccess(s1, t1)) *)

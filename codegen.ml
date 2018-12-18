@@ -191,30 +191,11 @@ builder in
       | SStringLiteral s -> L.build_global_stringptr s "name" builder
       | SArrayLiteral (l, t) -> L.const_array (ltype_of_typ t) (Array.of_list (List.map (expr builder) l))
       | SArrayAccess (s, e, _) -> L.build_load (get_array_acc_address s e builder) s builder
-      | SArrayAssign (var, idx, num) -> L.build_load (get_array_acc_address var num builder) var builder
-
-        (*let idx_val = (expr builder idx) and num_val = (expr builder num)
-      in let llname = var (*^ "[" ^ L.string_of_llvalue idx_val ^ "]"*) in
-      let arr_ptr = lookup var in
-      let arr_ptr_load = L.build_load arr_ptr var builder in
-      let arr_get = L.build_in_bounds_gep arr_ptr_load [|idx_val|] llname builder
-    in L.build_store num_val arr_get builder*)
-    
-     (*making this like pixelman assign*) (*| SArrayAssign (s, e1, e2) -> let lsb = (match s with 
-                      SArrayAccess(s,e,_) -> get_array_acc_address s e builder
-                      | _ -> raise (Failure ("Illegal assignment lvalue!")))
+      | SArrayAssign (s, e1, e2) -> 
+        let lsb = get_array_acc_address s e1 builder
                       in 
-                      let rsb = expr builder e1 in
-                      ignore (L.build_stoer rsb lsb builder); rsb*)
-
-
-      (*let e1' = expr builder e1 and e2' = expr builder e2 in
-        let addr = lookup s in
-          let ty = (type_of addr) in 
-          if ty == array_t then (ty = A.Array(A.Int, Array.length (addr)) in (
-            match ty with*)
-
-        
+                      let rsb = expr builder e2 in
+                      ignore (L.build_store rsb lsb builder); rsb   
       | STupleLiteral (x, y) -> 
         let x' = ensureFloat (expr builder x)
         and y' = ensureFloat (expr builder y) in
