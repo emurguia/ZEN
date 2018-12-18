@@ -7,8 +7,10 @@ install:
 	sudo apt-get install libopenal-dev
 	sudo apt-get install git
 	git clone http://gitlab.com/geoff-nagy/sigil.git
-	git clone https://github.com/glfw/glfw.git sigil/deps/glfw
-	mkdir sigil/build-linux-gcc
+	cd sigil/deps; git clone https://github.com/glfw/glfw.git
+	mkdir sigil/build-linux-gcc; cd sigil/build-linux-gcc; cmake ../; make; sudo make install
+	echo "/usr/local/lib" >> ld.so.conf
+	sudo ldconfig
 
 # "make test" Compiles everything and runs the regression tests
 
