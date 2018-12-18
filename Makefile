@@ -6,7 +6,9 @@ install:
 	sudo apt-get install libglew-dev
 	sudo apt-get install libopenal-dev
 	sudo apt-get install git
-
+	git clone http://gitlab.com/geoff-nagy/sigil.git
+	git clone https://github.com/glfw/glfw.git sigil/deps/glfw
+	mkdir sigil/build-linux-gcc
 
 # "make test" Compiles everything and runs the regression tests
 
