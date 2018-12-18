@@ -9,8 +9,6 @@ rule token = parse
 | ')'      { RPAREN }
 | '{'      { LBRACE }
 | '}'      { RBRACE }
-(* | '<'     {LCARROT}
-| '>'     {RCARROT} *)
 | '['	   { LSQUARE }
 | ']'     { RSQUARE }
 | ';'      { SEMI }
@@ -21,6 +19,7 @@ rule token = parse
 | '/'      { DIVIDE }
 | '='      { ASSIGN }
 | "%"	   { MOD }
+| "."     {DOT}
 | "=="     { EQ }
 | "!="     { NEQ }  
 | "<"      { LT }

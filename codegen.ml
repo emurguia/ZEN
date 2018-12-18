@@ -269,22 +269,22 @@ builder in
 	    A.Neg when t = A.Float -> L.build_fneg 
 	  | A.Neg                  -> L.build_neg
           | A.Not                  -> L.build_not) e' "tmp" builder
-(*       | STupleAccess (s1, s2) ->  
-        let t_ptr = (lookup s1) and
-        v_ptr = (expr builder s2) and 
-        zero_ptr = L.build_global_stringptr "0" "zero_ptr" builder and 
-        one_ptr =L.build_global_stringptr "1" "one_ptr" builder in 
+      | STupleAccess (s1, s2) ->  
+        let t_ptr = (lookup s1) in
+        (* v_ptr = (lookup s2) in  *)
+        (* zero_ptr = L.build_global_stringptr "0" "zero_ptr" builder and 
+        one_ptr =L.build_global_stringptr "1" "one_ptr" builder in  *)
         (* let e' = ensureInt (expr builder e) in *)
         
-         let idx = 
-            (match v_ptr with
-                zero_ptr -> 0
-              | one_ptr -> 1
-              | _ -> raise (Failure("choose 0 or 1 to access tuple" ^ string_of_sexpr s2 ))
+         (* let idx = 
+            (match s2 with
+                "0" -> 0
+              | "1" -> 1
+              | _ -> raise (Failure("choose 0 or 1 to access tuple" ^ s2))
             )
-          in
-        let value_ptr = L.build_struct_gep t_ptr idx ( "t_ptr") builder in
-        L.build_load value_ptr "t_ptr" builder *)
+          in *)
+        let value_ptr = L.build_struct_gep t_ptr s2 ( "t_ptr") builder in
+        L.build_load value_ptr "t_ptr" builder
           (* | SCall("getY", [e]) ->  *) 
       (* | A.Not                  -> L.build_not) e' "tmp" builder *)
       | SCall ("printbig", [e]) ->
