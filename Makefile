@@ -15,7 +15,7 @@ install:
 # "make test" Compiles everything and runs the regression tests
 
 .PHONY : test
-test : all test.sh
+test : all
 	./testall.sh
 
 # "make all" builds the executable as well as the library functions  designed
