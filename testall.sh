@@ -168,14 +168,14 @@ which "$LLI" >> $globallog || LLIFail
 if [ ! -f close_window.o ]
 then
     echo "Could not find close_window.o"
-    echo "Try \"make make_circle.o\""
+    echo "Try \"make all\""
     exit 1
 fi
 
 if [ ! -f keep_open.o ]
 then
     echo "Could not find keep_open.o"
-    echo "Try \"make make_circle.o\""
+    echo "Try \"make all\""
     exit 1
 fi
 
@@ -183,49 +183,49 @@ fi
 if [ ! -f make_circle.o ]
 then
 	echo "Could not find make_circle.o"
-	echo "Try \"make make_circle.o\""
+	echo "Try \"make all\""
 	exit 1
 fi
 
 if [ ! -f make_line.o ]
 then
     echo "Could not find make_line.o"
-    echo "Try \"make make_circle.o\""
+    echo "Try \"make all\""
     exit 1
 fi
 
 if [ ! -f make_point.o ]
 then
     echo "Could not find make_point.o"
-    echo "Try \"make make_circle.o\""
+    echo "Try \"make all\""
     exit 1
 fi
 
 if [ ! -f make_rectangle.o ]
 then
     echo "Could not find make_rectangle.o"
-    echo "Try \"make make_circle.o\""
+    echo "Try \"make all\""
     exit 1
 fi
 
 if [ ! -f make_triangle.o ]
 then
     echo "Could not find triangle.o"
-    echo "Try \"make make_circle.o\""
+    echo "Try \"make all\""
     exit 1
 fi
 
 if [ ! -f make_window.o ]
 then
     echo "Could not find make_window.o"
-    echo "Try \"make make_circle.o\""
+    echo "Try \"make all\""
     exit 1
 fi
 
 if [ ! -f render.o ]
 then
     echo "Could not find render.o"
-    echo "Try \"make make_circle.o\""
+    echo "Try \"make all\""
     exit 1
 fi
 
