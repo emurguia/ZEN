@@ -40,11 +40,11 @@ let check (globals, functions) =
       fname = name; 
       formals = [(ty, "x")];
       locals = []; body = [] } map
-    in let funct_map = List.fold_left add_bind StringMap.empty [ ("print", String);
+    in let funct_map = List.fold_left add_bind StringMap.empty [ 
+                     ("print", String);
     								 ("printf", Float);
     								 ("printi", Int);
                      ("printb", Bool);
-                     ("printbig", Int);
                                 ]
     in
   	let add_bind2 map (name, ty1, ty2, ty3, ty4) = StringMap.add name {

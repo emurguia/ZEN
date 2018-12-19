@@ -68,9 +68,6 @@ let translate (globals, functions) =
   let printf_t : L.lltype = L.var_arg_function_type i32_t [| L.pointer_type i8_t |] in
   let printf_func : L.llvalue = L.declare_function "printf" printf_t the_module in
 
-  let printbig_t = L.function_type i32_t [| i32_t |] in
-  let printbig_func = L.declare_function "printbig" printbig_t the_module in
-
   let make_triangle_t = L.function_type i32_t [| i32_t; i32_t; i32_t; i32_t |] in
   let make_triangle_func = L.declare_function "make_triangle" make_triangle_t the_module in
 
@@ -229,8 +226,6 @@ let translate (globals, functions) =
         let t_ptr = (lookup s1) in
         let value_ptr = L.build_struct_gep t_ptr s2 ( "t_ptr") builder in
         L.build_load value_ptr "t_ptr" builder
-      | SCall ("printbig", [e]) ->
-	  L.build_call printbig_func [| (expr builder e) |] "printbig" builder
       | SCall ("make_triangle", [e1; e2; e3; e4]) ->
     L.build_call make_triangle_func [| (expr builder e1); (expr builder e2); (expr builder e3); (expr builder e4)|] 
     "make_triangle" builder
