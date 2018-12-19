@@ -1,0 +1,9 @@
+float firstElem(tuple x) {
+	return x.0;
+}
+
+int main() {
+	tuple y;
+	y = (1.5, 2.5);
+	printf(firstElem(y));
+}
