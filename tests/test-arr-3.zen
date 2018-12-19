@@ -1,0 +1,12 @@
+int firstElem(int[5] x) {
+	int first;
+	first = x[0];
+	return first;
+}
+
+int main() {
+	int[5] y;
+	y = [1, 2, 3, 4, 5];
+	printi(firstElem(y));
+	return 0;
+}
