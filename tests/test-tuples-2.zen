@@ -1,13 +1,13 @@
 tuple returnTuple() {
 	tuple tup;
-	tup = (1.5, 2.5);
+	tup = (1, 2);
 	return tup;
 }
 
 int main() {
 	tuple newTup;
 	newTup = returnTuple();
-	printf(newTup.0);
-	printf(newTup.1);
+	printi(newTup.0);
+	printi(newTup.1);
 	return 0;
 }

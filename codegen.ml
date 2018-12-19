@@ -36,7 +36,7 @@ let translate (globals, functions) =
 
   let str_t = L.pointer_type i8_t in
   let tuple_t = L.named_struct_type context "tuple_t" in
-    L.struct_set_body tuple_t [| float_t; float_t |] false;
+    L.struct_set_body tuple_t [| i32_t; i32_t|] false;
 
   let int_lit_to_int = function
     A.IntLiteral(i) -> i | _ -> raise(Failure("arrays must be int")) 
@@ -96,9 +96,12 @@ let translate (globals, functions) =
   let render_func = L.declare_function "render" render_t the_module in
 
   (* Ensures float *)
-  let ensureFloat c = 
-    if L.type_of c = float_t then c else (L.const_sitofp c float_t) in
+ (* let ensureFloat c = 
+    if L.type_of c = float_t then c else (L.const_sitofp c float_t) in*)
 
+  (* Ensures int *)
+  let ensureInt c = 
+    if L.type_of c = float_t then (L.const_fptosi c i32_t) else c in 
 
   (* Define each function (arguments and return type) so we can 
    * define it's body and call it later *)
@@ -164,8 +167,8 @@ let translate (globals, functions) =
                       let rsb = expr builder e2 in
                       ignore (L.build_store rsb lsb builder); rsb   
       | STupleLiteral (x, y) -> 
-        let x' = ensureFloat (expr builder x)
-        and y' = ensureFloat (expr builder y) in
+        let x' = ensureInt (expr builder x)
+        and y' = ensureInt (expr builder y) in
         let t_ptr = L.build_alloca tuple_t "tmp" builder in
         let x_ptr = L.build_struct_gep t_ptr 0 "x" builder in
         ignore (L.build_store x' x_ptr builder);

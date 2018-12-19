@@ -187,7 +187,7 @@ in
       | ArrayAssign(var, idx, num) -> check_int_expr num; check_int_expr idx; (type_of_identifier var, SArrayAssign(var, expr idx, expr num))
       | TupleLiteral (x, y) -> let t1 = expr x and t2 = expr y in
         (Tuple, STupleLiteral (t1, t2))
-      | TupleAccess (s1, s2) ->  (Float, STupleAccess(s1, s2))
+      | TupleAccess (s1, s2) ->  (Int, STupleAccess(s1, s2))
       | Noexpr     -> (Void, SNoexpr)
       | Id s       -> (type_of_identifier s, SId s)
       | Assign(var, e) as ex -> 
