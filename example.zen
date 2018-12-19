@@ -1,0 +1,10 @@
+void main() {
+
+	make_window();
+	while (keep_open()) {
+		make_triangle(100, 450, 50, 50);
+		render();
+	}
+	print("Success!");
+	return;
+}
