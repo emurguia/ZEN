@@ -18,11 +18,11 @@ install:
 test : all test.sh
 	./testall.sh
 
-# "make all" builds the executable as well as the "printbig" library designed
+# "make all" builds the executable as well as the library functions  designed
 # to test linking external code
 
 .PHONY : all
-all : zen.native printbig.o make_circle.o render.o make_triangle.o make_window.o close_window.o keep_open.o make_line.o make_point.o make_rectangle.o render.o
+all : zen.native  make_circle.o render.o make_triangle.o make_window.o close_window.o keep_open.o make_line.o make_point.o make_rectangle.o render.o
 
 # "make zen.native" compiles the compiler
 
@@ -37,12 +37,8 @@ zen.native :
 .PHONY : clean
 clean :
 	ocamlbuild -clean
-	rm -rf testall.log *.diff printbig make_circle make_triangle keep_open close_window keep_open make_rectangle make_point make_line render *.o *.ll *.exe
+	rm -rf testall.log *.diff make_circle make_triangle keep_open close_window keep_open make_rectangle make_point make_line render *.o *.ll *.exe
 
-# # Testing the "printbig" example
-
-printbig : printbig.c
-	cc -o printbig -DBUILD_TEST printbig.c
 
 make_circle : make_circle.c
 	cc -o make_circle -DBUILD_TEST make_circle.c /usr/local/lib/libsigil.so
@@ -85,7 +81,7 @@ TESTFILES = $(TESTS:%=test-%.zen) $(TESTS:%=test-%.out) \
 
 TARFILES = ast.ml sast.ml codegen.ml Makefile _tags zen.ml parser.mly \
 	README scanner.mll semant.ml testall.sh \
-	printbig.c arcade-font.pbm font2c \
+	arcade-font.pbm font2c \
 	Dockerfile \
 	$(TESTFILES:%=tests/%) 
 

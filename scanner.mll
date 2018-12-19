@@ -10,7 +10,7 @@ rule token = parse
 | '{'      { LBRACE }
 | '}'      { RBRACE }
 | '['	   { LSQUARE }
-| ']'     { RSQUARE }
+| ']'      { RSQUARE }
 | ';'      { SEMI }
 | ','      { COMMA }
 | '+'      { PLUS }
@@ -19,7 +19,7 @@ rule token = parse
 | '/'      { DIVIDE }
 | '='      { ASSIGN }
 | "%"	   { MOD }
-| "."     {DOT}
+| "."      { DOT }
 | "=="     { EQ }
 | "!="     { NEQ }  
 | "<"      { LT }

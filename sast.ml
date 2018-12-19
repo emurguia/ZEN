@@ -9,24 +9,14 @@ and sx =
   | SBooleanLiteral of bool
   | SStringLiteral of string
   | STupleLiteral of sexpr * sexpr 
-  (*| SArrayInit of string * sexpr
-  | SArrayAssign of string * sexpr * sexpr
-  | SArrayAccess of string * sexpr*)
-  (*| SListLiteral of sexpr list*)
   | SArrayLiteral of sexpr list * typ
   | SArrayAccess of string * sexpr * typ
   | SArrayAssign of string * sexpr * sexpr
- (* | SArrayAccess of string * sexpr
-  | SArrayAssign of string * sexpr * sexpr*)
-
-(*   | SListLiteral of sexpr list*)
   | SId of string
   | SBinop of sexpr * op * sexpr
   | SUnop of uop * sexpr
   | SAssign of string * sexpr
   | SCall of string * sexpr list
-  (* | SListAccess of string * sexpr *)
-  (* | SListAssign of string * sexpr * sexpr  *)
   | STupleAccess of string * int 
   | SNoexpr
 

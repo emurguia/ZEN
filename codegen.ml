@@ -53,20 +53,7 @@ let translate (globals, functions) =
     | A.Array(typ, size) -> (match typ with
                               A.Int -> array_t i32_t (int_lit_to_int size)
                               | _ -> raise(Failure("arrays must be int")))
-    (*| A.List(t) -> L.pointer_type (ltype_of_typ t)*)
-    (*| A.Array(l, t) -> L.array_type (ltype_of_typ t) l*)
   in
-
-  (*let rec atype_of_typ = function
-      i32_t -> A.Int
-    | i1_t -> A.Bool
-    | float_t -> A.Float
-    | void_t -> A.Void
-    | str_t -> A.String
-    | tuple_t -> A.Tuple
-    | array_t (typ, size)  -> A.Array(atype_of_typ typ, atype_of_typ size)
-
-  in *)
 
 
   (* Declare each global variable; remember its value in a map *)
@@ -80,9 +67,6 @@ let translate (globals, functions) =
 
   let printf_t : L.lltype = L.var_arg_function_type i32_t [| L.pointer_type i8_t |] in
   let printf_func : L.llvalue = L.declare_function "printf" printf_t the_module in
-
-  let printbig_t = L.function_type i32_t [| i32_t |] in
-  let printbig_func = L.declare_function "printbig" printbig_t the_module in
 
   let make_triangle_t = L.function_type i32_t [| i32_t; i32_t; i32_t; i32_t |] in
   let make_triangle_func = L.declare_function "make_triangle" make_triangle_t the_module in
@@ -98,11 +82,6 @@ let translate (globals, functions) =
 
   let make_line_t = L.function_type i32_t [| i32_t; i32_t; i32_t; i32_t |] in
   let make_line_func = L.declare_function "make_line" make_line_t the_module in
-
-  (* Ensures int *)
-  (* let ensureInt c = 
-  if L.type_of c = float_t then (L.const_fptosi c i32_t) else c in *)
-   
  
   let make_window_t = L.function_type i32_t [||] in
   let make_window_func = L.declare_function "make_window" make_window_t the_module in
@@ -171,18 +150,6 @@ let translate (globals, functions) =
                    with Not_found -> StringMap.find n global_vars
     in
 
-   
-
-    
-
-   (* let init_arr v s = let tp = L.element_type (L.type_of v) in
-    let sz = L.size_of tp in
-    let sz = L.build_intcast sz (i32_t) "" builder in
-    let dt = L.build_bitcast (L.build_call calloc_func [|s;sz|] "" builder) tp ""
-builder in
- L.build_store dt v builder
- in*)
-
     (* Construct code for an expression; return its value *)
     let rec expr builder ((_, e) : sexpr) = match e with
 	      SIntLiteral i -> L.const_int i32_t i
@@ -191,30 +158,11 @@ builder in
       | SStringLiteral s -> L.build_global_stringptr s "name" builder
       | SArrayLiteral (l, t) -> L.const_array (ltype_of_typ t) (Array.of_list (List.map (expr builder) l))
       | SArrayAccess (s, e, _) -> L.build_load (get_array_acc_address s e builder) s builder
-      | SArrayAssign (var, idx, num) -> L.build_load (get_array_acc_address var num builder) var builder
-
-        (*let idx_val = (expr builder idx) and num_val = (expr builder num)
-      in let llname = var (*^ "[" ^ L.string_of_llvalue idx_val ^ "]"*) in
-      let arr_ptr = lookup var in
-      let arr_ptr_load = L.build_load arr_ptr var builder in
-      let arr_get = L.build_in_bounds_gep arr_ptr_load [|idx_val|] llname builder
-    in L.build_store num_val arr_get builder*)
-    
-     (*making this like pixelman assign*) (*| SArrayAssign (s, e1, e2) -> let lsb = (match s with 
-                      SArrayAccess(s,e,_) -> get_array_acc_address s e builder
-                      | _ -> raise (Failure ("Illegal assignment lvalue!")))
+      | SArrayAssign (s, e1, e2) -> 
+        let lsb = get_array_acc_address s e1 builder
                       in 
-                      let rsb = expr builder e1 in
-                      ignore (L.build_stoer rsb lsb builder); rsb*)
-
-
-      (*let e1' = expr builder e1 and e2' = expr builder e2 in
-        let addr = lookup s in
-          let ty = (type_of addr) in 
-          if ty == array_t then (ty = A.Array(A.Int, Array.length (addr)) in (
-            match ty with*)
-
-        
+                      let rsb = expr builder e2 in
+                      ignore (L.build_store rsb lsb builder); rsb   
       | STupleLiteral (x, y) -> 
         let x' = ensureFloat (expr builder x)
         and y' = ensureFloat (expr builder y) in
@@ -271,24 +219,8 @@ builder in
           | A.Not                  -> L.build_not) e' "tmp" builder
       | STupleAccess (s1, s2) ->  
         let t_ptr = (lookup s1) in
-        (* v_ptr = (lookup s2) in  *)
-        (* zero_ptr = L.build_global_stringptr "0" "zero_ptr" builder and 
-        one_ptr =L.build_global_stringptr "1" "one_ptr" builder in  *)
-        (* let e' = ensureInt (expr builder e) in *)
-        
-         (* let idx = 
-            (match s2 with
-                "0" -> 0
-              | "1" -> 1
-              | _ -> raise (Failure("choose 0 or 1 to access tuple" ^ s2))
-            )
-          in *)
         let value_ptr = L.build_struct_gep t_ptr s2 ( "t_ptr") builder in
         L.build_load value_ptr "t_ptr" builder
-          (* | SCall("getY", [e]) ->  *) 
-      (* | A.Not                  -> L.build_not) e' "tmp" builder *)
-      | SCall ("printbig", [e]) ->
-	  L.build_call printbig_func [| (expr builder e) |] "printbig" builder
       | SCall ("make_triangle", [e1; e2; e3; e4]) ->
     L.build_call make_triangle_func [| (expr builder e1); (expr builder e2); (expr builder e3); (expr builder e4)|] 
     "make_triangle" builder

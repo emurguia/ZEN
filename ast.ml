@@ -32,7 +32,6 @@ type expr =
   | Float  
   | Tuple  
   | Array of typ * expr
-  (*| List of typ*)
   | String 
   | Void
 
@@ -85,7 +84,6 @@ let rec string_of_expr = function
   | BooleanLiteral(true) -> "true"
   | BooleanLiteral(false) -> "false"
   | StringLiteral(s) -> s
-  (* | ListLit(li) -> "[" ^ List.fold_left(fun b a -> b ^ " " ^ string_of_expr a ^ ", ") "" li ^ "]" *)
   | TupleLiteral(e1, e2) -> "(" ^ string_of_expr e1 ^ ", " ^ string_of_expr e2 ^ ")"
   | ArrayLiteral(el) -> "[" ^ String.concat ", " (List.map (fun e -> string_of_expr e) el) ^ "]"
   | TupleAccess(s1, s2) -> s1  ^ "<" ^ string_of_int s2 ^ ">"
@@ -118,10 +116,6 @@ and string_of_typ = function
   | Bool -> "bool"
   | Float -> "float"
   | Array(t, e) -> string_of_typ t ^ "[" ^ string_of_expr e ^ "]"
-
-  (*| Array(t) -> "[" ^ string_of_typ t ^ "]"*)
-  (*| Array(l,t) -> string_of_typ t ^ " [" ^ string_of_int l ^ "]"*)
-  (* | List -> "list" *)
   | Tuple -> "tuple"
   | String -> "string"
   | Void -> "void"
