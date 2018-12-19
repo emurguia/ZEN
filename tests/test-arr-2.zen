@@ -1,0 +1,16 @@
+int[5] returnArray() {
+	int[5] x;
+	x = [1,2,3,4,5];
+	return x;
+}
+
+int main() {
+	int i;
+	int[5] y;
+	
+	y = returnArray();
+	for (i = 0; i < 5; i = i + 1) {
+		printi(y[i]);
+	}
+	return 0;
+}
