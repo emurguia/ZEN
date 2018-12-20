@@ -5,10 +5,6 @@ type op = Add | Sub | Mult | Div | Equal | Neq | Less | Leq | Greater | Geq |
 
 type uop = Neg | Not
 
-
-
-
-
 type expr =
     IntLiteral of int
   | FloatLiteral of string
@@ -76,8 +72,6 @@ let string_of_uop = function
     Neg -> "-"
   | Not -> "!"
 
-
-
 let rec string_of_expr = function
     IntLiteral(l) -> string_of_int l
   | FloatLiteral(l) -> l
@@ -86,7 +80,7 @@ let rec string_of_expr = function
   | StringLiteral(s) -> s
   | TupleLiteral(e1, e2) -> "(" ^ string_of_expr e1 ^ ", " ^ string_of_expr e2 ^ ")"
   | ArrayLiteral(el) -> "[" ^ String.concat ", " (List.map (fun e -> string_of_expr e) el) ^ "]"
-  | TupleAccess(s1, s2) -> s1  ^ "<" ^ string_of_int s2 ^ ">"
+  | TupleAccess(s1, s2) -> s1  ^ "." ^ string_of_int s2 
   | Id(s) -> s
   | Binop(e1, o, e2) ->
       string_of_expr e1 ^ " " ^ string_of_op o ^ " " ^ string_of_expr e2
@@ -120,7 +114,6 @@ and string_of_typ = function
   | String -> "string"
   | Void -> "void"
 
-
 let string_of_vdecl (t, id) = string_of_typ t ^ " " ^ id ^ ";\n"
 
 let string_of_fdecl fdecl =
@@ -134,4 +127,3 @@ let string_of_fdecl fdecl =
 let string_of_program (vars, funcs) =
   String.concat "" (List.map string_of_vdecl vars) ^ "\n" ^
   String.concat "\n" (List.map string_of_fdecl funcs)
-

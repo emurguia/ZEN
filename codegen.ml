@@ -95,10 +95,6 @@ let translate (globals, functions) =
   let render_t = L.function_type i1_t [||] in 
   let render_func = L.declare_function "render" render_t the_module in
 
-  (* Ensures float *)
- (* let ensureFloat c = 
-    if L.type_of c = float_t then c else (L.const_sitofp c float_t) in*)
-
   (* Ensures int *)
   let ensureInt c = 
     if L.type_of c = float_t then (L.const_fptosi c i32_t) else c in 

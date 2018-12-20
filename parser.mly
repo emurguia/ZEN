@@ -67,12 +67,9 @@ typ:
 | array_t { $1 }
 | VOID { Void }
 
-
-
 vdecl_list:
     /* nothing */    { [] }
   | vdecl_list vdecl { $2 :: $1 }
-
 
 vdecl:
    /*local_typ ID SEMI { ($1, $2) }*/
@@ -80,9 +77,6 @@ vdecl:
 
 array_t:
   typ LSQUARE expr RSQUARE { Array($1, $3) }
-
-
-
 
 stmt_list:
     /* nothing */  { [] }
@@ -102,7 +96,6 @@ stmt:
 expr_opt:
     /* nothing */ { Noexpr }
   | expr          { $1 }
-
 
 expr:
    literals { $1 }
@@ -130,7 +123,6 @@ expr:
   | LPAREN expr COMMA expr RPAREN { TupleLiteral($2,$4) } 
   | LPAREN expr RPAREN { $2 }
 
- 
 primitive_literals:
   INT_LITERAL      { IntLiteral($1) }
   | FLOAT_LITERAL    { FloatLiteral(string_of_float $1) }
