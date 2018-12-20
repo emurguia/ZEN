@@ -7,7 +7,6 @@ void main() {
     #keep window open     
     while(keep_open()){
 	draw_serp_triangle(0, 0, 240, 8);
-	#draw_serp_triangle_top(300, 200, 240, 8);
 	draw_rec_circle(100, 400, 75);
 	draw_rec_circle(400, 100, 75); 
 	draw_Z(200, 250, 175); 
@@ -22,6 +21,7 @@ void main() {
 
     return; 
 }
+
 
 void draw_Z(int x, int y, int width){
      if(x < width){
@@ -82,15 +82,3 @@ void draw_serp_triangle(int a, int b, int dim, int minSize){
 
 }
 
-void draw_serp_triangle_top(int a, int b, int dim, int minSize){
-
-    if (dim <= minSize){
-	make_triangle(a, b, dim, dim);
-    }else{
-	dim = dim/2;
-	draw_serp_triangle_top(a, b, dim, minSize);
-	draw_serp_triangle_top(a + dim, b, dim, minSize); 
-	draw_serp_triangle_top(a + dim, b + dim,dim, minSize);
-    }
-
-}
